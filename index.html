@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detektif Kalimat – Belajar SPO Seru!</title>
+  <meta name="description" content="Quiz interaktif belajar kalimat SPO (Subjek, Predikat, Objek) untuk anak-anak. Jadi detektif kalimat dan temukan unsur-unsur kalimat!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== SCREEN: COVER ===== -->
+  <div id="screen-cover" class="screen active">
+    <div class="cover-bg">
+      <img src="images/image1.jpeg" alt="background hutan" class="cover-bg-img" />
+    </div>
+    <div class="cover-content">
+      <div class="cover-title-wrap">
+        <div class="cover-badge">✨ Bahasa Indonesia</div>
+        <h1 class="cover-title">🔍 Detektif<br>Kalimat</h1>
+        <p class="cover-subtitle">Belajar Kalimat SPO dengan Seru!</p>
+      </div>
+      <div class="cover-characters">
+        <img src="images/image2.png" alt="Detektif perempuan" class="char char-left bounce-anim" />
+        <img src="images/image3.png" alt="Detektif laki-laki" class="char char-right bounce-anim delay-1" />
+      </div>
+      <div class="cover-buttons">
+        <button id="btn-materi" class="btn-main" onclick="showScreen('screen-menu')">
+          📚 Mulai Belajar!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: MENU ===== -->
+  <div id="screen-menu" class="screen">
+    <div class="header">
+      <button class="btn-back" onclick="showScreen('screen-cover')">← Kembali</button>
+      <h2 class="page-title">📋 Menu Utama</h2>
+      <div></div>
+    </div>
+    <div class="menu-content">
+      <img src="images/image2.png" alt="Detektif" class="menu-char float-anim" />
+      <div class="menu-cards">
+        <div class="menu-card card-materi" onclick="showScreen('screen-materi-intro')" id="menu-card-materi">
+          <div class="menu-card-icon">📖</div>
+          <h3>Materi</h3>
+          <p>Pelajari Kalimat SPO</p>
+          <span class="menu-card-arrow">→</span>
+        </div>
+        <div class="menu-card card-latihan" onclick="showScreen('screen-quiz')" id="menu-card-latihan">
+          <div class="menu-card-icon">🎯</div>
+          <h3>Latihan</h3>
+          <p>Uji Kemampuanmu!</p>
+          <span class="menu-card-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: MATERI INTRO ===== -->
+  <div id="screen-materi-intro" class="screen">
+    <div class="header">
+      <button class="btn-back" onclick="showScreen('screen-menu')">← Menu</button>
+      <h2 class="page-title">📖 Materi</h2>
+      <div class="slide-counter" id="materi-counter">1 / 5</div>
+    </div>
+    <div class="materi-content" id="materi-content">
+      <!-- Dynamic materi slides -->
+    </div>
+    <div class="materi-nav">
+      <button class="btn-nav" id="btn-prev-materi" onclick="prevMateri()" disabled>◀ Sebelumnya</button>
+      <div class="materi-dots" id="materi-dots"></div>
+      <button class="btn-nav btn-nav-next" id="btn-next-materi" onclick="nextMateri()">Selanjutnya ▶</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: QUIZ ===== -->
+  <div id="screen-quiz" class="screen">
+    <div class="header">
+      <button class="btn-back" onclick="confirmBackToMenu()">← Menu</button>
+      <h2 class="page-title">🎯 Latihan</h2>
+      <div class="quiz-progress-wrap">
+        <span id="quiz-progress-text">1/6</span>
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-body" id="quiz-body">
+      <!-- Dynamic quiz content -->
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: HASIL ===== -->
+  <div id="screen-hasil" class="screen">
+    <div class="hasil-content">
+      <div class="hasil-fireworks" id="fireworks"></div>
+      <img src="images/image3.png" alt="Detektif" class="hasil-char" id="hasil-char" />
+      <div class="hasil-card">
+        <h2 class="hasil-title" id="hasil-title">🎉 Luar Biasa!</h2>
+        <p class="hasil-subtitle" id="hasil-subtitle">Kamu adalah detektif kalimat sejati!</p>
+        <div class="score-display">
+          <div class="score-circle" id="score-circle">
+            <span class="score-num" id="score-num">0</span>
+            <span class="score-max" id="score-max">/6</span>
+          </div>
+          <div class="score-stars" id="score-stars">⭐⭐⭐</div>
+        </div>
+        <div class="review-list" id="review-list"></div>
+        <div class="hasil-buttons">
+          <button class="btn-main btn-ulang" onclick="restartQuiz()">🔄 Coba Lagi</button>
+          <button class="btn-main btn-menu-back" onclick="showScreen('screen-menu')">🏠 Menu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback overlay -->
+  <div class="feedback-overlay" id="feedback-overlay">
+    <div class="feedback-popup" id="feedback-popup">
+      <div class="feedback-icon" id="feedback-icon">✅</div>
+      <div class="feedback-text" id="feedback-text">Benar!</div>
+      <div class="feedback-explain" id="feedback-explain"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
