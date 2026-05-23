@@ -1,11 +1,49 @@
-node_modules/
-.env
-.env.local
-.vercel
-*.pptx
-public/
-slide_content.txt
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-.vercel
-"SOAL SOAL SPO (1).docx"
-"DETEKTIF KALIMAT.pptx"
+# Node modules & build
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Editor configs
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvsca
+*.njsproj
+*.sln
+*.sw?
+
+# Vercel
+.vercel/
+
+# PPTX/DOCX original sources & extraction scripts
+*.pptx
+*.docx
+slide_content.txt
+slide_content_utf8.txt
+docx_content.txt
+extract_media.py
+find_font_key.py
+inspect_all_typefaces.py
+inspect_docx_formatting.py
+inspect_files.py
+inspect_font_details.py
+inspect_slide3_elements.py
+inspect_slide3_shapes.py
+inspect_slide_relations.py
+inspect_slides.py
+ppt_slides_extracted.txt
+
+# Local env files
+.env
