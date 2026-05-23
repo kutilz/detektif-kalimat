@@ -3,6 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { playSound } from './utils/sound';
 import { materiSlides, allQuestions } from './data/quizData';
+import {
+  getAdminSettings,
+  getCustomQuestions,
+  getUserIdentityConfig,
+  addLeaderboardEntry,
+  getLeaderboard,
+} from './data/adminStore';
 
 // ReactBits Components
 import ParticlesBackground from './components/ReactBits/ParticlesBackground';
@@ -17,8 +24,17 @@ import TokenSelector from './components/Quiz/TokenSelector';
 import DragDropScramble from './components/Quiz/DragDropScramble';
 import DragDropSPO from './components/Quiz/DragDropSPO';
 import SandboxQuiz from './components/Quiz/SandboxQuiz';
+import UserIdentityForm from './components/Quiz/UserIdentityForm';
+
+// Admin Components
+import AdminLogin from './components/Admin/AdminLogin';
+import AdminDashboard from './components/Admin/AdminDashboard';
 
 export default function App() {
+  // Route state
+  const [route, setRoute] = useState('app'); // 'app' | 'admin'
+  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
+
   // App States
   const [currentScreen, setCurrentScreen] = useState('cover');
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
@@ -31,9 +47,28 @@ export default function App() {
   const [answers, setAnswers] = useState([]);
   const [feedback, setFeedback] = useState({ show: false, correct: false, explain: '', answerStr: '' });
   
+  // User Identity
+  const [userIdentity, setUserIdentity] = useState(null);
+  
   // Modals & Timeouts
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [feedbackTimeoutId, setFeedbackTimeoutId] = useState(null);
+
+  // Hash-based routing
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#/admin') {
+        setRoute('admin');
+      } else {
+        setRoute('app');
+        setAdminLoggedIn(false);
+      }
+    };
+    
+    handleHashChange(); // Check on mount
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // Sound toggle helper
   const handleToggleSound = () => {
@@ -49,25 +84,77 @@ export default function App() {
     if (screen === 'materi') {
       setCurrentMateri(0);
     } else if (screen === 'quiz') {
-      initQuiz();
+      // Show identity form first if fields are enabled
+      const idConfig = getUserIdentityConfig();
+      const hasEnabledFields = idConfig.fields.some((f) => f.enabled);
+      if (hasEnabledFields && !userIdentity) {
+        setCurrentScreen('identity');
+      } else {
+        initQuiz();
+      }
     }
   };
 
-  // Initialize Quiz
+  // Handle identity submission
+  const handleIdentitySubmit = (data) => {
+    setUserIdentity(data);
+    setCurrentScreen('quiz');
+    initQuiz();
+  };
+
+  const handleIdentitySkip = () => {
+    setUserIdentity({ name: '', class: '', studentId: '' });
+    setCurrentScreen('quiz');
+    initQuiz();
+  };
+
+  // Initialize Quiz with admin settings
   const initQuiz = () => {
-    // 1. Separate standard questions from sandbox
+    const settings = getAdminSettings();
+    const customQs = getCustomQuestions();
+
+    // Build question pool based on mode
+    let pool = [];
     const standardPool = allQuestions.filter(q => q.id !== 'q_sandbox');
-    
-    // 2. Shuffle standard questions
-    const shuffled = [...standardPool].sort(() => Math.random() - 0.5);
-    
-    // 3. Take 9 random questions
-    const selected = shuffled.slice(0, 9);
-    
-    // 4. Append sandbox as the 10th question
-    const sandboxQ = allQuestions.find(q => q.id === 'q_sandbox');
-    
-    setQuizQuestions([...selected, sandboxQ]);
+
+    switch (settings.quizMode) {
+      case 'sequential':
+        pool = [...standardPool, ...customQs];
+        break;
+      case 'custom_only':
+        pool = [...customQs];
+        break;
+      case 'mixed':
+        pool = [...standardPool, ...customQs];
+        // Shuffle for mixed mode
+        pool.sort(() => Math.random() - 0.5);
+        break;
+      case 'random':
+      default:
+        pool = [...standardPool, ...customQs].sort(() => Math.random() - 0.5);
+        break;
+    }
+
+    // Take the configured number of questions
+    const count = Math.min(settings.questionCount, pool.length);
+    let selected = pool.slice(0, count);
+
+    // Optionally append sandbox
+    if (settings.includeSandbox) {
+      const sandboxQ = allQuestions.find(q => q.id === 'q_sandbox');
+      if (sandboxQ) {
+        selected = [...selected, sandboxQ];
+      }
+    }
+
+    // Fallback: if no questions available, use defaults
+    if (selected.length === 0) {
+      const defaultPool = [...standardPool].sort(() => Math.random() - 0.5).slice(0, 9);
+      const sandboxQ = allQuestions.find(q => q.id === 'q_sandbox');
+      selected = sandboxQ ? [...defaultPool, sandboxQ] : defaultPool;
+    }
+
+    setQuizQuestions(selected);
     setCurrentQuestionIndex(0);
     setScore(0);
     setAnswers([]);
@@ -135,10 +222,24 @@ export default function App() {
       setCurrentQuestionIndex(nextIdx);
     } else {
       // Finished all questions - go to results
+      const finalScore = score + (feedback.correct ? 1 : 0);
+      
+      // Save to leaderboard
+      const settings = getAdminSettings();
+      if (settings.showLeaderboard) {
+        addLeaderboardEntry({
+          name: userIdentity?.name || 'Anonim',
+          class: userIdentity?.class || '',
+          studentId: userIdentity?.studentId || '',
+          score: finalScore,
+          total: quizQuestions.length,
+        });
+      }
+
       setCurrentScreen('hasil');
       
       // Celebrate with sound & confetti
-      const isPass = (score + (feedback.correct ? 1 : 0)) >= quizQuestions.length * 0.6;
+      const isPass = finalScore >= quizQuestions.length * 0.6;
       if (isPass) {
         playSound('victory', isSoundEnabled);
         // Confetti burst
@@ -192,8 +293,30 @@ export default function App() {
   // Confirm exiting quiz mid-way
   const handleConfirmExit = () => {
     setShowConfirmModal(false);
+    setUserIdentity(null);
     navigateTo('menu');
   };
+
+  // ===== ADMIN ROUTE =====
+  if (route === 'admin') {
+    if (!adminLoggedIn) {
+      return <AdminLogin onLogin={() => setAdminLoggedIn(true)} />;
+    }
+    return (
+      <AdminDashboard
+        onLogout={() => {
+          setAdminLoggedIn(false);
+          window.location.hash = '';
+        }}
+      />
+    );
+  }
+
+  // ===== USER APP =====
+
+  // Get leaderboard for results
+  const currentLeaderboard = getLeaderboard();
+  const adminSettings = getAdminSettings();
 
   return (
     <div className="app-container">
@@ -291,6 +414,23 @@ export default function App() {
                 </div>
               </div>
             </div>
+          </motion.div>
+        )}
+
+        {/* ===== IDENTITY SCREEN ===== */}
+        {currentScreen === 'identity' && (
+          <motion.div
+            key="identity"
+            className="screen active"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <UserIdentityForm
+              config={getUserIdentityConfig()}
+              onSubmit={handleIdentitySubmit}
+              onSkip={handleIdentitySkip}
+            />
           </motion.div>
         )}
 
@@ -468,6 +608,12 @@ export default function App() {
                     : 'Belajar lagi, kamu pasti bisa!'}
                 </p>
 
+                {userIdentity?.name && (
+                  <p style={{ fontSize: '0.9rem', color: '#8b5e3c', fontWeight: 700, marginTop: 4 }}>
+                    🕵️ {userIdentity.name}{userIdentity.class ? ` • ${userIdentity.class}` : ''}
+                  </p>
+                )}
+
                 <div className="score-display">
                   <div
                     className="score-circle"
@@ -500,11 +646,53 @@ export default function App() {
                   ))}
                 </div>
 
+                {/* Leaderboard in Results */}
+                {adminSettings.showLeaderboard && currentLeaderboard.length > 0 && (
+                  <div className="hasil-leaderboard">
+                    <h3 className="hasil-leaderboard-title">🏆 Papan Peringkat</h3>
+                    <table className="hasil-leaderboard-table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Nama</th>
+                          <th>Skor</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {currentLeaderboard.slice(0, 10).map((entry, idx) => {
+                          const isSelf = entry.name === (userIdentity?.name || 'Anonim') &&
+                            entry.id === currentLeaderboard.find(
+                              (e) => e.name === (userIdentity?.name || 'Anonim')
+                            )?.id;
+                          return (
+                            <tr
+                              key={entry.id}
+                              className={idx === 0 || idx === 1 || idx === 2 ? '' : ''}
+                            >
+                              <td>
+                                {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}
+                              </td>
+                              <td>{entry.name || 'Anonim'}</td>
+                              <td style={{ fontWeight: 800 }}>{entry.score}/{entry.total}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
                 <div className="hasil-buttons">
-                  <button className="btn-main btn-ulang" onClick={() => navigateTo('quiz')}>
+                  <button className="btn-main btn-ulang" onClick={() => {
+                    setUserIdentity(null);
+                    navigateTo('quiz');
+                  }}>
                     🔄 Coba Lagi
                   </button>
-                  <button className="btn-main btn-menu-back" onClick={() => navigateTo('menu')}>
+                  <button className="btn-main btn-menu-back" onClick={() => {
+                    setUserIdentity(null);
+                    navigateTo('menu');
+                  }}>
                     🏠 Menu
                   </button>
                 </div>
