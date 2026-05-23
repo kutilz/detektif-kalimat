@@ -29,6 +29,7 @@ export default function SandboxQuiz({ q, onCheck }) {
     let p = null;
     let o = null;
     
+    // 1. Direct Dictionary Match
     words.forEach((w) => {
       if (vocabS.includes(w) && !s) {
         s = w;
@@ -38,6 +39,55 @@ export default function SandboxQuiz({ q, onCheck }) {
         o = w;
       }
     });
+
+    // 2. Heuristics for Unmatched Slots
+    // If Predikat (Verb) is still not found, check Indonesian morphological prefixes
+    if (!p) {
+      const verbPrefixes = ['me', 'di', 'ber', 'ter'];
+      for (let i = 0; i < words.length; i++) {
+        const w = words[i];
+        // Must be longer than 3 letters to filter out short nouns/names
+        const hasVerbPrefix = verbPrefixes.some(prefix => w.startsWith(prefix) && w.length >= 4);
+        if (hasVerbPrefix) {
+          p = w;
+          break;
+        }
+      }
+    }
+
+    // If we have a Predikat (from dictionary or prefix check)
+    if (p) {
+      const pIndex = words.indexOf(p);
+      
+      // If Subjek is still empty, look for any word before Predikat
+      if (!s) {
+        for (let i = 0; i < pIndex; i++) {
+          const w = words[i];
+          if (w !== p) {
+            s = w;
+            break;
+          }
+        }
+      }
+      
+      // If Objek is still empty, look for any word after Predikat
+      if (!o) {
+        for (let i = pIndex + 1; i < words.length; i++) {
+          const w = words[i];
+          if (w !== p && w !== s) {
+            o = w;
+            break;
+          }
+        }
+      }
+    }
+
+    // 3. Fallback: If exactly 3 words are typed, map them directly to S-P-O
+    if (words.length === 3 && (!s || !p || !o)) {
+      s = words[0];
+      p = words[1];
+      o = words[2];
+    }
 
     setFoundS(s);
     setFoundP(p);
