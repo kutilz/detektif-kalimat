@@ -1,0 +1,33 @@
+=== ppt/slides/slide1.xml ===
+SPO | Mengenal
+
+=== ppt/slides/slide10.xml ===
+ΓÇ£ | dia | menulis | surat | ΓÇ¥ | Subjek: | Dia | Predikat: | menulis | Objek: | surat
+
+=== ppt/slides/slide11.xml ===
+Tentukan subjek dari kalimat ini
+
+=== ppt/slides/slide2.xml ===
+Materi | Latihan
+
+=== ppt/slides/slide3.xml ===
+
+
+=== ppt/slides/slide4.xml ===
+Kalimat adalah kumpulan kata yang memiliki arti. | Contoh: | Γû╢ Saya makan roti. | Kalimat SPO terdiri dari: | ≡ƒƒí | Subjek (S) | = siapa | ≡ƒƒó | Predikat (P) | = kegiatan | ≡ƒö╡ | Objek (O) | = benda | Subjek | - | Predikat | - | Objek
+
+=== ppt/slides/slide5.xml ===
+Subjek adalah pelaku | Contoh: | ΓÇ£ | Budi | bermain bolaΓÇ¥ | Γû╢ Subjek = | Budi
+
+=== ppt/slides/slide6.xml ===
+Predikat adalah kegiatan | Contoh: | ΓÇ£ | Kakak | membaca | bukuΓÇ¥ | Γû╢ Predikat = | membaca
+
+=== ppt/slides/slide7.xml ===
+Objek adalah benda yang dikenai kegiatan | Contoh: | ΓÇ£ | Ibu | memasak | nasi | ΓÇ¥ | Γû╢ Objek = | nasi
+
+=== ppt/slides/slide8.xml ===
+Contoh: | ΓÇ£ | Ayah | mencuci | mobil | ΓÇ¥ | Subjek: | Ayah | Predikat: | mencuci | Objek: | mobil | S | + | P | + | O
+
+=== ppt/slides/slide9.xml ===
+Rina minum susu | Subjek: | Rina | Predikat: | minum | Objek: | susu
+
