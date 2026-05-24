@@ -87,7 +87,7 @@ export default function App() {
     } else if (screen === 'quiz') {
       // Show identity form first if fields are enabled
       const idConfig = getUserIdentityConfig();
-      const hasEnabledFields = idConfig.fields.some((f) => f.enabled);
+      const hasEnabledFields = idConfig.fields.some((f) => f.enabled === true || f.enabled === 'true');
       if (hasEnabledFields && !userIdentity) {
         setCurrentScreen('identity');
       } else {

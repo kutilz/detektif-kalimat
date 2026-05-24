@@ -2,11 +2,22 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function UserIdentityForm({ config, onSubmit, onSkip }) {
-  const enabledFields = config.fields.filter((f) => f.enabled);
-  const hasRequired = enabledFields.some((f) => f.required);
+  const enabledFields = config.fields.filter((f) => f.enabled === true || f.enabled === 'true');
+  const hasRequired = enabledFields.some((f) => f.required === true || f.required === 'true');
 
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
+
+  // If no fields enabled, skip directly
+  React.useEffect(() => {
+    if (enabledFields.length === 0) {
+      onSkip();
+    }
+  }, [enabledFields, onSkip]);
+
+  if (enabledFields.length === 0) {
+    return null;
+  }
 
   const handleChange = (key, value) => {
     setValues((prev) => ({ ...prev, [key]: value }));
