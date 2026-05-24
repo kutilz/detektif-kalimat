@@ -160,7 +160,7 @@ export default function TokenSelector({ q, onCheck }) {
   return (
     <div className="drag-section token-puzzle-section" style={{ width: '100%' }}>
       <p className="drag-instruction" style={{ textAlign: 'center', marginBottom: '16px' }}>
-        👉 Tarik kata yang tepat ke kotak kosong atau ketuk katanya!
+        👉 Tarik kata yang tepat ke kotak kosong!
       </p>
 
       {/* Sentence row with Drop Zone */}
@@ -225,7 +225,6 @@ export default function TokenSelector({ q, onCheck }) {
             <motion.div
               key={idx}
               className={`word-chip available ${isPlaced ? 'disabled' : ''}`}
-              onTap={() => !isPlaced && handleWordClick(word)}
               drag={!hasAnswered && !isPlaced}
               dragSnapToOrigin
               dragElastic={0.4}
