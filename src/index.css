@@ -370,6 +370,59 @@ html, body {
 }
 .materi-body { padding: 0 24px 24px; }
 
+/* Responsive Materi Slide Images */
+.materi-image-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.materi-image-row img {
+  max-height: 90px;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  filter: drop-shadow(0 4px 8px var(--shadow));
+}
+
+.materi-slide1-row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 15px auto;
+  flex-wrap: wrap;
+}
+.materi-slide1-row img.img-mengenal {
+  height: 50px;
+  max-width: 100%;
+  object-fit: contain;
+  transform: rotate(-5deg);
+  z-index: 2;
+}
+.materi-slide1-row img.img-detektif {
+  height: 90px;
+  max-width: 100%;
+  object-fit: contain;
+  z-index: 3;
+}
+.materi-slide1-row img.img-bintang {
+  position: absolute;
+  right: 15%;
+  top: 10%;
+  height: 35px;
+  animation: floatAnim 2.5s ease-in-out infinite;
+}
+
+@media (max-width: 480px) {
+  .materi-slide1-row img.img-bintang {
+    display: none;
+  }
+}
+
 /* SPO Boxes */
 .spo-grid {
   display: grid;
@@ -974,6 +1027,57 @@ html, body {
 .word-token.disabled {
   cursor: not-allowed;
   opacity: 0.9;
+}
+
+/* ======= PUZZLE TOKEN SELECTOR ======= */
+.puzzle-static-word {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--brown-dark);
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(224, 212, 197, 0.5);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.token-dz {
+  min-width: 140px;
+  min-height: 56px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease;
+  padding: 4px 12px;
+  margin: 0 6px;
+  cursor: pointer;
+  border: 3px dashed #ccc;
+}
+
+.token-dz:hover {
+  background: #fff8f0;
+}
+
+.token-dz.occupied {
+  background: rgba(255, 255, 255, 0.95);
+  border-style: solid;
+}
+
+.token-dz.correct {
+  border-color: var(--green) !important;
+  background: rgba(232, 245, 233, 0.8) !important;
+  border-style: solid !important;
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.4);
+}
+
+.token-dz.wrong {
+  border-color: var(--red) !important;
+  background: rgba(255, 235, 235, 0.8) !important;
+  border-style: solid !important;
+  box-shadow: 0 0 12px rgba(244, 67, 54, 0.4);
 }
 
 /* ======= CREATIVE WRITING SANDBOX ======= */

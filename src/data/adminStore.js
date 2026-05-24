@@ -1,3 +1,5 @@
+import { allQuestions } from './quizData';
+
 // ============================================
 // Admin Store — localStorage persistence layer
 // ============================================
@@ -7,6 +9,7 @@ const KEYS = {
   CUSTOM_QUESTIONS: 'dk_custom_questions',
   LEADERBOARD: 'dk_leaderboard',
   USER_IDENTITY_CONFIG: 'dk_user_identity_config',
+  QUESTION_OVERRIDES: 'dk_question_overrides',
 };
 
 // ---- Default Values ----
@@ -99,6 +102,26 @@ export function deleteCustomQuestion(id) {
   const current = getCustomQuestions().filter((q) => q.id !== id);
   saveCustomQuestions(current);
   return current;
+}
+
+// ---- Question Overrides ----
+
+export function getQuestionOverrides() {
+  return getJSON(KEYS.QUESTION_OVERRIDES, {});
+}
+
+export function saveQuestionOverrides(overrides) {
+  setJSON(KEYS.QUESTION_OVERRIDES, overrides);
+}
+
+export function getMergedQuestions() {
+  const overrides = getQuestionOverrides();
+  return allQuestions.map((q) => {
+    if (overrides[q.id]) {
+      return { ...q, ...overrides[q.id], isOverride: true, isBuiltin: true };
+    }
+    return { ...q, isBuiltin: true };
+  });
 }
 
 // ---- Leaderboard ----

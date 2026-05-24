@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { playSound } from './utils/sound';
-import { materiSlides, allQuestions } from './data/quizData';
+import { materiSlides } from './data/quizData';
 import {
   getAdminSettings,
   getCustomQuestions,
   getUserIdentityConfig,
   addLeaderboardEntry,
   getLeaderboard,
+  getMergedQuestions,
 } from './data/adminStore';
 
 // ReactBits Components
@@ -112,10 +113,11 @@ export default function App() {
   const initQuiz = () => {
     const settings = getAdminSettings();
     const customQs = getCustomQuestions();
+    const mergedQuestions = getMergedQuestions();
 
     // Build question pool based on mode
     let pool = [];
-    const standardPool = allQuestions.filter(q => q.id !== 'q_sandbox');
+    const standardPool = mergedQuestions.filter(q => q.id !== 'q_sandbox');
 
     switch (settings.quizMode) {
       case 'sequential':
@@ -141,7 +143,7 @@ export default function App() {
 
     // Optionally append sandbox
     if (settings.includeSandbox) {
-      const sandboxQ = allQuestions.find(q => q.id === 'q_sandbox');
+      const sandboxQ = mergedQuestions.find(q => q.id === 'q_sandbox');
       if (sandboxQ) {
         selected = [...selected, sandboxQ];
       }
@@ -150,7 +152,7 @@ export default function App() {
     // Fallback: if no questions available, use defaults
     if (selected.length === 0) {
       const defaultPool = [...standardPool].sort(() => Math.random() - 0.5).slice(0, 9);
-      const sandboxQ = allQuestions.find(q => q.id === 'q_sandbox');
+      const sandboxQ = mergedQuestions.find(q => q.id === 'q_sandbox');
       selected = sandboxQ ? [...defaultPool, sandboxQ] : defaultPool;
     }
 

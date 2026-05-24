@@ -58,10 +58,10 @@ export const materiSlides = [
     desc: 'Selamat datang di markas besar detektif kalimat! Ayo kita pecahkan teka-teki kata.',
     content: (
       <div className="materi-body" style={{ textAlign: 'center' }}>
-        <div style={{ position: 'relative', height: '160px', margin: '15px auto', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
-          <img src="/images/image11.png" alt="Mengenal" style={{ height: '50px', objectFit: 'contain', transform: 'rotate(-5deg)', zIndex: 2 }} />
-          <img src="/images/image13.png" alt="Detektif Kalimat" style={{ height: '90px', objectFit: 'contain', zIndex: 3 }} />
-          <img src="/images/image12.png" alt="Bintang" style={{ position: 'absolute', right: '15%', top: '10%', height: '35px', animation: 'floatAnim 2.5s ease-in-out infinite' }} />
+        <div className="materi-slide1-row">
+          <img src="/images/image11.png" alt="Mengenal" className="img-mengenal" />
+          <img src="/images/image13.png" alt="Detektif Kalimat" className="img-detektif" />
+          <img src="/images/image12.png" alt="Bintang" className="img-bintang" />
         </div>
         <div className="example-box" style={{ marginTop: '10px', background: 'rgba(255,255,255,0.9)', borderLeftColor: 'var(--yellow-deep)' }}>
           <div className="example-sentence" style={{ fontSize: '1.15rem', color: 'var(--brown-dark)' }}>
@@ -123,9 +123,9 @@ export const materiSlides = [
           </div>
           <div className="example-analysis">Subjek = <strong style={{ color: '#f4a100' }}>Budi</strong> (yang bermain)</div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '12px' }}>
-          <img src="/images/image17.png" alt="Budi bermain bola" style={{ maxHeight: '90px', objectFit: 'contain' }} />
-          <img src="/images/image18.png" alt="Subjek" style={{ maxHeight: '90px', objectFit: 'contain' }} />
+        <div className="materi-image-row">
+          <img src="/images/image17.png" alt="Budi bermain bola" />
+          <img src="/images/image18.png" alt="Subjek" />
         </div>
       </div>
     )
@@ -149,9 +149,9 @@ export const materiSlides = [
           </div>
           <div className="example-analysis">Predikat = <strong style={{ color: '#2e7d32' }}>membaca</strong> (kegiatan membaca)</div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '12px' }}>
-          <img src="/images/image21.png" alt="Membaca" style={{ maxHeight: '90px', objectFit: 'contain' }} />
-          <img src="/images/image20.png" alt="Predikat" style={{ maxHeight: '90px', objectFit: 'contain' }} />
+        <div className="materi-image-row">
+          <img src="/images/image21.png" alt="Membaca" />
+          <img src="/images/image20.png" alt="Predikat" />
         </div>
       </div>
     )
@@ -175,9 +175,9 @@ export const materiSlides = [
           </div>
           <div className="example-analysis">Objek = <strong style={{ color: '#1565c0' }}>nasi</strong> (yang dimasak)</div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '12px' }}>
-          <img src="/images/image24.png" alt="Memasak" style={{ maxHeight: '90px', objectFit: 'contain' }} />
-          <img src="/images/image23.png" alt="Objek" style={{ maxHeight: '90px', objectFit: 'contain' }} />
+        <div className="materi-image-row">
+          <img src="/images/image24.png" alt="Memasak" />
+          <img src="/images/image23.png" alt="Objek" />
         </div>
       </div>
     )
@@ -199,9 +199,9 @@ export const materiSlides = [
             S: <strong>Ayah</strong> | P: <strong>mencuci</strong> | O: <strong>mobil</strong>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '12px' }}>
-          <img src="/images/image16.png" alt="Mencuci" style={{ maxHeight: '95px', objectFit: 'contain' }} />
-          <img src="/images/image25.png" alt="Mobil" style={{ maxHeight: '95px', objectFit: 'contain' }} />
+        <div className="materi-image-row">
+          <img src="/images/image16.png" alt="Mencuci" />
+          <img src="/images/image25.png" alt="Mobil" />
         </div>
       </div>
     )
@@ -223,9 +223,9 @@ export const materiSlides = [
             S: <strong>Rina</strong> | P: <strong>minum</strong> | O: <strong>susu</strong>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '12px' }}>
-          <img src="/images/image27.png" alt="Minum" style={{ maxHeight: '95px', objectFit: 'contain' }} />
-          <img src="/images/image26.png" alt="Susu" style={{ maxHeight: '95px', objectFit: 'contain' }} />
+        <div className="materi-image-row">
+          <img src="/images/image27.png" alt="Minum" />
+          <img src="/images/image26.png" alt="Susu" />
         </div>
       </div>
     )
@@ -247,9 +247,9 @@ export const materiSlides = [
             S: <strong>Dia</strong> | P: <strong>menulis</strong> | O: <strong>surat</strong>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '12px' }}>
-          <img src="/images/image28.png" alt="Menulis" style={{ maxHeight: '95px', objectFit: 'contain' }} />
-          <img src="/images/image26.png" alt="Surat" style={{ maxHeight: '95px', objectFit: 'contain' }} />
+        <div className="materi-image-row">
+          <img src="/images/image28.png" alt="Menulis" />
+          <img src="/images/image26.png" alt="Surat" />
         </div>
       </div>
     )

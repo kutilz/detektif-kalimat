@@ -11,8 +11,8 @@ import {
   getLeaderboard, deleteLeaderboardEntry, resetLeaderboard,
   getUserIdentityConfig, saveUserIdentityConfig,
   exportAllData,
+  getMergedQuestions, getQuestionOverrides, saveQuestionOverrides
 } from '../../data/adminStore';
-import { allQuestions } from '../../data/quizData';
 import QuestionEditor from './QuestionEditor';
 
 const NAV_ITEMS = [
@@ -39,6 +39,7 @@ export default function AdminDashboard({ onLogout }) {
   // Data states
   const [settings, setSettings] = useState(getAdminSettings());
   const [customQuestions, setCustomQuestions] = useState(getCustomQuestions());
+  const [questionOverrides, setQuestionOverrides] = useState(getQuestionOverrides());
   const [leaderboard, setLeaderboard] = useState(getLeaderboard());
   const [identityConfig, setIdentityConfig] = useState(getUserIdentityConfig());
 
@@ -74,15 +75,42 @@ export default function AdminDashboard({ onLogout }) {
   // ---- Question handlers ----
   const handleSaveQuestion = (questionData) => {
     if (questionData.id) {
-      const updated = updateCustomQuestion(questionData.id, questionData);
-      setCustomQuestions(updated);
-      showToast('Soal berhasil diperbarui! ✅');
+      if (questionData.id.startsWith('custom_')) {
+        const updated = updateCustomQuestion(questionData.id, questionData);
+        setCustomQuestions(updated);
+        showToast('Soal berhasil diperbarui! ✅');
+      } else {
+        const currentOverrides = getQuestionOverrides();
+        currentOverrides[questionData.id] = {
+          ...questionData,
+          isOverride: true,
+        };
+        saveQuestionOverrides(currentOverrides);
+        setQuestionOverrides(currentOverrides);
+        showToast('Soal bawaan berhasil diperbarui! ✅');
+      }
     } else {
       addCustomQuestion(questionData);
       setCustomQuestions(getCustomQuestions());
       showToast('Soal baru ditambahkan! ✅');
     }
     setEditingQuestion(null);
+  };
+
+  const handleResetQuestionOverride = (id) => {
+    setConfirmDialog({
+      icon: '🔄',
+      title: 'Kembalikan Soal?',
+      message: 'Soal bawaan ini akan dikembalikan ke teks asli bawaan sistem.',
+      onConfirm: () => {
+        const currentOverrides = getQuestionOverrides();
+        delete currentOverrides[id];
+        saveQuestionOverrides(currentOverrides);
+        setQuestionOverrides(currentOverrides);
+        setConfirmDialog(null);
+        showToast('Soal dikembalikan ke bawaan! 🔄');
+      },
+    });
   };
 
   const handleDeleteQuestion = (id) => {
@@ -164,8 +192,9 @@ export default function AdminDashboard({ onLogout }) {
   };
 
   // All questions combined
+  const mergedBuiltins = getMergedQuestions();
   const allQuestionsPool = [
-    ...allQuestions.filter((q) => q.id !== 'q_sandbox').map((q) => ({ ...q, isBuiltin: true })),
+    ...mergedBuiltins.filter((q) => q.id !== 'q_sandbox'),
     ...customQuestions.map((q) => ({ ...q, isCustom: true })),
   ];
 
@@ -263,7 +292,7 @@ export default function AdminDashboard({ onLogout }) {
                 <div className="admin-stats-grid">
                   <div className="admin-stat-card">
                     <span className="admin-stat-icon">📝</span>
-                    <div className="admin-stat-value">{allQuestions.filter((q) => q.id !== 'q_sandbox').length}</div>
+                    <div className="admin-stat-value">{mergedBuiltins.filter((q) => q.id !== 'q_sandbox').length}</div>
                     <div className="admin-stat-label">Soal Bawaan</div>
                   </div>
                   <div className="admin-stat-card">
@@ -468,18 +497,20 @@ export default function AdminDashboard({ onLogout }) {
                         {q.isCustom ? (
                           <span className="admin-custom-badge">Custom</span>
                         ) : (
-                          <span className="admin-builtin-badge">Bawaan</span>
+                          <span className="admin-builtin-badge">
+                            Bawaan{q.isOverride ? ' (Diedit)' : ''}
+                          </span>
                         )}
                       </div>
-                      {q.isCustom && (
-                        <div className="admin-question-actions">
-                          <button
-                            className="admin-btn-icon"
-                            title="Edit"
-                            onClick={() => { setEditingQuestion(q); setEditorOpen(true); }}
-                          >
-                            <Edit3 size={15} />
-                          </button>
+                      <div className="admin-question-actions">
+                        <button
+                          className="admin-btn-icon"
+                          title="Edit"
+                          onClick={() => { setEditingQuestion(q); setEditorOpen(true); }}
+                        >
+                          <Edit3 size={15} />
+                        </button>
+                        {q.isCustom ? (
                           <button
                             className="admin-btn-icon danger"
                             title="Hapus"
@@ -487,8 +518,19 @@ export default function AdminDashboard({ onLogout }) {
                           >
                             <Trash2 size={15} />
                           </button>
-                        </div>
-                      )}
+                        ) : (
+                          q.isOverride && (
+                            <button
+                              className="admin-btn-icon warning"
+                              title="Kembalikan ke Bawaan"
+                              onClick={() => handleResetQuestionOverride(q.id)}
+                              style={{ color: 'var(--admin-accent)' }}
+                            >
+                              <RefreshCw size={15} />
+                            </button>
+                          )
+                        )}
+                      </div>
                     </div>
                   ))}
 
