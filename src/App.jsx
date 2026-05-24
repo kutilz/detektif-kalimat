@@ -560,16 +560,17 @@ export default function App() {
                   <div className="quiz-num">Soal {currentQuestionIndex + 1} dari {quizQuestions.length}</div>
                   <h3 className="quiz-question">{quizQuestions[currentQuestionIndex].question}</h3>
 
-                  {/* Show sentence box ONLY for question types that need the full sentence displayed (e.g. drag/SPO type) */}
+                  {/* Show sentence box ONLY for question types that need the full sentence displayed */}
                   {quizQuestions[currentQuestionIndex].sentence &&
                    quizQuestions[currentQuestionIndex].type !== 'token' &&
-                   quizQuestions[currentQuestionIndex].type !== 'scramble' ? (
+                   quizQuestions[currentQuestionIndex].type !== 'scramble' &&
+                   quizQuestions[currentQuestionIndex].type !== 'drag' ? (
                     <div className="quiz-sentence-box">
                       <div className="quiz-sentence">"{quizQuestions[currentQuestionIndex].sentence}"</div>
                       <div className="quiz-sentence-hint">{quizQuestions[currentQuestionIndex].hint}</div>
                     </div>
                   ) : (
-                    /* For other types like scramble, we hide the sentence but still show the hint (token selector has its own hint rendering) */
+                    /* For other types like scramble/drag, we hide the sentence but still show the hint (token selector has its own hint rendering) */
                     quizQuestions[currentQuestionIndex].type !== 'token' && quizQuestions[currentQuestionIndex].hint && (
                       <div className="quiz-sentence-hint" style={{ margin: '12px 0 24px 0', textAlign: 'center' }}>
                         {quizQuestions[currentQuestionIndex].hint}
