@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { playSound } from './utils/sound';
@@ -47,13 +47,13 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [feedback, setFeedback] = useState({ show: false, correct: false, explain: '', answerStr: '' });
+  const hasAnsweredRef = useRef(false);
   
   // User Identity
   const [userIdentity, setUserIdentity] = useState(null);
   
   // Modals & Timeouts
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [feedbackTimeoutId, setFeedbackTimeoutId] = useState(null);
 
   // Hash-based routing
   useEffect(() => {
@@ -161,10 +161,14 @@ export default function App() {
     setScore(0);
     setAnswers([]);
     setFeedback({ show: false, correct: false, explain: '', answerStr: '' });
+    hasAnsweredRef.current = false;
   };
 
   // Check answers based on question types
   const handleCheckAnswer = (answer, explanationText = null, meta = null) => {
+    if (hasAnsweredRef.current) return;
+    hasAnsweredRef.current = true;
+
     const q = quizQuestions[currentQuestionIndex];
     let isCorrect = false;
     let computedExplain = explanationText || q.explain;
@@ -206,16 +210,12 @@ export default function App() {
       explain: computedExplain,
       answerStr: rightAnswerStr
     });
-
-    // Auto-advance after 3.2 seconds
-    const timeout = setTimeout(() => {
-      handleDismissFeedback();
-    }, 3200);
-    setFeedbackTimeoutId(timeout);
   };
 
   const handleDismissFeedback = () => {
-    if (feedbackTimeoutId) clearTimeout(feedbackTimeoutId);
+    if (!hasAnsweredRef.current) return;
+    hasAnsweredRef.current = false;
+
     setFeedback((f) => ({ ...f, show: false }));
     
     // Go to next question or show results
@@ -224,7 +224,7 @@ export default function App() {
       setCurrentQuestionIndex(nextIdx);
     } else {
       // Finished all questions - go to results
-      const finalScore = score + (feedback.correct ? 1 : 0);
+      const finalScore = score;
       
       // Save to leaderboard
       const settings = getAdminSettings();
