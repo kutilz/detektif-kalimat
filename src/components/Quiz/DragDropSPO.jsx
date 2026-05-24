@@ -15,7 +15,7 @@ export default function DragDropSPO({ q, onCheck }) {
     // Make sure display order of available words is never exactly S-P-O
     const correct = [q.answer?.S, q.answer?.P, q.answer?.O];
     let wordsToUse = q.words || [];
-    if (wordsToUse.length === 3 && wordsToUse.every((w, i) => w === correct[i])) {
+    if (wordsToUse.length === 3 && wordsToUse.every((w, i) => w.toLowerCase() === (correct[i] || '').toLowerCase())) {
       const shuffle = (arr) => {
         const newArr = [...arr];
         for (let i = newArr.length - 1; i > 0; i--) {
@@ -26,7 +26,7 @@ export default function DragDropSPO({ q, onCheck }) {
       };
       for (let attempt = 0; attempt < 10; attempt++) {
         wordsToUse = shuffle(wordsToUse);
-        if (!wordsToUse.every((w, i) => w === correct[i])) break;
+        if (!wordsToUse.every((w, i) => w.toLowerCase() === (correct[i] || '').toLowerCase())) break;
       }
     }
     setDisplayWords(wordsToUse);
@@ -56,19 +56,6 @@ export default function DragDropSPO({ q, onCheck }) {
       ...prev,
       [zone]: null
     }));
-  };
-
-  // Click handler for tap-to-place fallback
-  const handleWordClick = (word) => {
-    setSelectedWord(word === selectedWord ? null : word);
-  };
-
-  const handleZoneClick = (zone) => {
-    if (selectedWord) {
-      placeWord(selectedWord, zone);
-    } else if (placements[zone]) {
-      removeWord(zone);
-    }
   };
 
   // Drag end handler using Framer Motion
@@ -103,7 +90,7 @@ export default function DragDropSPO({ q, onCheck }) {
   return (
     <div className="drag-section">
       <p className="drag-instruction">
-        👉 Tarik kata ke kotak SPO atau klik kata lalu klik kotaknya!
+        👉 Tarik kata ke kotak SPO yang sesuai!
       </p>
 
       {/* Available word bank */}
@@ -111,8 +98,7 @@ export default function DragDropSPO({ q, onCheck }) {
         {availableWords.map((word) => (
           <motion.div
             key={word}
-            className={`word-chip available ${selectedWord === word ? 'selected-highlight' : ''}`}
-            onClick={() => handleWordClick(word)}
+            className={`word-chip available`}
             drag
             dragSnapToOrigin
             dragElastic={0.4}
@@ -134,8 +120,7 @@ export default function DragDropSPO({ q, onCheck }) {
         {/* Subjek */}
         <div
           id="dz-S"
-          onClick={() => handleZoneClick('S')}
-          className={`drop-zone s-zone ${placements.S ? 'occupied' : ''} ${selectedWord ? 'pulse-border' : ''}`}
+          className={`drop-zone s-zone ${placements.S ? 'occupied' : ''}`}
         >
           <span className="dz-label">🟡 Subjek (S)</span>
           {placements.S ? (
@@ -143,6 +128,8 @@ export default function DragDropSPO({ q, onCheck }) {
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               className="dz-word placed-s"
+              onClick={() => removeWord('S')}
+              style={{ cursor: 'pointer' }}
             >
               {placements.S}
             </motion.span>
@@ -154,8 +141,7 @@ export default function DragDropSPO({ q, onCheck }) {
         {/* Predikat */}
         <div
           id="dz-P"
-          onClick={() => handleZoneClick('P')}
-          className={`drop-zone p-zone ${placements.P ? 'occupied' : ''} ${selectedWord ? 'pulse-border' : ''}`}
+          className={`drop-zone p-zone ${placements.P ? 'occupied' : ''}`}
         >
           <span className="dz-label">🟢 Predikat (P)</span>
           {placements.P ? (
@@ -163,6 +149,8 @@ export default function DragDropSPO({ q, onCheck }) {
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               className="dz-word placed-p"
+              onClick={() => removeWord('P')}
+              style={{ cursor: 'pointer' }}
             >
               {placements.P}
             </motion.span>
@@ -174,8 +162,7 @@ export default function DragDropSPO({ q, onCheck }) {
         {/* Objek */}
         <div
           id="dz-O"
-          onClick={() => handleZoneClick('O')}
-          className={`drop-zone o-zone ${placements.O ? 'occupied' : ''} ${selectedWord ? 'pulse-border' : ''}`}
+          className={`drop-zone o-zone ${placements.O ? 'occupied' : ''}`}
         >
           <span className="dz-label">🔵 Objek (O)</span>
           {placements.O ? (
@@ -183,6 +170,8 @@ export default function DragDropSPO({ q, onCheck }) {
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               className="dz-word placed-o"
+              onClick={() => removeWord('O')}
+              style={{ cursor: 'pointer' }}
             >
               {placements.O}
             </motion.span>

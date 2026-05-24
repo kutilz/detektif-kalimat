@@ -87,7 +87,7 @@ export default function App() {
     } else if (screen === 'quiz') {
       // Show identity form first if fields are enabled
       const idConfig = getUserIdentityConfig();
-      const hasEnabledFields = idConfig.fields.some((f) => f.enabled === true || f.enabled === 'true');
+      const hasEnabledFields = idConfig.enabled !== false && idConfig.fields.some((f) => f.enabled === true || f.enabled === 'true');
       if (hasEnabledFields && !userIdentity) {
         setCurrentScreen('identity');
       } else {
@@ -564,18 +564,10 @@ export default function App() {
                   {quizQuestions[currentQuestionIndex].sentence &&
                    quizQuestions[currentQuestionIndex].type !== 'token' &&
                    quizQuestions[currentQuestionIndex].type !== 'scramble' &&
-                   quizQuestions[currentQuestionIndex].type !== 'drag' ? (
+                   quizQuestions[currentQuestionIndex].type !== 'drag' && (
                     <div className="quiz-sentence-box">
                       <div className="quiz-sentence">"{quizQuestions[currentQuestionIndex].sentence}"</div>
-                      <div className="quiz-sentence-hint">{quizQuestions[currentQuestionIndex].hint}</div>
                     </div>
-                  ) : (
-                    /* For other types like scramble/drag, we hide the sentence but still show the hint (token selector has its own hint rendering) */
-                    quizQuestions[currentQuestionIndex].type !== 'token' && quizQuestions[currentQuestionIndex].hint && (
-                      <div className="quiz-sentence-hint" style={{ margin: '12px 0 24px 0', textAlign: 'center' }}>
-                        {quizQuestions[currentQuestionIndex].hint}
-                      </div>
-                    )
                   )}
 
                   {/* Render based on Question Type */}

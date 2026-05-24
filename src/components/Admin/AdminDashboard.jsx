@@ -170,6 +170,16 @@ export default function AdminDashboard({ onLogout }) {
     showToast('Konfigurasi identitas disimpan! ✅');
   };
 
+  const handleToggleMasterIdentity = () => {
+    const updated = {
+      ...identityConfig,
+      enabled: identityConfig.enabled === false ? true : false,
+    };
+    saveUserIdentityConfig(updated);
+    setIdentityConfig(updated);
+    showToast(`Form identitas ${updated.enabled ? 'diaktifkan' : 'dinonaktifkan'}! ✅`);
+  };
+
   // ---- Security handlers ----
   const handleChangePasskey = () => {
     if (currentPass !== settings.passkey) {
@@ -625,9 +635,22 @@ export default function AdminDashboard({ onLogout }) {
                   </div>
                   <div className="admin-card-body">
                     <p style={{ color: 'var(--admin-text-3)', fontSize: '0.85rem', marginBottom: 20 }}>
-                      Atur field yang ditampilkan sebelum siswa memulai quiz. Field yang di-enable akan ditampilkan, field yang required harus diisi.
+                      Atur field yang ditampilkan sebelum siswa memulai quiz. Matikan toggle master untuk langsung melewati form identitas.
                     </p>
-                    <div className="admin-identity-list">
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--admin-surface-2)', borderRadius: 8, marginBottom: 20 }}>
+                      <div style={{ fontWeight: 600 }}>Tampilkan Form Identitas</div>
+                      <label className="admin-toggle" style={{ width: 44, height: 24 }}>
+                        <input
+                          type="checkbox"
+                          checked={identityConfig.enabled !== false}
+                          onChange={handleToggleMasterIdentity}
+                        />
+                        <span className="admin-toggle-slider" />
+                      </label>
+                    </div>
+
+                    <div className="admin-identity-list" style={{ opacity: identityConfig.enabled !== false ? 1 : 0.5, pointerEvents: identityConfig.enabled !== false ? 'auto' : 'none' }}>
                       {identityConfig.fields.map((field) => (
                         <div key={field.key} className="admin-identity-item">
                           <span className="admin-identity-field-name">{field.label}</span>

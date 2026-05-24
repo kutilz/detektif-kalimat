@@ -25,6 +25,7 @@ const DEFAULT_SETTINGS = {
 };
 
 const DEFAULT_USER_IDENTITY_CONFIG = {
+  enabled: true,
   fields: [
     { key: 'name', label: 'Nama', required: true, enabled: true },
     { key: 'class', label: 'Kelas', required: false, enabled: true },

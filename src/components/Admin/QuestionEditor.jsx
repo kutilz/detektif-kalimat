@@ -423,7 +423,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                             type="button"
                             className="admin-btn admin-btn-secondary admin-btn-sm"
                             style={{ display: 'flex', alignItems: 'center', gap: 4 }}
-                            onClick={() => setScrambleWordsDisplay(shuffleArray(scrambleWordsDisplay))}
+                            onClick={() => setScrambleWordsDisplay(shuffleArray(scrambleWordsDisplay, scrambleWords))}
                           >
                             🎲 Acak Tampilan Pilihan
                           </button>
@@ -493,7 +493,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                             type="button"
                             className="admin-btn admin-btn-secondary admin-btn-sm"
                             style={{ display: 'flex', alignItems: 'center', gap: 4 }}
-                            onClick={() => setDragWordsDisplay(shuffleArray(dragWordsDisplay))}
+                            onClick={() => setDragWordsDisplay(shuffleArray(dragWordsDisplay, [dragS.trim(), dragP.trim(), dragO.trim()]))}
                           >
                             🎲 Acak Tampilan Pilihan
                           </button>

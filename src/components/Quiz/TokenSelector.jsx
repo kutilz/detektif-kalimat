@@ -8,8 +8,8 @@ export default function TokenSelector({ q, onCheck }) {
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const [roleInfo, setRoleInfo] = useState({ label: 'Kata', color: '#888', code: 'S' });
 
-  // Find answer index in tokens
-  const answerIndex = q.tokens ? q.tokens.indexOf(q.answer) : -1;
+  // Find answer index in tokens (case insensitive)
+  const answerIndex = q.tokens ? q.tokens.findIndex(t => t.toLowerCase() === (q.answer || '').toLowerCase()) : -1;
 
   useEffect(() => {
     setPlacedToken(null);
@@ -89,17 +89,10 @@ export default function TokenSelector({ q, onCheck }) {
     if (!placedToken || hasAnswered) return;
     setHasAnswered(true);
 
-    const correct = placedToken === q.answer;
-
     // Call onCheck after a delay for visual feedback inside the slot
     setTimeout(() => {
-      onCheck(correct, placedToken);
+      onCheck(placedToken.toLowerCase() === (q.answer || '').toLowerCase(), placedToken);
     }, 850);
-  };
-
-  const handleWordClick = (word) => {
-    if (hasAnswered) return;
-    handlePlaceToken(word);
   };
 
   const handleDragEnd = (event, info, word) => {
@@ -114,44 +107,11 @@ export default function TokenSelector({ q, onCheck }) {
     }
   };
 
-  // Fallback view: if answer is not in tokens
+  // Fallback view (no longer using buttons, just plain text if tokens are broken)
   if (answerIndex === -1) {
     return (
-      <div className="token-sentence" id="token-sentence">
-        {shuffledOptions.map((tok, index) => {
-          const isSelected = placedToken === tok;
-          const isCorrectAnswer = tok === q.answer;
-
-          let btnClass = 'word-token';
-          if (hasAnswered) {
-            btnClass += ' disabled';
-            if (isCorrectAnswer) {
-              btnClass += ' correct';
-            } else if (isSelected) {
-              btnClass += ' wrong';
-            }
-          }
-
-          return (
-            <motion.button
-              key={index}
-              className={btnClass}
-              onClick={() => {
-                setPlacedToken(tok);
-                setHasAnswered(true);
-                onCheck(tok === q.answer, tok);
-              }}
-              disabled={hasAnswered}
-              whileHover={!hasAnswered ? { scale: 1.05 } : {}}
-              whileTap={!hasAnswered ? { scale: 0.95 } : {}}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.05 }}
-            >
-              {tok}
-            </motion.button>
-          );
-        })}
+      <div className="token-sentence" style={{ color: 'red' }}>
+        Error: Jawaban tidak ditemukan di dalam kalimat. Edit soal ini di Admin Panel.
       </div>
     );
   }

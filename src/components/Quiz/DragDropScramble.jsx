@@ -24,10 +24,10 @@ export default function DragDropScramble({ q, onCheck, isSoundEnabled }) {
 
     let scrambled = [...initialWords];
     // If the words are in the correct order, shuffle them until they are not
-    if (scrambled.length > 1 && scrambled.every((w, i) => w === q.answer[i])) {
+    if (scrambled.length > 1 && scrambled.every((w, i) => w.toLowerCase() === (q.answer[i] || '').toLowerCase())) {
       for (let attempt = 0; attempt < 10; attempt++) {
         scrambled = shuffle(scrambled);
-        if (!scrambled.every((w, i) => w === q.answer[i])) break;
+        if (!scrambled.every((w, i) => w.toLowerCase() === (q.answer[i] || '').toLowerCase())) break;
       }
     }
     setWords(scrambled);
@@ -45,10 +45,10 @@ export default function DragDropScramble({ q, onCheck, isSoundEnabled }) {
   const handleReset = () => {
     playSound('click', isSoundEnabled);
     let scrambled = shuffle(q.words || q.answer || []);
-    if (scrambled.length > 1 && scrambled.every((w, i) => w === q.answer[i])) {
+    if (scrambled.length > 1 && scrambled.every((w, i) => w.toLowerCase() === (q.answer[i] || '').toLowerCase())) {
       for (let attempt = 0; attempt < 10; attempt++) {
         scrambled = shuffle(scrambled);
-        if (!scrambled.every((w, i) => w === q.answer[i])) break;
+        if (!scrambled.every((w, i) => w.toLowerCase() === (q.answer[i] || '').toLowerCase())) break;
       }
     }
     setWords(scrambled);
