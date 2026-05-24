@@ -25,10 +25,10 @@ const DEFAULT_SETTINGS = {
 };
 
 const DEFAULT_USER_IDENTITY_CONFIG = {
-  enabled: true,
+  enabled: false,
   fields: [
-    { key: 'name', label: 'Nama', required: true, enabled: true },
-    { key: 'class', label: 'Kelas', required: false, enabled: true },
+    { key: 'name', label: 'Nama', required: true, enabled: false },
+    { key: 'class', label: 'Kelas', required: false, enabled: false },
     { key: 'studentId', label: 'No. Absen', required: false, enabled: false },
   ],
 };
