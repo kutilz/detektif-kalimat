@@ -12,6 +12,38 @@ const KEYS = {
   QUESTION_OVERRIDES: 'dk_question_overrides',
 };
 
+// ---- Global State Cache ----
+let globalStoreCache = null;
+let syncTimeout = null;
+
+export async function initGlobalStore() {
+  try {
+    const res = await fetch('/api/store', { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      globalStoreCache = data;
+    } else {
+      globalStoreCache = {};
+    }
+  } catch (err) {
+    console.warn('Failed to load global store from API. Falling back to local.', err);
+    globalStoreCache = {};
+  }
+}
+
+async function syncToGlobalStore() {
+  if (!globalStoreCache) return;
+  try {
+    await fetch('/api/store', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(globalStoreCache)
+    });
+  } catch (err) {
+    console.error('Failed to sync to global store:', err);
+  }
+}
+
 // ---- Default Values ----
 
 const DEFAULT_SETTINGS = {
@@ -36,6 +68,11 @@ const DEFAULT_USER_IDENTITY_CONFIG = {
 // ---- Generic helpers ----
 
 function getJSON(key, fallback) {
+  // 1. Try Global Store first
+  if (globalStoreCache && globalStoreCache[key] !== undefined) {
+    return globalStoreCache[key];
+  }
+  // 2. Fallback to localStorage
   try {
     const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : fallback;
@@ -45,7 +82,21 @@ function getJSON(key, fallback) {
 }
 
 function setJSON(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+  // Update local storage (as backup/fallback)
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn('Failed to save to localStorage', e);
+  }
+  
+  // Update Global Store and debounce sync
+  if (globalStoreCache) {
+    globalStoreCache[key] = value;
+    clearTimeout(syncTimeout);
+    syncTimeout = setTimeout(() => {
+      syncToGlobalStore();
+    }, 1000); // 1-second debounce
+  }
 }
 
 // ---- Admin Settings ----

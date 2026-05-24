@@ -10,6 +10,7 @@ import {
   addLeaderboardEntry,
   getLeaderboard,
   getMergedQuestions,
+  initGlobalStore,
 } from './data/adminStore';
 
 // ReactBits Components
@@ -40,6 +41,14 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState('cover');
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [currentMateri, setCurrentMateri] = useState(0);
+  const [isGlobalLoading, setIsGlobalLoading] = useState(true);
+
+  // Initialize Global Store
+  useEffect(() => {
+    initGlobalStore().then(() => {
+      setIsGlobalLoading(false);
+    });
+  }, []);
   
   // Quiz States
   const [quizQuestions, setQuizQuestions] = useState([]);
@@ -319,6 +328,16 @@ export default function App() {
   // Get leaderboard for results
   const currentLeaderboard = getLeaderboard();
   const adminSettings = getAdminSettings();
+
+  if (isGlobalLoading) {
+    return (
+      <div className="app-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--blue-50)' }}>
+        <h2 style={{ color: 'var(--blue-600)', marginBottom: 20 }}>🔄 Menghubungkan ke Server...</h2>
+        <div className="spinner" style={{ width: 40, height: 40, border: '4px solid rgba(0,0,0,0.1)', borderTopColor: 'var(--blue-500)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
