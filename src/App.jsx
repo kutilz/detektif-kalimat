@@ -333,7 +333,7 @@ export default function App() {
       )}
 
       {/* Screens Router */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         
         {/* ===== COVER SCREEN ===== */}
         {currentScreen === 'cover' && (
@@ -364,7 +364,7 @@ export default function App() {
               </div>
               <div className="cover-buttons">
                 <button className="btn-main" onClick={() => navigateTo('menu')}>
-                  <ShinyText text="📚 Mulai Belajar!" speed="3s" />
+                  📚 <ShinyText text="Mulai Belajar!" speed="3s" />
                 </button>
               </div>
             </div>
