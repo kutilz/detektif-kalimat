@@ -222,6 +222,34 @@ html, body {
 .btn-back:hover { background: var(--brown-light); color: var(--white); }
 .btn-back:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* Header Sound Button */
+.btn-sound-header {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2.5px solid var(--brown-light);
+  background: var(--bg);
+  color: var(--brown-dark);
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  outline: none;
+  box-shadow: 0 2px 6px var(--shadow);
+}
+.btn-sound-header:hover {
+  background: var(--brown-light);
+  color: var(--white);
+  transform: scale(1.05);
+}
+.btn-sound-header.muted {
+  background: #e0d4c5;
+  color: #8b5e3c;
+  border-color: #c5b9a8;
+}
+
 /* ======= MENU SCREEN ======= */
 .menu-content {
   display: flex;
@@ -628,11 +656,12 @@ html, body {
   display: flex;
   justify-content: center;
   margin: 24px 0;
+  width: 100%;
 }
 .scramble-reorder-group {
   display: flex;
   gap: 12px;
-  justify-content: center;
+  justify-content: flex-start; /* Aligned to start for clean scroll experience */
   align-items: center;
   padding: 20px;
   background: rgba(255, 255, 255, 0.6);
@@ -642,7 +671,42 @@ html, body {
   list-style: none;
   width: 100%;
   max-width: 480px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Prevent chips from wrapping and breaking drag */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.scramble-reorder-group::-webkit-scrollbar {
+  height: 6px;
+}
+.scramble-reorder-group::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-radius: 999px;
+}
+.scramble-reorder-group::-webkit-scrollbar-thumb {
+  background: var(--brown-light);
+  border-radius: 999px;
+}
+
+.scramble-chip {
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  box-shadow: 0 4px 8px var(--shadow);
+  user-select: none;
+  background: var(--white);
+  border: 2px solid var(--brown-light);
+  color: var(--brown-dark);
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0; /* Keep chips from compressing */
+}
+.scramble-chip:hover {
+  background: var(--yellow);
+  border-color: var(--yellow-deep);
 }
 .scramble-chip.draggable {
   cursor: grab;
@@ -680,6 +744,8 @@ html, body {
   align-items: center;
   justify-content: center;
   z-index: 100;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .feedback-popup {
@@ -691,6 +757,9 @@ html, body {
   width: 90%;
   box-shadow: 0 24px 64px rgba(0,0,0,.3);
   border: 4px solid var(--brown-light);
+  margin: auto;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .feedback-icon { font-size: 4rem; display: block; margin-bottom: 12px; }
@@ -987,9 +1056,11 @@ html, body {
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 2000;
+  overflow-y: auto;
+  padding: 20px;
 }
 .confirm-modal-backdrop {
   position: absolute;
@@ -1008,6 +1079,7 @@ html, body {
   box-shadow: 0 20px 50px rgba(92, 51, 23, 0.25);
   text-align: center;
   z-index: 2001;
+  margin: auto;
 }
 .confirm-modal-icon {
   font-size: 3rem;
@@ -1066,11 +1138,97 @@ html, body {
 @media (max-width: 480px) {
   .cover-title { font-size: 2.5rem; }
   .materi-slide-header h2 { font-size: 1.5rem; }
-  .quiz-sentence { font-size: 1.3rem; }
+  .quiz-sentence { font-size: 1.35rem; }
   .drop-zones { flex-direction: column; }
   .options-grid.cols-2 { grid-template-columns: 1fr; }
   .hasil-buttons { grid-template-columns: 1fr; }
   .confirm-modal-actions { grid-template-columns: 1fr; }
+  
+  /* Header responsive updates to prevent overlap */
+  .header {
+    padding: 10px 12px;
+  }
+  .page-title {
+    font-size: 1.15rem;
+  }
+  .btn-back {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  .quiz-progress-bar {
+    width: 80px; /* shrink progress bar to fit headers on mobile */
+  }
+  
+  /* Spacing adjustments to prevent overlap inside containers */
+  .materi-content {
+    padding: 12px;
+  }
+  .quiz-body {
+    padding: 12px;
+  }
+  .materi-slide-glass-overlay {
+    padding: 16px;
+  }
+  .example-box {
+    padding: 12px 14px;
+  }
+  .spo-grid {
+    gap: 8px;
+  }
+  .spo-box {
+    padding: 10px 6px;
+  }
+  .spo-box .spo-label {
+    font-size: 1.3rem;
+  }
+  .spo-box .spo-name {
+    font-size: 0.75rem;
+  }
+  .spo-box .spo-meaning {
+    font-size: 0.7rem;
+  }
+  .quiz-sentence-box {
+    padding: 12px 16px;
+    margin: 12px 0;
+  }
+  
+  /* Materials navigation button adjustments */
+  .materi-nav {
+    padding: 12px;
+    gap: 6px;
+  }
+  .btn-nav {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    min-width: 90px;
+  }
+  .materi-dots {
+    gap: 4px;
+  }
+  .materi-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Sandbox Grid Scaling */
+  .sandbox-feedback-grid {
+    gap: 6px;
+  }
+  .sandbox-part {
+    padding: 8px 4px;
+  }
+  .sandbox-label {
+    font-size: 0.7rem;
+  }
+  .sandbox-val {
+    font-size: 0.9rem;
+    word-break: break-all;
+  }
+  
+  /* Leaderboard table cell width caps */
+  .hasil-leaderboard-table td:nth-child(2) {
+    max-width: 100px;
+  }
 }
 
 /* ============================================ */
@@ -1822,9 +1980,13 @@ html, body {
 /* ======= USER IDENTITY FORM (light, user-facing) ======= */
 .identity-screen {
   position: fixed; inset: 0;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; 
+  align-items: flex-start; 
+  justify-content: center;
   background: linear-gradient(160deg, #fff9f0 0%, #fdf3d0 100%);
-  z-index: 1; padding: 20px;
+  z-index: 1; 
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .identity-card {
@@ -1835,6 +1997,7 @@ html, body {
   width: 100%; max-width: 440px;
   text-align: center;
   border: 3px solid var(--brown-light);
+  margin: auto; /* Centering helper inside scrollable flex container */
 }
 
 .identity-char {
@@ -1939,6 +2102,22 @@ html, body {
   padding: 10px 12px; font-weight: 600;
   color: var(--text-dark);
   border-bottom: 1px solid #f0ece4;
+}
+.hasil-leaderboard-table td:nth-child(2) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px; /* Truncate names to prevent overflowing */
+}
+.hasil-leaderboard-table th:nth-child(1),
+.hasil-leaderboard-table td:nth-child(1) {
+  width: 44px;
+  text-align: center;
+}
+.hasil-leaderboard-table th:nth-child(3),
+.hasil-leaderboard-table td:nth-child(3) {
+  width: 80px;
+  text-align: center;
 }
 
 .hasil-leaderboard-table tr:last-child td { border-bottom: none; }

@@ -320,15 +320,17 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* Floating Sound Toggle Button */}
-      <button
-        id="btn-sound-toggle"
-        className={`btn-sound-floating ${!isSoundEnabled ? 'muted' : ''}`}
-        onClick={handleToggleSound}
-        aria-label="Toggle Sound"
-      >
-        {isSoundEnabled ? '🔊' : '🔇'}
-      </button>
+      {/* Floating Sound Toggle Button (Only on screens without sticky headers) */}
+      {(currentScreen === 'cover' || currentScreen === 'identity' || currentScreen === 'hasil') && (
+        <button
+          id="btn-sound-toggle"
+          className={`btn-sound-floating ${!isSoundEnabled ? 'muted' : ''}`}
+          onClick={handleToggleSound}
+          aria-label="Toggle Sound"
+        >
+          {isSoundEnabled ? '🔊' : '🔇'}
+        </button>
+      )}
 
       {/* Screens Router */}
       <AnimatePresence mode="wait">
@@ -387,7 +389,13 @@ export default function App() {
               <div className="header" style={{ width: '100%', background: 'rgba(255,255,255,0.9)', borderRadius: '16px' }}>
                 <button className="btn-back" onClick={() => navigateTo('cover')}>← Kembali</button>
                 <h2 className="page-title">📋 Menu Utama</h2>
-                <div style={{ width: '60px' }}></div>
+                <button
+                  className={`btn-sound-header ${!isSoundEnabled ? 'muted' : ''}`}
+                  onClick={handleToggleSound}
+                  aria-label="Toggle Sound"
+                >
+                  {isSoundEnabled ? '🔊' : '🔇'}
+                </button>
               </div>
               
               <div className="menu-body-wrapper">
@@ -447,7 +455,16 @@ export default function App() {
             <div className="header">
               <button className="btn-back" onClick={() => navigateTo('menu')}>← Menu</button>
               <h2 className="page-title">📖 Materi</h2>
-              <div className="slide-counter">{currentMateri + 1} / {materiSlides.length}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="slide-counter">{currentMateri + 1} / {materiSlides.length}</div>
+                <button
+                  className={`btn-sound-header ${!isSoundEnabled ? 'muted' : ''}`}
+                  onClick={handleToggleSound}
+                  aria-label="Toggle Sound"
+                >
+                  {isSoundEnabled ? '🔊' : '🔇'}
+                </button>
+              </div>
             </div>
 
             <div className="materi-content">
@@ -513,16 +530,25 @@ export default function App() {
             <div className="header">
               <button className="btn-back" onClick={() => setShowConfirmModal(true)}>← Menu</button>
               <h2 className="page-title">🎯 Latihan</h2>
-              <div className="quiz-progress-wrap">
-                <span className="quiz-progress-text">
-                  {currentQuestionIndex + 1}/{quizQuestions.length}
-                </span>
-                <div className="quiz-progress-bar">
-                  <div
-                    className="quiz-progress-fill"
-                    style={{ width: `${(currentQuestionIndex / quizQuestions.length) * 100}%` }}
-                  />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="quiz-progress-wrap">
+                  <span className="quiz-progress-text">
+                    {currentQuestionIndex + 1}/{quizQuestions.length}
+                  </span>
+                  <div className="quiz-progress-bar">
+                    <div
+                      className="quiz-progress-fill"
+                      style={{ width: `${(currentQuestionIndex / quizQuestions.length) * 100}%` }}
+                    />
+                  </div>
                 </div>
+                <button
+                  className={`btn-sound-header ${!isSoundEnabled ? 'muted' : ''}`}
+                  onClick={handleToggleSound}
+                  aria-label="Toggle Sound"
+                >
+                  {isSoundEnabled ? '🔊' : '🔇'}
+                </button>
               </div>
             </div>
 
