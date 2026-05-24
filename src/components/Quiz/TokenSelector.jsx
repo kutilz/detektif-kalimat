@@ -35,25 +35,39 @@ export default function TokenSelector({ q, onCheck }) {
     }
     setRoleInfo({ label, color, code: role });
 
-    // Select distractor from vocabulary that is not in the tokens
+    // ── Cross-category distractor strategy ──────────────────────────────
+    // If asking for S → pull from P or O vocab (a verb/object, NOT another noun)
+    // If asking for P → pull from S or O vocab (a noun/object, NOT another verb)
+    // If asking for O → pull from S or P vocab (a noun/verb, NOT another object)
+    // This ensures the distractor is obviously the wrong grammatical category,
+    // so it won't form a plausible sentence in the blank and won't confuse kids.
     let distractor = '';
-    const vocab = role === 'S' ? vocabS : role === 'P' ? vocabP : vocabO;
-    const candidates = vocab.filter(
-      (w) => !q.tokens.map((t) => t.toLowerCase()).includes(w.toLowerCase())
-    );
-    if (candidates.length > 0) {
-      distractor = candidates[Math.floor(Math.random() * candidates.length)];
+    const tokenLower = q.tokens.map((t) => t.toLowerCase());
+
+    const pickFrom = (vocabArr) =>
+      vocabArr.filter((w) => !tokenLower.includes(w.toLowerCase()));
+
+    let candidatePool = [];
+    if (role === 'S') {
+      // Wrong-category: verbs (P) or objects (O) — neither can be a subject cleanly
+      candidatePool = [...pickFrom(vocabP), ...pickFrom(vocabO)];
+    } else if (role === 'P') {
+      // Wrong-category: subjects (S) or objects (O)
+      candidatePool = [...pickFrom(vocabS), ...pickFrom(vocabO)];
+    } else {
+      // Wrong-category: subjects (S) or verbs (P)
+      candidatePool = [...pickFrom(vocabS), ...pickFrom(vocabP)];
     }
 
-    // Compile choices: tokens + distractor
+    if (candidatePool.length > 0) {
+      distractor = candidatePool[Math.floor(Math.random() * candidatePool.length)];
+    }
+
+    // Compile choices: all tokens + 1 distractor
     const choices = [...q.tokens];
     if (distractor) {
-      // Capitalize if the answer is capitalized
-      let processedDist = distractor;
-      if (q.answer && q.answer[0] === q.answer[0].toUpperCase()) {
-        processedDist = distractor.charAt(0).toUpperCase() + distractor.slice(1);
-      }
-      choices.push(processedDist);
+      // Keep distractor lowercase (it's clearly a different category — no need to capitalise)
+      choices.push(distractor.toLowerCase());
     }
 
     // Shuffle choices
