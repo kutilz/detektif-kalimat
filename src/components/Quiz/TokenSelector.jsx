@@ -64,13 +64,22 @@ export default function TokenSelector({ q, onCheck }) {
   const handlePlaceToken = (word) => {
     if (hasAnswered) return;
     setPlacedToken(word);
+  };
+
+  const handleRemoveToken = () => {
+    if (hasAnswered) return;
+    setPlacedToken(null);
+  };
+
+  const handleSubmit = () => {
+    if (!placedToken || hasAnswered) return;
     setHasAnswered(true);
 
-    const correct = word === q.answer;
+    const correct = placedToken === q.answer;
 
     // Call onCheck after a delay for visual feedback inside the slot
     setTimeout(() => {
-      onCheck(correct, word);
+      onCheck(correct, placedToken);
     }, 850);
   };
 
@@ -153,6 +162,7 @@ export default function TokenSelector({ q, onCheck }) {
           className={`drop-zone token-dz ${placedToken ? 'occupied' : ''} ${
             hasAnswered ? (placedToken === q.answer ? 'correct' : 'wrong') : ''
           }`}
+          onClick={handleRemoveToken}
           style={{
             borderColor: roleInfo.color,
             boxShadow: hasAnswered
@@ -201,7 +211,7 @@ export default function TokenSelector({ q, onCheck }) {
             <motion.div
               key={idx}
               className={`word-chip available ${isPlaced ? 'disabled' : ''}`}
-              onClick={() => !isPlaced && handleWordClick(word)}
+              onTap={() => !isPlaced && handleWordClick(word)}
               drag={!hasAnswered && !isPlaced}
               dragSnapToOrigin
               dragElastic={0.4}
@@ -218,6 +228,26 @@ export default function TokenSelector({ q, onCheck }) {
             </motion.div>
           );
         })}
+      </div>
+
+      {/* Control Buttons */}
+      <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '24px' }}>
+        <button
+          className="btn-back"
+          style={{ padding: '12px 24px', fontSize: '1rem', borderColor: 'var(--yellow-deep)' }}
+          onClick={handleRemoveToken}
+          disabled={!placedToken || hasAnswered}
+        >
+          🔄 Reset
+        </button>
+        <button
+          className="btn-check"
+          onClick={handleSubmit}
+          disabled={!placedToken || hasAnswered}
+          style={{ margin: 0, width: '100%', maxWidth: '160px' }}
+        >
+          Periksa ✅
+        </button>
       </div>
 
       {/* Hint */}
