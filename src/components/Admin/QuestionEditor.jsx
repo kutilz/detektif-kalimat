@@ -2,6 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save } from 'lucide-react';
 
+// Helper to shuffle array
+function shuffleArray(arr) {
+  const newArr = [...arr];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+}
+
 // Derive initial state from an existing question (for edit mode)
 function deriveState(q) {
   if (!q) {
@@ -13,6 +23,7 @@ function deriveState(q) {
       sentence: '',
       tokenAnswer: '',
       scrambleWords: [],
+      scrambleWordsDisplay: [],
       dragS: '',
       dragP: '',
       dragO: '',
@@ -27,6 +38,7 @@ function deriveState(q) {
     sentence: '',
     tokenAnswer: '',
     scrambleWords: [],
+    scrambleWordsDisplay: [],
     dragS: '',
     dragP: '',
     dragO: '',
@@ -38,6 +50,13 @@ function deriveState(q) {
   } else if (q.type === 'scramble') {
     // answer is the correct word order array
     base.scrambleWords = Array.isArray(q.answer) ? [...q.answer] : [];
+    // words is the scrambled order array
+    const savedWords = Array.isArray(q.words) ? [...q.words] : [];
+    if (savedWords.length === 0 && base.scrambleWords.length > 0) {
+      base.scrambleWordsDisplay = shuffleArray(base.scrambleWords);
+    } else {
+      base.scrambleWordsDisplay = savedWords;
+    }
   } else if (q.type === 'drag') {
     base.dragS = q.answer?.S || '';
     base.dragP = q.answer?.P || '';
@@ -60,6 +79,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
   const [sentence, setSentence] = useState('');
   const [tokenAnswer, setTokenAnswer] = useState('');
   const [scrambleWords, setScrambleWords] = useState([]);
+  const [scrambleWordsDisplay, setScrambleWordsDisplay] = useState([]);
   const [scrambleWordInput, setScrambleWordInput] = useState('');
   const [dragS, setDragS] = useState('');
   const [dragP, setDragP] = useState('');
@@ -77,6 +97,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     setSentence(s.sentence);
     setTokenAnswer(s.tokenAnswer);
     setScrambleWords(s.scrambleWords);
+    setScrambleWordsDisplay(s.scrambleWordsDisplay);
     setScrambleWordInput('');
     setDragS(s.dragS);
     setDragP(s.dragP);
@@ -92,6 +113,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     setSentence('');
     setTokenAnswer('');
     setScrambleWords([]);
+    setScrambleWordsDisplay([]);
     setScrambleWordInput('');
     setDragS('');
     setDragP('');
@@ -104,11 +126,18 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     const w = scrambleWordInput.trim();
     if (w) {
       setScrambleWords([...scrambleWords, w]);
+      setScrambleWordsDisplay([...scrambleWordsDisplay, w]);
       setScrambleWordInput('');
     }
   };
-  const handleRemoveScrambleWord = (idx) =>
+  const handleRemoveScrambleWord = (idx) => {
+    const wordToRemove = scrambleWords[idx];
     setScrambleWords(scrambleWords.filter((_, i) => i !== idx));
+    const displayIdx = scrambleWordsDisplay.indexOf(wordToRemove);
+    if (displayIdx !== -1) {
+      setScrambleWordsDisplay(scrambleWordsDisplay.filter((_, i) => i !== displayIdx));
+    }
+  };
   const handleScrambleKeyDown = (e) => {
     if (e.key === 'Enter') { e.preventDefault(); handleAddScrambleWord(); }
   };
@@ -142,7 +171,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     } else if (type === 'scramble') {
       question = {
         ...question,
-        words: [...scrambleWords].sort(() => Math.random() - 0.5),
+        words: [...scrambleWordsDisplay],
         answer: [...scrambleWords],
       };
     } else if (type === 'drag') {
@@ -337,9 +366,29 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                       Masukkan kata dalam urutan yang BENAR. Kata akan diacak saat soal ditampilkan.
                     </div>
                     {scrambleWords.length >= 2 && (
-                      <div style={{ marginTop: 10, padding: '8px 12px', background: 'var(--admin-surface-2)', borderRadius: 8, fontSize: '0.85rem', color: 'var(--admin-text-2)' }}>
-                        Urutan benar: <strong>{scrambleWords.join(' → ')}</strong>
-                      </div>
+                      <>
+                        <div style={{ marginTop: 10, padding: '8px 12px', background: 'var(--admin-surface-2)', borderRadius: 8, fontSize: '0.85rem', color: 'var(--admin-text-2)' }}>
+                          Urutan benar: <strong>{scrambleWords.join(' → ')}</strong>
+                        </div>
+                        <div style={{ marginTop: 16 }}>
+                          <label className="admin-label">Urutan Tampilan Pilihan Kata (Scramble) <span className="required">*</span></label>
+                          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8, marginBottom: 8 }}>
+                            {scrambleWordsDisplay.map((w, idx) => (
+                              <span key={idx} className="admin-chip" style={{ background: 'rgba(244,161,0,0.15)', borderColor: 'var(--admin-accent)' }}>
+                                {w}
+                              </span>
+                            ))}
+                          </div>
+                          <button
+                            type="button"
+                            className="admin-btn admin-btn-secondary admin-btn-sm"
+                            style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                            onClick={() => setScrambleWordsDisplay(shuffleArray(scrambleWordsDisplay))}
+                          >
+                            🎲 Acak Tampilan Pilihan
+                          </button>
+                        </div>
+                      </>
                     )}
                   </div>
                 )}

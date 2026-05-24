@@ -15,14 +15,15 @@ export default function DragDropScramble({ q, onCheck, isSoundEnabled }) {
     return newArr;
   };
 
-  // Setup/Shuffle when question changes
+  // Use the exact scrambled words order defined in the question data
   useEffect(() => {
-    let scrambled = shuffle(q.words);
-    // If the scrambled version happens to be the correct answer, shuffle again (if words > 1)
-    if (scrambled.length > 1 && scrambled.every((w, i) => w === q.answer[i])) {
-      scrambled = shuffle(q.words);
+    if (q.words && q.words.length > 0) {
+      setWords(q.words);
+    } else if (q.answer && q.answer.length > 0) {
+      setWords(shuffle(q.answer));
+    } else {
+      setWords([]);
     }
-    setWords(scrambled);
   }, [q]);
 
   const handleReorder = (newOrder) => {

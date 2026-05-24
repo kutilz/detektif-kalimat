@@ -448,12 +448,12 @@ export const allQuestions = [
   {
     id: 'q_drag3',
     type: 'drag',
-    sentence: 'Kucing menangkap tikus',
-    words: ['menangkap', 'Kucing', 'tikus'],
-    answer: { S: 'Kucing', P: 'menangkap', O: 'tikus' },
+    sentence: 'Anak-anak menulis huruf',
+    words: ['huruf', 'Anak-anak', 'menulis'],
+    answer: { S: 'Anak-anak', P: 'menulis', O: 'huruf' },
     question: 'Tempatkan kata ke unsur SPO yang sesuai!',
-    hint: '💡 Kucing pelakunya, menangkap tindakannya, tikus sasarannya.',
-    explain: '✅ Kucing (Subjek) + menangkap (Predikat) + tikus (Objek).'
+    hint: '💡 Anak-anak adalah pelaku, menulis adalah kegiatan, huruf adalah objek.',
+    explain: '✅ Anak-anak (Subjek) + menulis (Predikat) + huruf (Objek).'
   },
 
   // 17. Scramble Questions
@@ -483,6 +483,15 @@ export const allQuestions = [
     question: 'Susun kata menjadi kalimat SPO yang benar!',
     hint: '💡 Pelakunya adalah kata ganti orang.',
     explain: '✅ Susunan benar: Dia (S) + menulis (P) + surat (O).'
+  },
+  {
+    id: 'q_scramble4',
+    type: 'scramble',
+    words: ['bola', 'Budi', 'bermain'],
+    answer: ['Budi', 'bermain', 'bola'],
+    question: 'Susun kata menjadi kalimat SPO yang benar!',
+    hint: '💡 Mulai dari orang yang bermain.',
+    explain: '✅ Susunan benar: Budi (S) + bermain (P) + bola (O).'
   },
 
   // 18. Sandbox Challenge
