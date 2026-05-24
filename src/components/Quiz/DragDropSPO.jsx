@@ -5,13 +5,34 @@ export default function DragDropSPO({ q, onCheck }) {
   const [placements, setPlacements] = useState({ S: null, P: null, O: null });
   const [selectedWord, setSelectedWord] = useState(null);
 
+  const [displayWords, setDisplayWords] = useState([]);
+
   // Reset state when question changes
   useEffect(() => {
     setPlacements({ S: null, P: null, O: null });
     setSelectedWord(null);
+
+    // Make sure display order of available words is never exactly S-P-O
+    const correct = [q.answer?.S, q.answer?.P, q.answer?.O];
+    let wordsToUse = q.words || [];
+    if (wordsToUse.length === 3 && wordsToUse.every((w, i) => w === correct[i])) {
+      const shuffle = (arr) => {
+        const newArr = [...arr];
+        for (let i = newArr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+        }
+        return newArr;
+      };
+      for (let attempt = 0; attempt < 10; attempt++) {
+        wordsToUse = shuffle(wordsToUse);
+        if (!wordsToUse.every((w, i) => w === correct[i])) break;
+      }
+    }
+    setDisplayWords(wordsToUse);
   }, [q]);
 
-  const availableWords = q.words.filter(
+  const availableWords = displayWords.filter(
     (w) => w !== placements.S && w !== placements.P && w !== placements.O
   );
 

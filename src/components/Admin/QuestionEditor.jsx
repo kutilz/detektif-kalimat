@@ -2,12 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save } from 'lucide-react';
 
-// Helper to shuffle array
-function shuffleArray(arr) {
-  const newArr = [...arr];
-  for (let i = newArr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+// Helper to shuffle array and ensure it is not identical to correctOrder
+function shuffleArray(arr, correctOrder = null) {
+  if (arr.length <= 1) return arr;
+  let newArr = [...arr];
+  for (let attempt = 0; attempt < 20; attempt++) {
+    for (let i = newArr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+    if (correctOrder) {
+      const isIdentical = newArr.length === correctOrder.length && 
+                          newArr.every((val, idx) => val === correctOrder[idx]);
+      if (!isIdentical) break;
+    } else {
+      break;
+    }
   }
   return newArr;
 }
@@ -53,7 +63,7 @@ function deriveState(q) {
     // words is the scrambled order array
     const savedWords = Array.isArray(q.words) ? [...q.words] : [];
     if (savedWords.length === 0 && base.scrambleWords.length > 0) {
-      base.scrambleWordsDisplay = shuffleArray(base.scrambleWords);
+      base.scrambleWordsDisplay = shuffleArray(base.scrambleWords, base.scrambleWords);
     } else {
       base.scrambleWordsDisplay = savedWords;
     }
@@ -63,7 +73,7 @@ function deriveState(q) {
     base.dragO = q.answer?.O || '';
     const savedWords = Array.isArray(q.words) ? [...q.words] : [];
     if (savedWords.length === 0 && base.dragS && base.dragP && base.dragO) {
-      base.dragWordsDisplay = shuffleArray([base.dragS, base.dragP, base.dragO]);
+      base.dragWordsDisplay = shuffleArray([base.dragS, base.dragP, base.dragO], [base.dragS, base.dragP, base.dragO]);
     } else {
       base.dragWordsDisplay = savedWords;
     }
@@ -119,10 +129,16 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
       setDragWordsDisplay(prev => {
         const normalized = prev.filter(w => [dragS.trim(), dragP.trim(), dragO.trim()].includes(w));
         const missing = [dragS.trim(), dragP.trim(), dragO.trim()].filter(w => w && !normalized.includes(w));
+        let nextWords = prev;
         if (missing.length > 0 || normalized.length !== currentInputs.length) {
-          return [...normalized, ...missing];
+          nextWords = [...normalized, ...missing];
         }
-        return prev;
+        // If the resulting words are exactly in the correct S-P-O order and we have all 3, shuffle to break it
+        const correct = [dragS.trim(), dragP.trim(), dragO.trim()];
+        if (nextWords.length === 3 && nextWords.every((w, i) => w === correct[i])) {
+          return shuffleArray(nextWords, correct);
+        }
+        return nextWords;
       });
     }
   }, [dragS, dragP, dragO, type]);

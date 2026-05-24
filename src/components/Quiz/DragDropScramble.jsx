@@ -17,13 +17,20 @@ export default function DragDropScramble({ q, onCheck, isSoundEnabled }) {
 
   // Use the exact scrambled words order defined in the question data
   useEffect(() => {
-    if (q.words && q.words.length > 0) {
-      setWords(q.words);
-    } else if (q.answer && q.answer.length > 0) {
-      setWords(shuffle(q.answer));
-    } else {
-      setWords([]);
+    let initialWords = q.words;
+    if (!initialWords || initialWords.length === 0) {
+      initialWords = q.answer || [];
     }
+
+    let scrambled = [...initialWords];
+    // If the words are in the correct order, shuffle them until they are not
+    if (scrambled.length > 1 && scrambled.every((w, i) => w === q.answer[i])) {
+      for (let attempt = 0; attempt < 10; attempt++) {
+        scrambled = shuffle(scrambled);
+        if (!scrambled.every((w, i) => w === q.answer[i])) break;
+      }
+    }
+    setWords(scrambled);
   }, [q]);
 
   const handleReorder = (newOrder) => {
@@ -37,7 +44,14 @@ export default function DragDropScramble({ q, onCheck, isSoundEnabled }) {
 
   const handleReset = () => {
     playSound('click', isSoundEnabled);
-    setWords(shuffle(q.words));
+    let scrambled = shuffle(q.words || q.answer || []);
+    if (scrambled.length > 1 && scrambled.every((w, i) => w === q.answer[i])) {
+      for (let attempt = 0; attempt < 10; attempt++) {
+        scrambled = shuffle(scrambled);
+        if (!scrambled.every((w, i) => w === q.answer[i])) break;
+      }
+    }
+    setWords(scrambled);
   };
 
   return (
