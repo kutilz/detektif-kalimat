@@ -61,6 +61,12 @@ function deriveState(q) {
     base.dragS = q.answer?.S || '';
     base.dragP = q.answer?.P || '';
     base.dragO = q.answer?.O || '';
+    const savedWords = Array.isArray(q.words) ? [...q.words] : [];
+    if (savedWords.length === 0 && base.dragS && base.dragP && base.dragO) {
+      base.dragWordsDisplay = shuffleArray([base.dragS, base.dragP, base.dragO]);
+    } else {
+      base.dragWordsDisplay = savedWords;
+    }
   }
 
   return base;
@@ -84,6 +90,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
   const [dragS, setDragS] = useState('');
   const [dragP, setDragP] = useState('');
   const [dragO, setDragO] = useState('');
+  const [dragWordsDisplay, setDragWordsDisplay] = useState([]);
 
   // Sync ALL state whenever the modal opens or editingQuestion changes
   useEffect(() => {
@@ -102,7 +109,23 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     setDragS(s.dragS);
     setDragP(s.dragP);
     setDragO(s.dragO);
+    setDragWordsDisplay(s.dragWordsDisplay || []);
   }, [isOpen, editingQuestion]);
+
+  // Keep dragWordsDisplay in sync with dragS, dragP, and dragO input values
+  useEffect(() => {
+    if (type === 'drag') {
+      const currentInputs = [dragS.trim(), dragP.trim(), dragO.trim()].filter(Boolean);
+      setDragWordsDisplay(prev => {
+        const normalized = prev.filter(w => [dragS.trim(), dragP.trim(), dragO.trim()].includes(w));
+        const missing = [dragS.trim(), dragP.trim(), dragO.trim()].filter(w => w && !normalized.includes(w));
+        if (missing.length > 0 || normalized.length !== currentInputs.length) {
+          return [...normalized, ...missing];
+        }
+        return prev;
+      });
+    }
+  }, [dragS, dragP, dragO, type]);
 
   if (!isOpen) return null;
 
@@ -118,6 +141,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     setDragS('');
     setDragP('');
     setDragO('');
+    setDragWordsDisplay([]);
     setStep(2);
   };
 
@@ -178,7 +202,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
       question = {
         ...question,
         sentence: `${dragS.trim()} ${dragP.trim()} ${dragO.trim()}`,
-        words: [dragP.trim(), dragS.trim(), dragO.trim()].sort(() => Math.random() - 0.5),
+        words: [...dragWordsDisplay],
         answer: { S: dragS.trim(), P: dragP.trim(), O: dragO.trim() },
       };
     }
@@ -432,13 +456,33 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                       </div>
                     </div>
                     {dragS && dragP && dragO && (
-                      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 4, padding: '8px 12px', background: 'var(--admin-surface-2)', borderRadius: 8, fontSize: '0.9rem' }}>
-                        <span style={{ color: '#f4a100', fontWeight: 800 }}>S: {dragS}</span>
-                        <span style={{ color: 'var(--admin-text-3)' }}>|</span>
-                        <span style={{ color: '#22c55e', fontWeight: 800 }}>P: {dragP}</span>
-                        <span style={{ color: 'var(--admin-text-3)' }}>|</span>
-                        <span style={{ color: '#3b82f6', fontWeight: 800 }}>O: {dragO}</span>
-                      </div>
+                      <>
+                        <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 4, padding: '8px 12px', background: 'var(--admin-surface-2)', borderRadius: 8, fontSize: '0.9rem' }}>
+                          <span style={{ color: '#f4a100', fontWeight: 800 }}>S: {dragS}</span>
+                          <span style={{ color: 'var(--admin-text-3)' }}>|</span>
+                          <span style={{ color: '#22c55e', fontWeight: 800 }}>P: {dragP}</span>
+                          <span style={{ color: 'var(--admin-text-3)' }}>|</span>
+                          <span style={{ color: '#3b82f6', fontWeight: 800 }}>O: {dragO}</span>
+                        </div>
+                        <div style={{ marginTop: 16 }}>
+                          <label className="admin-label">Urutan Tampilan Pilihan Kata (Drag SPO) <span className="required">*</span></label>
+                          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8, marginBottom: 8 }}>
+                            {dragWordsDisplay.map((w, idx) => (
+                              <span key={idx} className="admin-chip" style={{ background: 'rgba(244,161,0,0.15)', borderColor: 'var(--admin-accent)' }}>
+                                {w}
+                              </span>
+                            ))}
+                          </div>
+                          <button
+                            type="button"
+                            className="admin-btn admin-btn-secondary admin-btn-sm"
+                            style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                            onClick={() => setDragWordsDisplay(shuffleArray(dragWordsDisplay))}
+                          >
+                            🎲 Acak Tampilan Pilihan
+                          </button>
+                        </div>
+                      </>
                     )}
                   </>
                 )}
