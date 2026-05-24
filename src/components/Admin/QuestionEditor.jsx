@@ -1,49 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Trash2, Save } from 'lucide-react';
+import { X, Save } from 'lucide-react';
+
+// Derive initial state from an existing question (for edit mode)
+function deriveState(q) {
+  if (!q) {
+    return {
+      type: 'token',
+      questionText: '',
+      hint: '',
+      explain: '',
+      sentence: '',
+      tokenAnswer: '',
+      scrambleWords: [],
+      dragS: '',
+      dragP: '',
+      dragO: '',
+    };
+  }
+
+  const base = {
+    type: q.type || 'token',
+    questionText: q.question || '',
+    hint: q.hint || '',
+    explain: q.explain || '',
+    sentence: '',
+    tokenAnswer: '',
+    scrambleWords: [],
+    dragS: '',
+    dragP: '',
+    dragO: '',
+  };
+
+  if (q.type === 'token') {
+    base.sentence = q.sentence || '';
+    base.tokenAnswer = typeof q.answer === 'string' ? q.answer : '';
+  } else if (q.type === 'scramble') {
+    // answer is the correct word order array
+    base.scrambleWords = Array.isArray(q.answer) ? [...q.answer] : [];
+  } else if (q.type === 'drag') {
+    base.dragS = q.answer?.S || '';
+    base.dragP = q.answer?.P || '';
+    base.dragO = q.answer?.O || '';
+  }
+
+  return base;
+}
 
 export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestion }) {
   const isEditing = !!editingQuestion;
+
+  // Step: 1 = choose type (add mode only), 2 = fill details
   const [step, setStep] = useState(isEditing ? 2 : 1);
-  const [type, setType] = useState(editingQuestion?.type || 'token');
 
-  // Common fields
-  const [questionText, setQuestionText] = useState(editingQuestion?.question || '');
-  const [hint, setHint] = useState(editingQuestion?.hint || '');
-  const [explain, setExplain] = useState(editingQuestion?.explain || '');
-
-  // Token type
-  const [sentence, setSentence] = useState(editingQuestion?.sentence || '');
-  const [tokenAnswer, setTokenAnswer] = useState(editingQuestion?.answer || '');
-
-  // Scramble type
-  const [scrambleWords, setScrambleWords] = useState(editingQuestion?.answer || []);
+  const [type, setType] = useState('token');
+  const [questionText, setQuestionText] = useState('');
+  const [hint, setHint] = useState('');
+  const [explain, setExplain] = useState('');
+  const [sentence, setSentence] = useState('');
+  const [tokenAnswer, setTokenAnswer] = useState('');
+  const [scrambleWords, setScrambleWords] = useState([]);
   const [scrambleWordInput, setScrambleWordInput] = useState('');
+  const [dragS, setDragS] = useState('');
+  const [dragP, setDragP] = useState('');
+  const [dragO, setDragO] = useState('');
 
-  // Drag type
-  const [dragS, setDragS] = useState(editingQuestion?.answer?.S || '');
-  const [dragP, setDragP] = useState(editingQuestion?.answer?.P || '');
-  const [dragO, setDragO] = useState(editingQuestion?.answer?.O || '');
+  // Sync ALL state whenever the modal opens or editingQuestion changes
+  useEffect(() => {
+    if (!isOpen) return;
+    const s = deriveState(editingQuestion);
+    setStep(editingQuestion ? 2 : 1);
+    setType(s.type);
+    setQuestionText(s.questionText);
+    setHint(s.hint);
+    setExplain(s.explain);
+    setSentence(s.sentence);
+    setTokenAnswer(s.tokenAnswer);
+    setScrambleWords(s.scrambleWords);
+    setScrambleWordInput('');
+    setDragS(s.dragS);
+    setDragP(s.dragP);
+    setDragO(s.dragO);
+  }, [isOpen, editingQuestion]);
 
   if (!isOpen) return null;
 
+  // ---- Type select (add mode step 1) ----
   const handleSelectType = (t) => {
     setType(t);
+    // Reset type-specific fields when switching type in add mode
+    setSentence('');
+    setTokenAnswer('');
+    setScrambleWords([]);
+    setScrambleWordInput('');
+    setDragS('');
+    setDragP('');
+    setDragO('');
     setStep(2);
-    // Reset fields
-    if (!isEditing) {
-      setQuestionText('');
-      setHint('');
-      setExplain('');
-      setSentence('');
-      setTokenAnswer('');
-      setScrambleWords([]);
-      setDragS('');
-      setDragP('');
-      setDragO('');
-    }
   };
 
+  // ---- Scramble helpers ----
   const handleAddScrambleWord = () => {
     const w = scrambleWordInput.trim();
     if (w) {
@@ -51,37 +107,25 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
       setScrambleWordInput('');
     }
   };
-
-  const handleRemoveScrambleWord = (idx) => {
+  const handleRemoveScrambleWord = (idx) =>
     setScrambleWords(scrambleWords.filter((_, i) => i !== idx));
-  };
-
   const handleScrambleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddScrambleWord();
-    }
+    if (e.key === 'Enter') { e.preventDefault(); handleAddScrambleWord(); }
   };
 
-  const computeTokens = () => {
-    if (!sentence.trim()) return [];
-    return sentence.trim().split(/\s+/);
-  };
+  // ---- Token helpers ----
+  const computeTokens = () => (sentence.trim() ? sentence.trim().split(/\s+/) : []);
 
+  // ---- Validation ----
   const canSave = () => {
     if (!questionText.trim()) return false;
-    if (type === 'token') {
-      return sentence.trim() && tokenAnswer.trim() && computeTokens().includes(tokenAnswer.trim());
-    }
-    if (type === 'scramble') {
-      return scrambleWords.length >= 2;
-    }
-    if (type === 'drag') {
-      return dragS.trim() && dragP.trim() && dragO.trim();
-    }
+    if (type === 'token') return sentence.trim() && tokenAnswer.trim() && computeTokens().includes(tokenAnswer.trim());
+    if (type === 'scramble') return scrambleWords.length >= 2;
+    if (type === 'drag') return dragS.trim() && dragP.trim() && dragO.trim();
     return false;
   };
 
+  // ---- Save ----
   const handleSave = () => {
     if (!canSave()) return;
 
@@ -94,12 +138,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
 
     if (type === 'token') {
       const tokens = computeTokens();
-      question = {
-        ...question,
-        sentence: sentence.trim(),
-        tokens,
-        answer: tokenAnswer.trim(),
-      };
+      question = { ...question, sentence: sentence.trim(), tokens, answer: tokenAnswer.trim() };
     } else if (type === 'scramble') {
       question = {
         ...question,
@@ -115,12 +154,16 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
       };
     }
 
-    if (isEditing) {
-      question.id = editingQuestion.id;
-    }
+    if (isEditing) question.id = editingQuestion.id;
 
     onSave(question);
     onClose();
+  };
+
+  const TYPE_INFO = {
+    token: { icon: '🎯', label: 'Token', desc: 'Pilih kata yang tepat dari kalimat' },
+    scramble: { icon: '🔀', label: 'Scramble', desc: 'Susun kata-kata acak menjadi kalimat' },
+    drag: { icon: '📦', label: 'Drag SPO', desc: 'Tempatkan kata ke kotak S/P/O' },
   };
 
   return (
@@ -149,52 +192,58 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
 
           {/* Body */}
           <div className="admin-modal-body">
-            {/* Step 1: Choose Type */}
+
+            {/* ── Step 1: Choose Type (add mode only) ── */}
             {step === 1 && (
               <div className="admin-fade-in">
                 <div className="admin-label">Pilih Tipe Soal</div>
                 <div className="admin-radio-group" style={{ marginTop: 8 }}>
-                  <div
-                    className={`admin-radio-option ${type === 'token' ? 'active' : ''}`}
-                    onClick={() => handleSelectType('token')}
-                  >
-                    <span className="radio-icon">🎯</span>
-                    <span className="radio-label">Token</span>
-                    <span className="radio-desc">Pilih kata yang tepat</span>
-                  </div>
-                  <div
-                    className={`admin-radio-option ${type === 'scramble' ? 'active' : ''}`}
-                    onClick={() => handleSelectType('scramble')}
-                  >
-                    <span className="radio-icon">🔀</span>
-                    <span className="radio-label">Scramble</span>
-                    <span className="radio-desc">Susun kata acak</span>
-                  </div>
-                  <div
-                    className={`admin-radio-option ${type === 'drag' ? 'active' : ''}`}
-                    onClick={() => handleSelectType('drag')}
-                  >
-                    <span className="radio-icon">🎯</span>
-                    <span className="radio-label">Drag SPO</span>
-                    <span className="radio-desc">Tempatkan ke S/P/O</span>
-                  </div>
+                  {Object.entries(TYPE_INFO).map(([key, info]) => (
+                    <div
+                      key={key}
+                      className={`admin-radio-option ${type === key ? 'active' : ''}`}
+                      onClick={() => handleSelectType(key)}
+                    >
+                      <span className="radio-icon">{info.icon}</span>
+                      <span className="radio-label">{info.label}</span>
+                      <span className="radio-desc">{info.desc}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
 
-            {/* Step 2: Fill Details */}
+            {/* ── Step 2: Fill Details ── */}
             {step === 2 && (
               <div className="admin-fade-in">
-                {!isEditing && (
-                  <button
-                    className="admin-btn admin-btn-secondary admin-btn-sm"
-                    onClick={() => setStep(1)}
-                    style={{ marginBottom: 20 }}
-                  >
-                    ← Ubah Tipe
-                  </button>
-                )}
 
+                {/* Type badge + back button */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+                  {!isEditing && (
+                    <button
+                      className="admin-btn admin-btn-secondary admin-btn-sm"
+                      onClick={() => setStep(1)}
+                    >
+                      ← Ubah Tipe
+                    </button>
+                  )}
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    background: 'var(--admin-surface-2)', borderRadius: 8,
+                    padding: '4px 12px', fontSize: '0.82rem', fontWeight: 700,
+                    color: 'var(--admin-accent)',
+                  }}>
+                    <span>{TYPE_INFO[type]?.icon}</span>
+                    <span>{TYPE_INFO[type]?.label}</span>
+                  </div>
+                  {isEditing && (
+                    <span style={{ fontSize: '0.78rem', color: 'var(--admin-text-3)' }}>
+                      Tipe soal tidak dapat diubah
+                    </span>
+                  )}
+                </div>
+
+                {/* Question text */}
                 <div className="admin-form-group">
                   <label className="admin-label">Pertanyaan <span className="required">*</span></label>
                   <input
@@ -205,7 +254,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                   />
                 </div>
 
-                {/* Token Type Fields */}
+                {/* ── Token fields ── */}
                 {type === 'token' && (
                   <>
                     <div className="admin-form-group">
@@ -214,7 +263,13 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                         className="admin-input"
                         placeholder="Contoh: Ani membaca buku"
                         value={sentence}
-                        onChange={(e) => setSentence(e.target.value)}
+                        onChange={(e) => {
+                          setSentence(e.target.value);
+                          // Clear token answer if it's no longer in the new tokens
+                          if (tokenAnswer && !e.target.value.trim().split(/\s+/).includes(tokenAnswer)) {
+                            setTokenAnswer('');
+                          }
+                        }}
                       />
                       {sentence.trim() && (
                         <div style={{ marginTop: 8, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -234,7 +289,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                               className={`admin-btn admin-btn-sm ${tokenAnswer === t ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
                               onClick={() => setTokenAnswer(t)}
                             >
-                              {t}
+                              {t} {tokenAnswer === t && '✓'}
                             </button>
                           ))}
                         </div>
@@ -247,7 +302,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                   </>
                 )}
 
-                {/* Scramble Type Fields */}
+                {/* ── Scramble fields ── */}
                 {type === 'scramble' && (
                   <div className="admin-form-group">
                     <label className="admin-label">
@@ -270,47 +325,78 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                         onKeyDown={handleScrambleKeyDown}
                       />
                     </div>
+                    <button
+                      className="admin-btn admin-btn-secondary admin-btn-sm"
+                      style={{ marginTop: 8 }}
+                      onClick={handleAddScrambleWord}
+                      disabled={!scrambleWordInput.trim()}
+                    >
+                      + Tambah Kata
+                    </button>
                     <div style={{ marginTop: 6, fontSize: '0.78rem', color: 'var(--admin-text-3)' }}>
                       Masukkan kata dalam urutan yang BENAR. Kata akan diacak saat soal ditampilkan.
                     </div>
+                    {scrambleWords.length >= 2 && (
+                      <div style={{ marginTop: 10, padding: '8px 12px', background: 'var(--admin-surface-2)', borderRadius: 8, fontSize: '0.85rem', color: 'var(--admin-text-2)' }}>
+                        Urutan benar: <strong>{scrambleWords.join(' → ')}</strong>
+                      </div>
+                    )}
                   </div>
                 )}
 
-                {/* Drag Type Fields */}
+                {/* ── Drag SPO fields ── */}
                 {type === 'drag' && (
-                  <div className="admin-form-row">
-                    <div className="admin-form-group">
-                      <label className="admin-label">Subjek (S) <span className="required">*</span></label>
-                      <input
-                        className="admin-input"
-                        placeholder="Contoh: Budi"
-                        value={dragS}
-                        onChange={(e) => setDragS(e.target.value)}
-                      />
+                  <>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--admin-text-3)', marginBottom: 12, padding: '8px 12px', background: 'var(--admin-surface-2)', borderRadius: 8 }}>
+                      💡 Isi S, P, O — siswa akan men-drag kata-kata ke kotak yang sesuai.
                     </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Predikat (P) <span className="required">*</span></label>
-                      <input
-                        className="admin-input"
-                        placeholder="Contoh: membaca"
-                        value={dragP}
-                        onChange={(e) => setDragP(e.target.value)}
-                      />
+                    <div className="admin-form-row">
+                      <div className="admin-form-group">
+                        <label className="admin-label" style={{ color: '#f4a100' }}>Subjek (S) <span className="required">*</span></label>
+                        <input
+                          className="admin-input"
+                          placeholder="Contoh: Budi"
+                          value={dragS}
+                          onChange={(e) => setDragS(e.target.value)}
+                          style={{ borderColor: dragS ? '#f4a100' : undefined }}
+                        />
+                      </div>
+                      <div className="admin-form-group">
+                        <label className="admin-label" style={{ color: '#22c55e' }}>Predikat (P) <span className="required">*</span></label>
+                        <input
+                          className="admin-input"
+                          placeholder="Contoh: membaca"
+                          value={dragP}
+                          onChange={(e) => setDragP(e.target.value)}
+                          style={{ borderColor: dragP ? '#22c55e' : undefined }}
+                        />
+                      </div>
+                      <div className="admin-form-group">
+                        <label className="admin-label" style={{ color: '#3b82f6' }}>Objek (O) <span className="required">*</span></label>
+                        <input
+                          className="admin-input"
+                          placeholder="Contoh: buku"
+                          value={dragO}
+                          onChange={(e) => setDragO(e.target.value)}
+                          style={{ borderColor: dragO ? '#3b82f6' : undefined }}
+                        />
+                      </div>
                     </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Objek (O) <span className="required">*</span></label>
-                      <input
-                        className="admin-input"
-                        placeholder="Contoh: buku"
-                        value={dragO}
-                        onChange={(e) => setDragO(e.target.value)}
-                      />
-                    </div>
-                  </div>
+                    {dragS && dragP && dragO && (
+                      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 4, padding: '8px 12px', background: 'var(--admin-surface-2)', borderRadius: 8, fontSize: '0.9rem' }}>
+                        <span style={{ color: '#f4a100', fontWeight: 800 }}>S: {dragS}</span>
+                        <span style={{ color: 'var(--admin-text-3)' }}>|</span>
+                        <span style={{ color: '#22c55e', fontWeight: 800 }}>P: {dragP}</span>
+                        <span style={{ color: 'var(--admin-text-3)' }}>|</span>
+                        <span style={{ color: '#3b82f6', fontWeight: 800 }}>O: {dragO}</span>
+                      </div>
+                    )}
+                  </>
                 )}
 
-                <div className="admin-form-group">
-                  <label className="admin-label">Hint</label>
+                {/* Hint & Explain */}
+                <div className="admin-form-group" style={{ marginTop: 8 }}>
+                  <label className="admin-label">Hint (opsional)</label>
                   <input
                     className="admin-input"
                     placeholder="💡 Contoh hint untuk siswa"
@@ -320,7 +406,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                 </div>
 
                 <div className="admin-form-group">
-                  <label className="admin-label">Penjelasan</label>
+                  <label className="admin-label">Penjelasan (opsional)</label>
                   <textarea
                     className="admin-textarea"
                     placeholder="✅ Penjelasan jawaban yang benar"
@@ -329,38 +415,13 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                   />
                 </div>
 
-                {/* Preview */}
-                {canSave() && (
-                  <div className="admin-preview-card">
-                    <div className="admin-preview-label">👁 Preview Soal</div>
-                    <div style={{ color: 'var(--admin-text)', fontWeight: 700, marginBottom: 8 }}>
-                      {questionText}
-                    </div>
-                    {type === 'token' && (
-                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                        {computeTokens().map((t, i) => (
-                          <span
-                            key={i}
-                            className="admin-chip"
-                            style={t === tokenAnswer ? { background: 'rgba(244,161,0,0.3)', borderColor: 'var(--admin-accent)' } : {}}
-                          >
-                            {t} {t === tokenAnswer && '✓'}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    {type === 'scramble' && (
-                      <div style={{ color: 'var(--admin-text-2)', fontSize: '0.85rem' }}>
-                        Urutan benar: {scrambleWords.join(' → ')}
-                      </div>
-                    )}
-                    {type === 'drag' && (
-                      <div style={{ display: 'flex', gap: 12 }}>
-                        <span style={{ color: '#f4a100', fontWeight: 800 }}>S: {dragS}</span>
-                        <span style={{ color: '#22c55e', fontWeight: 800 }}>P: {dragP}</span>
-                        <span style={{ color: '#3b82f6', fontWeight: 800 }}>O: {dragO}</span>
-                      </div>
-                    )}
+                {/* Live validation indicator */}
+                {!canSave() && questionText.trim() && (
+                  <div style={{ fontSize: '0.8rem', color: 'var(--admin-danger, #ef4444)', marginTop: 4 }}>
+                    {type === 'token' && !sentence.trim() && '⚠ Isi kalimat terlebih dahulu'}
+                    {type === 'token' && sentence.trim() && !tokenAnswer && '⚠ Pilih jawaban benar dari token di atas'}
+                    {type === 'scramble' && scrambleWords.length < 2 && '⚠ Tambahkan minimal 2 kata'}
+                    {type === 'drag' && (!dragS || !dragP || !dragO) && '⚠ Isi semua field S, P, dan O'}
                   </div>
                 )}
               </div>

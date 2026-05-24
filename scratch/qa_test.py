@@ -39,27 +39,25 @@ def run_qa():
             page.wait_for_timeout(1500)
             page.screenshot(path=os.path.join(screenshot_dir, f"2_menu_{mode}.png"))
 
-            # Only do Materi walkthrough on desktop mode to save time/space
-            if mode == "desktop":
-                # 3. Go to Materi
-                print("Navigating to Materi slides...")
-                page.click(".card-materi")
-                page.wait_for_timeout(1000)
-                
-                # Take screenshot of Slide 1
-                page.screenshot(path=os.path.join(screenshot_dir, "3_materi_slide1_desktop.png"))
+            # 3. Go to Materi
+            print("Navigating to Materi slides...")
+            page.click(".card-materi")
+            page.wait_for_timeout(1000)
+            
+            # Take screenshot of Slide 1
+            page.screenshot(path=os.path.join(screenshot_dir, f"3_materi_slide1_{mode}.png"))
 
-                # Go through slide 2 and 3
-                for i in range(2, 5):
-                    print(f"Clicking next slide ({i})...")
-                    page.click(".btn-nav-next")
-                    page.wait_for_timeout(1000)
-                    page.screenshot(path=os.path.join(screenshot_dir, f"3_materi_slide{i}_desktop.png"))
-                
-                # Go back to Menu from Materi
-                print("Returning to menu...")
-                page.click(".btn-back")
+            # Go through slide 2 to 8
+            for i in range(2, 9):
+                print(f"Clicking next slide ({i})...")
+                page.click(".btn-nav-next")
                 page.wait_for_timeout(1000)
+                page.screenshot(path=os.path.join(screenshot_dir, f"3_materi_slide{i}_{mode}.png"))
+            
+            # Go back to Menu from Materi
+            print("Returning to menu...")
+            page.click(".btn-back")
+            page.wait_for_timeout(1000)
 
             # 4. Go to Latihan (Quiz)
             print("Navigating to Latihan...")

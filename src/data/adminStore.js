@@ -16,8 +16,8 @@ const KEYS = {
 
 const DEFAULT_SETTINGS = {
   passkey: '8888',
-  quizMode: 'random',          // 'random' | 'sequential' | 'custom_only' | 'mixed'
-  questionCount: 9,            // jumlah soal standard (+ sandbox jika enabled)
+  quizMode: 'sequential',      // 'random' | 'sequential' | 'custom_only' | 'mixed'
+  questionCount: 20,           // jumlah soal standard (+ sandbox jika enabled)
   includeSandbox: true,
   shuffleOptions: true,
   timeLimit: 0,                // 0 = no limit, in seconds
