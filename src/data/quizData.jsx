@@ -20,7 +20,7 @@ export const vocabP = [
   'minum', 'meminum', 'mencuci', 'cuci', 'membaca', 'baca', 'dibaca', 'memasak', 
   'masak', 'dimasak', 'menulis', 'tulis', 'ditulis', 'bermain', 'main', 'manjat', 
   'memanjat', 'dipanjat', 'menggambar', 'gambar', 'membeli', 'beli', 'dimakan', 
-  'makan', 'memakan', 'dilempar', 'lempar', 'membersihkan', 'bersih', 'memukul', 
+  'makan', 'memakan', 'melempar', 'dilempar', 'lempar', 'membersihkan', 'bersih', 'memukul', 
   'pukul', 'menendang', 'tendang', 'membawa', 'bawa', 'menaruh', 'taruh',
   'membuka', 'buka', 'menutup', 'tutup', 'memotong', 'potong', 'menyapu', 'sapu',
   'mengepel', 'kepel', 'membuang', 'buang', 'mengambil', 'ambil', 'membuat', 'buat',
@@ -313,16 +313,16 @@ export const allQuestions = [
     hint: '💡 Siapa yang membaca buku dongeng?',
     explain: '✅ Kakak adalah subjek (S) karena Kakak pelaku tindakan membaca.'
   },
-  // 6. Adik manjat pohon - P
+  // 6. Anak memanjat pohon - P
   {
     id: 'q_docx6',
     type: 'token',
-    sentence: 'Adik manjat pohon',
-    tokens: ['Adik', 'manjat', 'pohon'],
-    answer: 'manjat',
+    sentence: 'Anak memanjat pohon',
+    tokens: ['Anak', 'memanjat', 'pohon'],
+    answer: 'memanjat',
     question: 'Tentukan PREDIKAT dari kalimat berikut!',
-    hint: '💡 Apa kegiatan yang sedang dilakukan Adik?',
-    explain: '✅ manjat adalah predikat (P) karena menunjukkan tindakan/kegiatan yang dilakukan Adik.'
+    hint: '💡 Apa kegiatan yang sedang dilakukan Anak?',
+    explain: '✅ memanjat adalah predikat (P) karena menunjukkan tindakan/kegiatan yang dilakukan Anak.'
   },
   // 7. Kalian menggambar rumah - P
   {
@@ -335,16 +335,16 @@ export const allQuestions = [
     hint: '💡 Tindakan apa yang dilakukan Kalian?',
     explain: '✅ menggambar adalah predikat (P) – kata kerja yang menggambarkan aktivitas.'
   },
-  // 8. pohon dipanjat Adik - P (pasif)
+  // 8. Adik memanjat pohon - P
   {
     id: 'q_docx8',
     type: 'token',
-    sentence: 'pohon dipanjat Adik',
-    tokens: ['pohon', 'dipanjat', 'Adik'],
-    answer: 'dipanjat',
+    sentence: 'Adik memanjat pohon',
+    tokens: ['Adik', 'memanjat', 'pohon'],
+    answer: 'memanjat',
     question: 'Tentukan PREDIKAT dari kalimat berikut!',
-    hint: '💡 Temukan kata kerja pasif (berawalan di-) yang menjadi kegiatan.',
-    explain: '✅ dipanjat adalah predikat (P) – kata kerja pasif yang menghubungkan subjek dengan pelaku.'
+    hint: '💡 Apa kegiatan yang sedang dilakukan Adik?',
+    explain: '✅ memanjat adalah predikat (P) karena menunjukkan tindakan/kegiatan yang dilakukan Adik.'
   },
   // 9. Kamu membeli sayur - P
   {
@@ -357,23 +357,23 @@ export const allQuestions = [
     hint: '💡 Temukan kata kerja/tindakan dalam kalimat ini.',
     explain: '✅ membeli adalah predikat (P) – tindakan yang dilakukan oleh subjek (Kamu).'
   },
-  // 10. sayur dimasak Ibu - P (pasif)
+  // 10. Ibu memasak sayur - P
   {
     id: 'q_docx10',
     type: 'token',
-    sentence: 'sayur dimasak Ibu',
-    tokens: ['sayur', 'dimasak', 'Ibu'],
-    answer: 'dimasak',
+    sentence: 'Ibu memasak sayur',
+    tokens: ['Ibu', 'memasak', 'sayur'],
+    answer: 'memasak',
     question: 'Tentukan PREDIKAT dari kalimat berikut!',
-    hint: '💡 Temukan tindakan pasif yang dikenakan pada sayur.',
-    explain: '✅ dimasak adalah predikat (P) – tindakan yang dilakukan pelaku (Ibu) kepada subjek (sayur).'
+    hint: '💡 Apa kegiatan yang sedang dilakukan Ibu?',
+    explain: '✅ memasak adalah predikat (P) karena menunjukkan tindakan yang dilakukan Ibu.'
   },
-  // 11. Tante masak nasi - O
+  // 11. Tante memasak nasi - O
   {
     id: 'q_docx11',
     type: 'token',
-    sentence: 'Tante masak nasi',
-    tokens: ['Tante', 'masak', 'nasi'],
+    sentence: 'Tante memasak nasi',
+    tokens: ['Tante', 'memasak', 'nasi'],
     answer: 'nasi',
     question: 'Tentukan OBJEK dari kalimat berikut!',
     hint: '💡 Benda apa yang dimasak oleh Tante?',
@@ -390,16 +390,16 @@ export const allQuestions = [
     hint: '💡 Apa sasaran benda yang sedang dicuci?',
     explain: '✅ mobil adalah objek (O) – sasaran yang dikenai tindakan mencuci.'
   },
-  // 13. roti Kakak dimakan - O (pasif)
+  // 13. Kakak memakan roti - O
   {
     id: 'q_docx13',
     type: 'token',
-    sentence: 'roti Kakak dimakan',
-    tokens: ['roti Kakak', 'dimakan'],
-    answer: 'roti Kakak',
-    question: 'Tentukan OBJEK (penderita/sasaran) dari kalimat berikut!',
-    hint: '💡 Benda apa yang dikenai tindakan dimakan?',
-    explain: '✅ roti Kakak adalah sasaran (pasien) dari tindakan dimakan. Dalam kalimat pasif ini, ia menduduki jabatan subjek.'
+    sentence: 'Kakak memakan roti',
+    tokens: ['Kakak', 'memakan', 'roti'],
+    answer: 'roti',
+    question: 'Tentukan OBJEK dari kalimat berikut!',
+    hint: '💡 Benda apa yang dimakan oleh Kakak?',
+    explain: '✅ roti adalah objek (O) karena merupakan sasaran benda yang dimakan Kakak.'
   },
   // 14. Kerbau meminum air - O
   {
@@ -412,16 +412,16 @@ export const allQuestions = [
     hint: '💡 Benda apa yang diminum oleh Kerbau?',
     explain: '✅ air adalah objek (O) – sasaran air yang diminum Kerbau.'
   },
-  // 15. Bola dilempar Kakak - O (pasif)
+  // 15. Kakak melempar bola - O
   {
     id: 'q_docx15',
     type: 'token',
-    sentence: 'Bola dilempar Kakak',
-    tokens: ['Bola', 'dilempar', 'Kakak'],
-    answer: 'Bola',
-    question: 'Tentukan OBJEK (penderita/sasaran) dari kalimat berikut!',
-    hint: '💡 Benda apa yang menjadi sasaran dilempar?',
-    explain: '✅ Bola adalah sasaran yang dilempar. Pada kalimat pasif, sasaran ini menduduki bagian depan sebagai subjek.'
+    sentence: 'Kakak melempar bola',
+    tokens: ['Kakak', 'melempar', 'bola'],
+    answer: 'bola',
+    question: 'Tentukan OBJEK dari kalimat berikut!',
+    hint: '💡 Benda apa yang dilempar oleh Kakak?',
+    explain: '✅ bola adalah objek (O) karena merupakan sasaran benda yang dilempar Kakak.'
   },
 
   // 16. New Drag and Drop (SPO Identification) Questions

@@ -118,7 +118,7 @@ export default function SandboxQuiz({ q, onCheck }) {
 
   return (
     <div className="sandbox-container">
-      <p className="sandbox-instruction">Tulis kalimatmu di kotak input di bawah.</p>
+      <p className="sandbox-instruction">Buatlah kalimat SPO dengan benar!</p>
       
       <div className="sandbox-input-group">
         <input
@@ -127,7 +127,7 @@ export default function SandboxQuiz({ q, onCheck }) {
           className="sandbox-input"
           value={inputValue}
           onChange={(e) => handleInputChange(e.target.value)}
-          placeholder="Tulis kalimat SPO-mu di sini... (contoh: Rina minum susu)"
+          placeholder="Tuliskan kaalimatmu di kotak ini ya! (contoh: Rina minum susu)"
           autoComplete="off"
         />
       </div>
