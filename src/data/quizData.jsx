@@ -8,7 +8,7 @@ export const vocabS = [
   'guru', 'murid', 'kakek', 'nenek', 'paman', 'mama', 'papa', 'dokter', 'polisi', 
   'tentara', 'petani', 'nelayan', 'sopir', 'pilot', 'koki', 'anak', 'orang',
   // Nama-nama umum
-  'siti', 'aldi', 'dodi', 'lani', 'edo', 'rudi', 'roni', 'dika', 'iwan', 'siska', 
+  'siti', 'aldi', 'dodi', 'lani', 'edo', 'rudi', 'roni', 'dika', 'iwan', 'siska', 'ani', 
   'lisa', 'nita', 'wati', 'joko', 'ali', 'ratna', 'tito', 'kiki', 'wawan',
   // Hewan tambahan
   'kambing', 'domba', 'kelinci', 'gajah', 'singa', 'harimau', 'kuda', 'jerapah', 
@@ -258,49 +258,49 @@ export const materiSlides = [
 
 // Quiz Questions Pool
 export const allQuestions = [
-  // 1. Ani baca buku - S
+  // 1. Ani membaca buku - S
   {
     id: 'q_docx1',
     type: 'token',
-    sentence: 'Ani baca buku',
-    tokens: ['Ani', 'baca', 'buku'],
+    sentence: 'Ani membaca buku',
+    tokens: ['Ani', 'membaca', 'buku'],
     answer: 'Ani',
     question: 'Tentukan SUBJEK dari kalimat berikut!',
-    hint: '💡 Tanya: "Siapa yang baca?"',
+    hint: '💡 Tanya: "Siapa yang membaca?"',
     explain: '✅ Ani adalah subjek karena dia yang melakukan kegiatan membaca.'
   },
-  // 2. surat ditulis Aku - S (pasif)
+  // 2. Aku menulis surat - S
   {
     id: 'q_docx2',
     type: 'token',
-    sentence: 'surat ditulis Aku',
-    tokens: ['surat', 'ditulis', 'Aku'],
-    answer: 'surat',
+    sentence: 'Aku menulis surat',
+    tokens: ['Aku', 'menulis', 'surat'],
+    answer: 'Aku',
     question: 'Tentukan SUBJEK dari kalimat berikut!',
-    hint: '💡 Pada kalimat pasif, kata benda di depan adalah subjek.',
-    explain: '✅ surat adalah subjek (S) kalimat pasif ini. Penerima kegiatan diposisikan di depan sebagai subjek.'
+    hint: '💡 Siapa yang menulis surat?',
+    explain: '✅ Aku adalah subjek (S) karena Aku yang melakukan tindakan menulis.'
   },
-  // 3. pohon dipanjat Monyet - S (pasif)
+  // 3. Monyet memanjat pohon - S
   {
     id: 'q_docx3',
     type: 'token',
-    sentence: 'pohon dipanjat Monyet',
-    tokens: ['pohon', 'dipanjat', 'Monyet'],
-    answer: 'pohon',
+    sentence: 'Monyet memanjat pohon',
+    tokens: ['Monyet', 'memanjat', 'pohon'],
+    answer: 'Monyet',
     question: 'Tentukan SUBJEK dari kalimat berikut!',
-    hint: '💡 Benda di depan kalimat pasif adalah subjek.',
-    explain: '✅ pohon adalah subjek (S) kalimat pasif ini, sedangkan "Monyet" bertindak sebagai pelaku.'
+    hint: '💡 Siapa yang memanjat pohon?',
+    explain: '✅ Monyet adalah subjek (S) karena Monyet yang melakukan tindakan memanjat.'
   },
-  // 4. Buku dongeng dibaca Ani - S (pasif)
+  // 4. Ani membaca buku dongeng - S
   {
     id: 'q_docx4',
     type: 'token',
-    sentence: 'Buku dongeng dibaca Ani',
-    tokens: ['Buku dongeng', 'dibaca', 'Ani'],
-    answer: 'Buku dongeng',
+    sentence: 'Ani membaca buku dongeng',
+    tokens: ['Ani', 'membaca', 'buku dongeng'],
+    answer: 'Ani',
     question: 'Tentukan SUBJEK dari kalimat berikut!',
-    hint: '💡 Perhatikan gabungan kata di awal kalimat pasif ini.',
-    explain: '✅ Buku dongeng adalah subjek (S) – frasa benda yang diletakkan di awal kalimat pasif.'
+    hint: '💡 Siapa yang membaca buku dongeng?',
+    explain: '✅ Ani adalah subjek (S) karena Ani yang melakukan tindakan membaca.'
   },
   // 5. Kakak membaca buku dongeng - S
   {
