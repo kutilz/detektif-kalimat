@@ -592,6 +592,7 @@ export default function App() {
                   {/* Render based on Question Type */}
                   {quizQuestions[currentQuestionIndex].type === 'token' && (
                     <TokenSelector
+                      key={quizQuestions[currentQuestionIndex].id}
                       q={quizQuestions[currentQuestionIndex]}
                       onCheck={(correct, selection) => handleCheckAnswer(correct)}
                     />
@@ -599,6 +600,7 @@ export default function App() {
 
                   {quizQuestions[currentQuestionIndex].type === 'scramble' && (
                     <DragDropScramble
+                      key={quizQuestions[currentQuestionIndex].id}
                       q={quizQuestions[currentQuestionIndex]}
                       onCheck={(ans) => handleCheckAnswer(ans)}
                       isSoundEnabled={isSoundEnabled}
@@ -607,6 +609,7 @@ export default function App() {
 
                   {quizQuestions[currentQuestionIndex].type === 'drag' && (
                     <DragDropSPO
+                      key={quizQuestions[currentQuestionIndex].id}
                       q={quizQuestions[currentQuestionIndex]}
                       onCheck={(ans) => handleCheckAnswer(ans)}
                     />
@@ -614,6 +617,7 @@ export default function App() {
 
                   {quizQuestions[currentQuestionIndex].type === 'sandbox' && (
                     <SandboxQuiz
+                      key={quizQuestions[currentQuestionIndex].id}
                       q={quizQuestions[currentQuestionIndex]}
                       onCheck={(correct, explain) => handleCheckAnswer(correct, explain)}
                     />
