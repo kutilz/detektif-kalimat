@@ -334,7 +334,7 @@ export default function AdminDashboard({ onLogout }) {
                         <span className="admin-toggle-label">Jumlah Soal per Quiz</span>
                       </div>
                       <span style={{ color: 'var(--admin-accent)', fontWeight: 800, fontSize: '1.1rem' }}>
-                        {settings.questionCount}{settings.includeSandbox ? ' + Sandbox' : ''}
+                        {settings.useAllQuestions ? 'Semua Soal' : settings.questionCount}{settings.includeSandbox ? ' + Sandbox' : ''}
                       </span>
                     </div>
                     <div className="admin-toggle-group">
@@ -387,7 +387,22 @@ export default function AdminDashboard({ onLogout }) {
                     <h3>⚙️ Konfigurasi</h3>
                   </div>
                   <div className="admin-card-body">
-                    <div className="admin-form-group">
+                    <div className="admin-toggle-group" style={{ marginBottom: '20px', borderBottom: '1px dashed var(--admin-border)', paddingBottom: '16px' }}>
+                      <div className="admin-toggle-info">
+                        <span className="admin-toggle-label">Sertakan Semua Soal</span>
+                        <span className="admin-toggle-desc">Mainkan semua soal yang tersedia tanpa batas jumlah</span>
+                      </div>
+                      <label className="admin-toggle">
+                        <input
+                          type="checkbox"
+                          checked={settings.useAllQuestions}
+                          onChange={() => handleUpdateSettings({ useAllQuestions: !settings.useAllQuestions })}
+                        />
+                        <span className="admin-toggle-slider" />
+                      </label>
+                    </div>
+
+                    <div className="admin-form-group" style={settings.useAllQuestions ? { opacity: 0.5, pointerEvents: 'none' } : {}}>
                       <label className="admin-label">
                         <Hash size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
                         Jumlah Soal (tanpa Sandbox)
@@ -398,6 +413,7 @@ export default function AdminDashboard({ onLogout }) {
                         min={1}
                         max={50}
                         value={settings.questionCount}
+                        disabled={settings.useAllQuestions}
                         onChange={(e) => handleUpdateSettings({ questionCount: Math.max(1, Math.min(50, parseInt(e.target.value) || 1)) })}
                       />
                     </div>

@@ -147,7 +147,7 @@ export default function App() {
     }
 
     // Take the configured number of questions
-    const count = Math.min(settings.questionCount, pool.length);
+    const count = settings.useAllQuestions ? pool.length : Math.min(settings.questionCount, pool.length);
     let selected = pool.slice(0, count);
 
     // Optionally append sandbox

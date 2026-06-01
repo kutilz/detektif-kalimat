@@ -50,6 +50,7 @@ const DEFAULT_SETTINGS = {
   passkey: '8888',
   quizMode: 'sequential',      // 'random' | 'sequential' | 'custom_only' | 'mixed'
   questionCount: 24,           // jumlah soal standard (+ sandbox jika enabled)
+  useAllQuestions: false,      // sertakan semua soal tanpa limit jumlah
   includeSandbox: true,
   shuffleOptions: true,
   timeLimit: 0,                // 0 = no limit, in seconds
