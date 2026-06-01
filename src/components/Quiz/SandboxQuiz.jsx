@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { vocabS, vocabP, vocabO } from '../../data/quizData';
 
-export default function SandboxQuiz({ q, onCheck }) {
+export default function SandboxQuiz({ q, onCheck, usedSentences = [] }) {
   const [inputValue, setInputValue] = useState('');
   const [foundS, setFoundS] = useState(null);
   const [foundP, setFoundP] = useState(null);
   const [foundO, setFoundO] = useState(null);
+  const [warningMessage, setWarningMessage] = useState('');
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -92,6 +93,19 @@ export default function SandboxQuiz({ q, onCheck }) {
     setFoundS(s);
     setFoundP(p);
     setFoundO(o);
+
+    // Check duplicate sentence
+    const normalized = val
+      .toLowerCase()
+      .trim()
+      .replace(/[.,?!]/g, '')
+      .replace(/\s+/g, ' ');
+
+    if (usedSentences.includes(normalized)) {
+      setWarningMessage('⚠️ Kamu sudah menggunakan kalimat ini sebelumnya! Tulis kalimat yang berbeda ya.');
+    } else {
+      setWarningMessage('');
+    }
   };
 
   const capitalize = (str) => {
@@ -103,6 +117,17 @@ export default function SandboxQuiz({ q, onCheck }) {
 
   const handleSubmit = () => {
     if (!isComplete) return;
+
+    const normalizedInput = inputValue
+      .toLowerCase()
+      .trim()
+      .replace(/[.,?!]/g, '')
+      .replace(/\s+/g, ' ');
+
+    if (usedSentences.includes(normalizedInput)) {
+      setWarningMessage('⚠️ Kamu sudah menggunakan kalimat ini sebelumnya! Tulis kalimat yang berbeda ya.');
+      return;
+    }
 
     // Check that S, P, O appear in the correct order in the original sentence
     const wordsLower = inputValue
@@ -126,7 +151,8 @@ export default function SandboxQuiz({ q, onCheck }) {
       onCheck(true, explain, {
         S: capitalize(foundS),
         P: capitalize(foundP),
-        O: capitalize(foundO)
+        O: capitalize(foundO),
+        sentence: normalizedInput
       });
     } else {
       const explain = `🤔 <strong>Hmm, coba perhatikan urutannya ya!</strong><br/><br/>
@@ -155,9 +181,14 @@ export default function SandboxQuiz({ q, onCheck }) {
           className="sandbox-input"
           value={inputValue}
           onChange={(e) => handleInputChange(e.target.value)}
-          placeholder="Tuliskan kaalimatmu di kotak ini ya! (contoh: Rina minum susu)"
+          placeholder="Tuliskan kalimatmu di kotak ini ya! (contoh: Rina minum susu)"
           autoComplete="off"
         />
+        {warningMessage && (
+          <div className="sandbox-warning" style={{ color: '#e53e3e', fontSize: '0.9rem', marginTop: '8px', fontWeight: '600' }}>
+            {warningMessage}
+          </div>
+        )}
       </div>
 
       <div className="sandbox-feedback-grid">
@@ -193,7 +224,7 @@ export default function SandboxQuiz({ q, onCheck }) {
         className="btn-check"
         id="btn-check-sandbox"
         onClick={handleSubmit}
-        disabled={!isComplete}
+        disabled={!isComplete || !!warningMessage}
         style={{ marginTop: '24px', width: '100%', maxWidth: '240px' }}
       >
         Periksa Kalimat 🔍

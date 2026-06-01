@@ -55,6 +55,7 @@ export default function App() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState([]);
+  const [usedSandboxSentences, setUsedSandboxSentences] = useState([]);
   const [feedback, setFeedback] = useState({ show: false, correct: false, explain: '', answerStr: '' });
   const hasAnsweredRef = useRef(false);
   
@@ -169,6 +170,7 @@ export default function App() {
     setCurrentQuestionIndex(0);
     setScore(0);
     setAnswers([]);
+    setUsedSandboxSentences([]);
     setFeedback({ show: false, correct: false, explain: '', answerStr: '' });
     hasAnsweredRef.current = false;
   };
@@ -203,6 +205,9 @@ export default function App() {
       }
     } else if (q.type === 'sandbox') {
       isCorrect = answer; // SandboxQuiz now returns true/false based on SPO order check
+      if (isCorrect && meta && meta.sentence) {
+        setUsedSandboxSentences((prev) => [...prev, meta.sentence]);
+      }
     }
 
     if (isCorrect) {
@@ -619,7 +624,8 @@ export default function App() {
                     <SandboxQuiz
                       key={quizQuestions[currentQuestionIndex].id}
                       q={quizQuestions[currentQuestionIndex]}
-                      onCheck={(correct, explain) => handleCheckAnswer(correct, explain)}
+                      usedSentences={usedSandboxSentences}
+                      onCheck={(correct, explain, meta) => handleCheckAnswer(correct, explain, meta)}
                     />
                   )}
                 </div>
