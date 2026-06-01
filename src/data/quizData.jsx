@@ -31,7 +31,8 @@ export const vocabP = [
   // Kata Kerja Pasif tambahan
   'dibuka', 'ditutup', 'dipotong', 'disapu', 'dikepel', 'dibuang', 'diambil', 'dibuat',
   'dilihat', 'didengar', 'ditanam', 'disiram', 'dipetik', 'dijaga', 'dibantu', 'dipanggil',
-  'dijemput', 'diantar', 'ditangkap', 'dikejar'
+  'dijemput', 'diantar', 'ditangkap', 'dikejar',
+  'memeriksa', 'periksa', 'diperiksa'
 ];
 
 export const vocabO = [
@@ -45,7 +46,8 @@ export const vocabO = [
   'mangkuk', 'wajan', 'panci', 'pensil', 'pulpen', 'kertas', 'papan tulis', 
   'mainan', 'boneka', 'bantal', 'guling', 'selimut', 'sabun', 'sampo', 'sikat gigi',
   // Kendaraan & Bangunan
-  'motor', 'pesawat', 'kereta', 'sekolah', 'kamar', 'taman', 'halaman', 'jalan', 'bunga'
+  'motor', 'pesawat', 'kereta', 'sekolah', 'kamar', 'taman', 'halaman', 'jalan', 'bunga',
+  'pasien'
 ];
 
 // Materials Content
@@ -494,7 +496,54 @@ export const allQuestions = [
     explain: '✅ Susunan benar: Budi (S) + bermain (P) + bola (O).'
   },
 
-  // 18. Sandbox Challenge
+  // 19. Petani menanam jagung - P (token)
+  {
+    id: 'q_token_new1',
+    type: 'token',
+    sentence: 'Petani menanam jagung',
+    tokens: ['Petani', 'menanam', 'jagung'],
+    answer: 'menanam',
+    question: 'Tentukan PREDIKAT dari kalimat berikut!',
+    hint: '💡 Apa kegiatan yang dilakukan Petani?',
+    explain: '✅ menanam adalah predikat (P) karena menunjukkan kegiatan yang dilakukan Petani.'
+  },
+
+  // 20. Nenek memetik bunga - O (token)
+  {
+    id: 'q_token_new2',
+    type: 'token',
+    sentence: 'Nenek memetik bunga',
+    tokens: ['Nenek', 'memetik', 'bunga'],
+    answer: 'bunga',
+    question: 'Tentukan OBJEK dari kalimat berikut!',
+    hint: '💡 Benda apa yang dipetik oleh Nenek?',
+    explain: '✅ bunga adalah objek (O) karena merupakan benda sasaran yang dipetik Nenek.'
+  },
+
+  // 21. Dokter memeriksa pasien - Drag
+  {
+    id: 'q_drag_new1',
+    type: 'drag',
+    sentence: 'Dokter memeriksa pasien',
+    words: ['memeriksa', 'pasien', 'Dokter'],
+    answer: { S: 'Dokter', P: 'memeriksa', O: 'pasien' },
+    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
+    hint: '💡 Dokter adalah pelaku, memeriksa adalah kegiatan, pasien adalah sasaran.',
+    explain: '✅ Dokter (Subjek) + memeriksa (Predikat) + pasien (Objek).'
+  },
+
+  // 22. Scramble: Kucing mengejar tikus
+  {
+    id: 'q_scramble_new1',
+    type: 'scramble',
+    words: ['tikus', 'mengejar', 'Kucing'],
+    answer: ['Kucing', 'mengejar', 'tikus'],
+    question: 'Susun kata menjadi kalimat SPO yang benar!',
+    hint: '💡 Mulai dari hewan yang mengejar.',
+    explain: '✅ Susunan benar: Kucing (S) + mengejar (P) + tikus (O).'
+  },
+
+  // 23. Sandbox Challenge
   {
     id: 'q_sandbox',
     type: 'sandbox',

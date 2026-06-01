@@ -202,7 +202,7 @@ export default function App() {
         rightAnswerStr = `Susunan yang benar: S = ${q.answer.S}, P = ${q.answer.P}, O = ${q.answer.O}`;
       }
     } else if (q.type === 'sandbox') {
-      isCorrect = true; // Sandbox sentences passing regex checks are always validated
+      isCorrect = answer; // SandboxQuiz now returns true/false based on SPO order check
     }
 
     if (isCorrect) {

@@ -103,17 +103,45 @@ export default function SandboxQuiz({ q, onCheck }) {
 
   const handleSubmit = () => {
     if (!isComplete) return;
-    
-    const explain = `🎉 <strong>Luar Biasa Detektif!</strong> Kalimat SPO buatanmu berhasil dianalisis:<br/><br/>
-      - 🟡 Subjek: <strong>${capitalize(foundS)}</strong> (Pelaku)<br/>
-      - 🟢 Predikat: <strong>${capitalize(foundP)}</strong> (Kegiatan)<br/>
-      - 🔵 Objek: <strong>${capitalize(foundO)}</strong> (Benda sasaran)`;
 
-    onCheck(true, explain, {
-      S: capitalize(foundS),
-      P: capitalize(foundP),
-      O: capitalize(foundO)
-    });
+    // Check that S, P, O appear in the correct order in the original sentence
+    const wordsLower = inputValue
+      .toLowerCase()
+      .replace(/[.,?!]/g, '')
+      .split(/\s+/)
+      .filter(Boolean);
+
+    const sIndex = wordsLower.indexOf(foundS);
+    const pIndex = wordsLower.indexOf(foundP);
+    const oIndex = wordsLower.indexOf(foundO);
+
+    const isOrderCorrect = sIndex < pIndex && pIndex < oIndex;
+
+    if (isOrderCorrect) {
+      const explain = `🎉 <strong>Luar Biasa Detektif!</strong> Kalimat SPO buatanmu berhasil dianalisis:<br/><br/>
+        - 🟡 Subjek: <strong>${capitalize(foundS)}</strong> (Pelaku)<br/>
+        - 🟢 Predikat: <strong>${capitalize(foundP)}</strong> (Kegiatan)<br/>
+        - 🔵 Objek: <strong>${capitalize(foundO)}</strong> (Benda sasaran)`;
+
+      onCheck(true, explain, {
+        S: capitalize(foundS),
+        P: capitalize(foundP),
+        O: capitalize(foundO)
+      });
+    } else {
+      const explain = `🤔 <strong>Hmm, coba perhatikan urutannya ya!</strong><br/><br/>
+        Ingat, kalimat SPO yang benar urutannya:<br/>
+        - 🟡 <strong>Subjek (S)</strong> = Pelaku → siapa yang melakukan?<br/>
+        - 🟢 <strong>Predikat (P)</strong> = Kegiatan → apa yang dilakukan?<br/>
+        - 🔵 <strong>Objek (O)</strong> = Benda sasaran → apa yang dikenai?<br/><br/>
+        Contoh: <strong>Saya</strong> (S) + <strong>menulis</strong> (P) + <strong>buku</strong> (O) ✅`;
+
+      onCheck(false, explain, {
+        S: capitalize(foundS),
+        P: capitalize(foundP),
+        O: capitalize(foundO)
+      });
+    }
   };
 
   return (
