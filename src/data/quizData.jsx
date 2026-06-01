@@ -496,59 +496,40 @@ export const allQuestions = [
     explain: '✅ Susunan benar: Budi (S) + bermain (P) + bola (O).'
   },
 
-  // 19. Petani menanam jagung - P (token)
+  // 19–23. Tantangan Detektif Kreatif (5 soal sandbox)
   {
-    id: 'q_token_new1',
-    type: 'token',
-    sentence: 'Petani menanam jagung',
-    tokens: ['Petani', 'menanam', 'jagung'],
-    answer: 'menanam',
-    question: 'Tentukan PREDIKAT dari kalimat berikut!',
-    hint: '💡 Apa kegiatan yang dilakukan Petani?',
-    explain: '✅ menanam adalah predikat (P) karena menunjukkan kegiatan yang dilakukan Petani.'
-  },
-
-  // 20. Nenek memetik bunga - O (token)
-  {
-    id: 'q_token_new2',
-    type: 'token',
-    sentence: 'Nenek memetik bunga',
-    tokens: ['Nenek', 'memetik', 'bunga'],
-    answer: 'bunga',
-    question: 'Tentukan OBJEK dari kalimat berikut!',
-    hint: '💡 Benda apa yang dipetik oleh Nenek?',
-    explain: '✅ bunga adalah objek (O) karena merupakan benda sasaran yang dipetik Nenek.'
-  },
-
-  // 21. Dokter memeriksa pasien - Drag
-  {
-    id: 'q_drag_new1',
-    type: 'drag',
-    sentence: 'Dokter memeriksa pasien',
-    words: ['memeriksa', 'pasien', 'Dokter'],
-    answer: { S: 'Dokter', P: 'memeriksa', O: 'pasien' },
-    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
-    hint: '💡 Dokter adalah pelaku, memeriksa adalah kegiatan, pasien adalah sasaran.',
-    explain: '✅ Dokter (Subjek) + memeriksa (Predikat) + pasien (Objek).'
-  },
-
-  // 22. Scramble: Kucing mengejar tikus
-  {
-    id: 'q_scramble_new1',
-    type: 'scramble',
-    words: ['tikus', 'mengejar', 'Kucing'],
-    answer: ['Kucing', 'mengejar', 'tikus'],
-    question: 'Susun kata menjadi kalimat SPO yang benar!',
-    hint: '💡 Mulai dari hewan yang mengejar.',
-    explain: '✅ Susunan benar: Kucing (S) + mengejar (P) + tikus (O).'
-  },
-
-  // 23. Sandbox Challenge
-  {
-    id: 'q_sandbox',
+    id: 'q_sandbox1',
     type: 'sandbox',
     question: 'Tantangan Detektif Kreatif!',
     hint: '💡 Ketik kalimat sederhana buatanmu sendiri yang memiliki susunan Subjek (S), Predikat (P), dan Objek (O) yang benar!',
+    explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
+  },
+  {
+    id: 'q_sandbox2',
+    type: 'sandbox',
+    question: 'Tantangan Detektif Kreatif!',
+    hint: '💡 Coba buat kalimat tentang kegiatan di sekolah! Pastikan ada Subjek, Predikat, dan Objek.',
+    explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
+  },
+  {
+    id: 'q_sandbox3',
+    type: 'sandbox',
+    question: 'Tantangan Detektif Kreatif!',
+    hint: '💡 Buat kalimat tentang hewan! Siapa (S) melakukan apa (P) terhadap apa (O)?',
+    explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
+  },
+  {
+    id: 'q_sandbox4',
+    type: 'sandbox',
+    question: 'Tantangan Detektif Kreatif!',
+    hint: '💡 Ceritakan kegiatan di rumah! Tuliskan kalimat dengan susunan SPO yang benar.',
+    explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
+  },
+  {
+    id: 'q_sandbox5',
+    type: 'sandbox',
+    question: 'Tantangan Detektif Kreatif!',
+    hint: '💡 Tantangan terakhir! Buat kalimat SPO paling keren buatanmu sendiri!',
     explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   }
 ];

@@ -126,7 +126,7 @@ export default function App() {
 
     // Build question pool based on mode
     let pool = [];
-    const standardPool = mergedQuestions.filter(q => q.id !== 'q_sandbox');
+    const standardPool = mergedQuestions.filter(q => q.type !== 'sandbox');
 
     switch (settings.quizMode) {
       case 'sequential':
@@ -150,19 +150,19 @@ export default function App() {
     const count = settings.useAllQuestions ? pool.length : Math.min(settings.questionCount, pool.length);
     let selected = pool.slice(0, count);
 
-    // Optionally append sandbox
+    // Optionally append sandbox questions
     if (settings.includeSandbox) {
-      const sandboxQ = mergedQuestions.find(q => q.id === 'q_sandbox');
-      if (sandboxQ) {
-        selected = [...selected, sandboxQ];
+      const sandboxQs = mergedQuestions.filter(q => q.type === 'sandbox');
+      if (sandboxQs.length > 0) {
+        selected = [...selected, ...sandboxQs];
       }
     }
 
     // Fallback: if no questions available, use defaults
     if (selected.length === 0) {
       const defaultPool = [...standardPool].sort(() => Math.random() - 0.5).slice(0, 9);
-      const sandboxQ = mergedQuestions.find(q => q.id === 'q_sandbox');
-      selected = sandboxQ ? [...defaultPool, sandboxQ] : defaultPool;
+      const sandboxQs = mergedQuestions.filter(q => q.type === 'sandbox');
+      selected = sandboxQs.length > 0 ? [...defaultPool, ...sandboxQs] : defaultPool;
     }
 
     setQuizQuestions(selected);
@@ -574,7 +574,7 @@ export default function App() {
             </div>
 
             <div className="quiz-body">
-              <div className={`quiz-card ${quizQuestions[currentQuestionIndex].id === 'q_sandbox' ? 'bg-slide-intro' : 'bg-slide-quiz-intro'}`}>
+              <div className={`quiz-card ${quizQuestions[currentQuestionIndex].type === 'sandbox' ? 'bg-slide-intro' : 'bg-slide-quiz-intro'}`}>
                 <div className="materi-slide-glass-overlay">
                   <div className="quiz-num">Soal {currentQuestionIndex + 1} dari {quizQuestions.length}</div>
                   <h3 className="quiz-question">{quizQuestions[currentQuestionIndex].question}</h3>

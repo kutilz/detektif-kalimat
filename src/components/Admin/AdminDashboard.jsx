@@ -204,7 +204,7 @@ export default function AdminDashboard({ onLogout }) {
   // All questions combined
   const mergedBuiltins = getMergedQuestions();
   const allQuestionsPool = [
-    ...mergedBuiltins.filter((q) => q.id !== 'q_sandbox'),
+    ...mergedBuiltins.filter((q) => q.type !== 'sandbox'),
     ...customQuestions.map((q) => ({ ...q, isCustom: true })),
   ];
 
@@ -302,7 +302,7 @@ export default function AdminDashboard({ onLogout }) {
                 <div className="admin-stats-grid">
                   <div className="admin-stat-card">
                     <span className="admin-stat-icon">📝</span>
-                    <div className="admin-stat-value">{mergedBuiltins.filter((q) => q.id !== 'q_sandbox').length}</div>
+                    <div className="admin-stat-value">{mergedBuiltins.filter((q) => q.type !== 'sandbox').length}</div>
                     <div className="admin-stat-label">Soal Bawaan</div>
                   </div>
                   <div className="admin-stat-card">
@@ -334,7 +334,7 @@ export default function AdminDashboard({ onLogout }) {
                         <span className="admin-toggle-label">Jumlah Soal per Quiz</span>
                       </div>
                       <span style={{ color: 'var(--admin-accent)', fontWeight: 800, fontSize: '1.1rem' }}>
-                        {settings.useAllQuestions ? 'Semua Soal' : settings.questionCount}{settings.includeSandbox ? ' + Sandbox' : ''}
+                        {settings.useAllQuestions ? 'Semua Soal' : settings.questionCount}{settings.includeSandbox ? ` + ${mergedBuiltins.filter(q => q.type === 'sandbox').length} Sandbox` : ''}
                       </span>
                     </div>
                     <div className="admin-toggle-group">

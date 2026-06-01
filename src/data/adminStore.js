@@ -49,7 +49,7 @@ async function syncToGlobalStore() {
 const DEFAULT_SETTINGS = {
   passkey: '8888',
   quizMode: 'sequential',      // 'random' | 'sequential' | 'custom_only' | 'mixed'
-  questionCount: 24,           // jumlah soal standard (+ sandbox jika enabled)
+  questionCount: 20,           // jumlah soal standard (+ sandbox jika enabled)
   useAllQuestions: false,      // sertakan semua soal tanpa limit jumlah
   includeSandbox: true,
   shuffleOptions: true,
