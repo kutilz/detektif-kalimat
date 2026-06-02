@@ -30,66 +30,75 @@ export default function SandboxQuiz({ q, onCheck, usedSentences = [] }) {
     let p = null;
     let o = null;
     
-    // 1. Direct Dictionary Match
-    words.forEach((w) => {
-      if (vocabS.includes(w) && !s) {
-        s = w;
-      } else if (vocabP.includes(w) && !p) {
+    // 1. Find the Predikat (P) first
+    for (let i = 0; i < words.length; i++) {
+      const w = words[i];
+      if (vocabP.includes(w)) {
         p = w;
-      } else if (vocabO.includes(w) && !o) {
-        o = w;
+        break;
       }
-    });
-
-    // 2. Heuristics for Unmatched Slots
-    // If Predikat (Verb) is still not found, check Indonesian morphological prefixes
+    }
+    
+    // Heuristic if not found in vocabP, check Indonesian morphological prefixes
     if (!p) {
       const verbPrefixes = ['me', 'di', 'ber', 'ter'];
       for (let i = 0; i < words.length; i++) {
         const w = words[i];
-        // Must be longer than 3 letters to filter out short nouns/names
-        const hasVerbPrefix = verbPrefixes.some(prefix => w.startsWith(prefix) && w.length >= 4);
-        if (hasVerbPrefix) {
+        if (w.length >= 4 && verbPrefixes.some(prefix => w.startsWith(prefix))) {
           p = w;
           break;
         }
       }
     }
-
-    // If we have a Predikat (from dictionary or prefix check)
+    
+    // 2. Parse Subjek (S) before Predikat, and Objek (O) after Predikat
     if (p) {
       const pIndex = words.indexOf(p);
       
-      // If Subjek is still empty, look for any word before Predikat
-      if (!s) {
-        for (let i = 0; i < pIndex; i++) {
-          const w = words[i];
-          if (w !== p) {
-            s = w;
-            break;
-          }
+      const beforeWords = words.slice(0, pIndex);
+      const afterWords = words.slice(pIndex + 1);
+      
+      // Find S in beforeWords: prefer vocabS
+      for (const w of beforeWords) {
+        if (vocabS.includes(w)) {
+          s = w;
+          break;
         }
       }
+      // Heuristic fallback for S
+      if (!s && beforeWords.length > 0) {
+        s = beforeWords.find(w => !vocabO.includes(w)) || beforeWords[0];
+      }
       
-      // If Objek is still empty, look for any word after Predikat
+      // Find O in afterWords: prefer vocabO
+      for (const w of afterWords) {
+        if (vocabO.includes(w)) {
+          o = w;
+          break;
+        }
+      }
+      // Heuristic fallback for O (prefer vocabS next)
       if (!o) {
-        for (let i = pIndex + 1; i < words.length; i++) {
-          const w = words[i];
-          if (w !== p && w !== s) {
+        for (const w of afterWords) {
+          if (vocabS.includes(w)) {
             o = w;
             break;
           }
         }
       }
+      // General fallback for O
+      if (!o && afterWords.length > 0) {
+        o = afterWords[0];
+      }
     }
-
-    // 3. Fallback: If exactly 3 words are typed, map them directly to S-P-O
+    
+    // 3. Fallback: If exactly 3 words are typed and we missed any slots
     if (words.length === 3 && (!s || !p || !o)) {
       s = words[0];
       p = words[1];
       o = words[2];
     }
-
+    
     setFoundS(s);
     setFoundP(p);
     setFoundO(o);
@@ -136,13 +145,54 @@ export default function SandboxQuiz({ q, onCheck, usedSentences = [] }) {
       .split(/\s+/)
       .filter(Boolean);
 
-    const sIndex = wordsLower.indexOf(foundS);
     const pIndex = wordsLower.indexOf(foundP);
-    const oIndex = wordsLower.indexOf(foundO);
+    
+    let sIndex = -1;
+    for (let i = 0; i < pIndex; i++) {
+      if (wordsLower[i] === foundS) {
+        sIndex = i;
+        break;
+      }
+    }
+    if (sIndex === -1) sIndex = wordsLower.indexOf(foundS);
 
-    const isOrderCorrect = sIndex < pIndex && pIndex < oIndex;
+    let oIndex = -1;
+    for (let i = pIndex + 1; i < wordsLower.length; i++) {
+      if (wordsLower[i] === foundO) {
+        oIndex = i;
+        break;
+      }
+    }
+    if (oIndex === -1) oIndex = wordsLower.indexOf(foundO);
 
-    if (isOrderCorrect) {
+    const isOrderCorrect = sIndex !== -1 && pIndex !== -1 && oIndex !== -1 && sIndex < pIndex && pIndex < oIndex;
+
+    // Check passive verb semantics
+    const isPassive = foundP.startsWith('di') || [
+      'dibaca', 'ditulis', 'dimasak', 'dicuci', 'dimakan', 'diminum', 'dilempar', 'dibeli', 'dibawa',
+      'dibuka', 'ditutup', 'dipotong', 'disapu', 'dikepel', 'dibuang', 'diambil', 'dibuat',
+      'dilihat', 'didengar', 'ditanam', 'disiram', 'dipetik', 'dijaga', 'dibantu', 'dipanggil',
+      'dijemput', 'diantar', 'ditangkap', 'dikejar', 'diperiksa'
+    ].includes(foundP);
+
+    let isSemanticValid = true;
+    let semanticErrorMsg = '';
+
+    if (isPassive) {
+      // In a passive sentence, the Object (agent) must be animate
+      if (vocabO.includes(foundO)) {
+        isSemanticValid = false;
+        semanticErrorMsg = `🤔 Benda mati seperti <strong>${capitalize(foundO)}</strong> tidak bisa melakukan kegiatan <strong>${foundP}</strong>!`;
+      }
+    } else {
+      // In an active sentence, the Subject (agent) must be animate
+      if (vocabO.includes(foundS)) {
+        isSemanticValid = false;
+        semanticErrorMsg = `🤔 Benda mati seperti <strong>${capitalize(foundS)}</strong> tidak bisa melakukan kegiatan <strong>${foundP}</strong>!`;
+      }
+    }
+
+    if (isOrderCorrect && isSemanticValid) {
       const explain = `🎉 <strong>Luar Biasa Detektif!</strong> Kalimat SPO buatanmu berhasil dianalisis:<br/><br/>
         - 🟡 Subjek: <strong>${capitalize(foundS)}</strong> (Pelaku)<br/>
         - 🟢 Predikat: <strong>${capitalize(foundP)}</strong> (Kegiatan)<br/>
@@ -153,6 +203,12 @@ export default function SandboxQuiz({ q, onCheck, usedSentences = [] }) {
         P: capitalize(foundP),
         O: capitalize(foundO),
         sentence: normalizedInput
+      });
+    } else if (!isSemanticValid) {
+      onCheck(false, semanticErrorMsg, {
+        S: capitalize(foundS),
+        P: capitalize(foundP),
+        O: capitalize(foundO)
       });
     } else {
       const explain = `🤔 <strong>Hmm, coba perhatikan urutannya ya!</strong><br/><br/>
