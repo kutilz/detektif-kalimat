@@ -2468,6 +2468,11 @@ html, body {
   opacity: 0;
 }
 
+.contoh1-bird.fly-away-right {
+  transform: translateY(-300px) translateX(300px) scale(0.2) rotate(25deg);
+  opacity: 0;
+}
+
 .fade-in-image {
   animation: fadeIn 0.8s ease-out forwards;
 }

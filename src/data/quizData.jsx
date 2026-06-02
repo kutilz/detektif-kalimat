@@ -225,50 +225,57 @@ export function Contoh1Slide() {
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'center',
+        gap: '30px',
         margin: '15px auto 0',
-        width: '100%'
+        width: '100%',
+        overflow: 'hidden'
       }}>
-        {/* Bird Image (image16.png) */}
-        {!showFatherImage && (
-          <img 
-            src="/images/image16.png" 
-            alt="Burung" 
-            className={`contoh1-bird ${isBirdFlying ? 'fly-away' : ''}`}
-            style={{
-              maxHeight: '120px',
-              transition: 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.2s ease',
-              zIndex: 5
-            }}
-          />
-        )}
+        {/* Left Side Container: Bird flying away, replaced by Father washing car */}
+        <div style={{ position: 'relative', width: '200px', height: '160px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {/* Bird Image (image16.png) */}
+          {!showFatherImage && (
+            <img 
+              src="/images/image16.png" 
+              alt="Burung" 
+              className={`contoh1-bird ${isBirdFlying ? 'fly-away-right' : ''}`}
+              style={{
+                maxHeight: '110px',
+                transition: 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.2s ease',
+                zIndex: 5,
+                position: 'absolute'
+              }}
+            />
+          )}
 
-        {/* Mobil Image (image25.png) */}
-        {!showFatherImage && !isBirdFlying && (
+          {/* Father Washing Car Image (revealed after bird flies away) */}
+          {showFatherImage && (
+            <img 
+              src="/images/father_washing_car.png" 
+              alt="Ayah mencuci mobil" 
+              className="fade-in-image"
+              style={{
+                maxHeight: '150px',
+                borderRadius: '16px',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                border: '4px solid #fff',
+                display: 'block',
+                position: 'absolute'
+              }}
+            />
+          )}
+        </div>
+
+        {/* Right Side: Car (image25.png) - always stays! */}
+        <div style={{ width: '200px', height: '160px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <img 
             src="/images/image25.png" 
             alt="Mobil" 
             style={{
-              maxHeight: '60px',
-              marginLeft: '15px'
-            }}
-          />
-        )}
-
-        {/* Father Washing Car Image (revealed after bird flies away) */}
-        {showFatherImage && (
-          <img 
-            src="/images/father_washing_car.png" 
-            alt="Ayah mencuci mobil" 
-            className="fade-in-image"
-            style={{
-              maxHeight: '180px',
-              borderRadius: '16px',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-              border: '4px solid #fff',
+              maxHeight: '80px',
               display: 'block'
             }}
           />
-        )}
+        </div>
       </div>
     </div>
   );
