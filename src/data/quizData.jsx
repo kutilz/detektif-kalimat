@@ -1,4 +1,190 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+// Interactive Slide Components
+export function SubjekSlide() {
+  const [showExplanation, setShowExplanation] = useState(false);
+
+  return (
+    <div className="materi-body">
+      <button 
+        className="spo-box s clickable-spo-btn" 
+        onClick={() => setShowExplanation(!showExplanation)}
+        style={{ 
+          marginBottom: '12px', 
+          padding: '12px', 
+          width: '100%', 
+          textAlign: 'left',
+          cursor: 'pointer',
+          border: '3px solid var(--yellow-deep)',
+          transition: 'all 0.2s ease',
+          display: 'block'
+        }}
+      >
+        <div className="spo-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>S = Subjek</span>
+          <span style={{ fontSize: '0.85rem', background: '#f4a100', color: '#fff', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold' }}>
+            {showExplanation ? 'Tutup ✖' : 'Klik Penjelasan Detail! 🔍'}
+          </span>
+        </div>
+        <div className="spo-name" style={{ fontSize: '.95rem', marginTop: '6px', fontWeight: 600 }}>Siapa yang melakukan kegiatan?</div>
+      </button>
+
+      {showExplanation && (
+        <div className="explain-detail-box s-detail" style={{
+          background: 'rgba(255, 248, 225, 0.95)',
+          border: '2px dashed #f4a100',
+          borderRadius: '12px',
+          padding: '14px 18px',
+          marginBottom: '12px',
+          animation: 'slideDown 0.3s ease-out',
+          textAlign: 'left'
+        }}>
+          <h4 style={{ color: '#e65100', margin: '0 0 8px 0', fontSize: '1.05rem', fontFamily: 'Fredoka', fontWeight: 'bold' }}>🕵️‍♂️ Contoh Subjek:</h4>
+          <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.9rem', color: '#5c3317', lineHeight: '1.5', fontFamily: 'Nunito' }}>
+            <li>🧑 <strong>Nama Orang / Keluarga:</strong> ayah, ibu, kakak, adik, nenek, kakek, paman, bibi, Budi, Ani, Rina, dll.</li>
+            <li>👤 <strong>Kata Ganti:</strong> dia, aku, saya, mereka, kami, kamu, kalian, dll.</li>
+            <li>🐱 <strong>Hewan:</strong> sapi, monyet, kucing, kambing, kelinci, anjing, gajah, dll.</li>
+          </ul>
+        </div>
+      )}
+
+      <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)' }}>
+        <div className="example-label">▶ Contoh</div>
+        <div className="example-sentence">
+          "<span className="highlight-s">Budi</span> bermain bola"
+        </div>
+        <div className="example-analysis">Subjek = <strong style={{ color: '#f4a100' }}>Budi</strong> (yang bermain)</div>
+      </div>
+      <div className="materi-image-row">
+        <img src="/images/image17.png" alt="Budi bermain bola" />
+        <img src="/images/image18.png" alt="Subjek" />
+      </div>
+    </div>
+  );
+}
+
+export function PredikatSlide() {
+  const [showExplanation, setShowExplanation] = useState(false);
+
+  return (
+    <div className="materi-body">
+      <button 
+        className="spo-box p clickable-spo-btn" 
+        onClick={() => setShowExplanation(!showExplanation)}
+        style={{ 
+          marginBottom: '12px', 
+          padding: '12px', 
+          width: '100%', 
+          textAlign: 'left',
+          cursor: 'pointer',
+          border: '3px solid var(--green)',
+          transition: 'all 0.2s ease',
+          display: 'block'
+        }}
+      >
+        <div className="spo-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>P = Predikat</span>
+          <span style={{ fontSize: '0.85rem', background: '#2e7d32', color: '#fff', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold' }}>
+            {showExplanation ? 'Tutup ✖' : 'Klik Penjelasan Detail! 🔍'}
+          </span>
+        </div>
+        <div className="spo-name" style={{ fontSize: '.95rem', marginTop: '6px', fontWeight: 600 }}>Apa yang sedang dilakukan?</div>
+      </button>
+
+      {showExplanation && (
+        <div className="explain-detail-box p-detail" style={{
+          background: 'rgba(232, 245, 233, 0.95)',
+          border: '2px dashed #2e7d32',
+          borderRadius: '12px',
+          padding: '14px 18px',
+          marginBottom: '12px',
+          animation: 'slideDown 0.3s ease-out',
+          textAlign: 'left'
+        }}>
+          <h4 style={{ color: '#1b5e20', margin: '0 0 8px 0', fontSize: '1.05rem', fontFamily: 'Fredoka', fontWeight: 'bold' }}>🕵️‍♂️ Contoh Predikat:</h4>
+          <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.9rem', color: '#5c3317', lineHeight: '1.5', fontFamily: 'Nunito' }}>
+            <li>🏃‍♂️ <strong>Kata Kerja Aktif (Kegiatan):</strong> membaca, menulis, memasak, mencuci, memanjat, meminum, memakan, melempar, berlari, dll.</li>
+            <li>🔄 <strong>Kata Kerja Pasif (Dikenai):</strong> dibaca, ditulis, dimasak, dicuci, dipanjat, diminum, dimakan, dilempar, dll.</li>
+          </ul>
+        </div>
+      )}
+
+      <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)', borderLeftColor: 'var(--green)' }}>
+        <div className="example-label" style={{ color: 'var(--green-dark)' }}>▶ Contoh</div>
+        <div className="example-sentence">
+          "Kakak <span className="highlight-p">membaca</span> buku"
+        </div>
+        <div className="example-analysis">Predikat = <strong style={{ color: '#2e7d32' }}>membaca</strong> (kegiatan membaca)</div>
+      </div>
+      <div className="materi-image-row">
+        <img src="/images/image21.png" alt="Membaca" />
+        <img src="/images/image20.png" alt="Predikat" />
+      </div>
+    </div>
+  );
+}
+
+export function ObjekSlide() {
+  const [showExplanation, setShowExplanation] = useState(false);
+
+  return (
+    <div className="materi-body">
+      <button 
+        className="spo-box o clickable-spo-btn" 
+        onClick={() => setShowExplanation(!showExplanation)}
+        style={{ 
+          marginBottom: '12px', 
+          padding: '12px', 
+          width: '100%', 
+          textAlign: 'left',
+          cursor: 'pointer',
+          border: '3px solid var(--blue)',
+          transition: 'all 0.2s ease',
+          display: 'block'
+        }}
+      >
+        <div className="spo-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>O = Objek</span>
+          <span style={{ fontSize: '0.85rem', background: '#1565c0', color: '#fff', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold' }}>
+            {showExplanation ? 'Tutup ✖' : 'Klik Penjelasan Detail! 🔍'}
+          </span>
+        </div>
+        <div className="spo-name" style={{ fontSize: '.95rem', marginTop: '6px', fontWeight: 600 }}>Benda yang dikenai kegiatan</div>
+      </button>
+
+      {showExplanation && (
+        <div className="explain-detail-box o-detail" style={{
+          background: 'rgba(227, 242, 253, 0.95)',
+          border: '2px dashed #1565c0',
+          borderRadius: '12px',
+          padding: '14px 18px',
+          marginBottom: '12px',
+          animation: 'slideDown 0.3s ease-out',
+          textAlign: 'left'
+        }}>
+          <h4 style={{ color: '#0d47a1', margin: '0 0 8px 0', fontSize: '1.05rem', fontFamily: 'Fredoka', fontWeight: 'bold' }}>🕵️‍♂️ Contoh Objek:</h4>
+          <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.9rem', color: '#5c3317', lineHeight: '1.5', fontFamily: 'Nunito' }}>
+            <li>🍎 <strong>Makanan & Minuman:</strong> roti, susu, air, nasi, sayur, buah, kopi, teh, dll.</li>
+            <li>⚽ <strong>Benda & Pakaian:</strong> buku, surat, bola, mobil, sepeda, tas, sepatu, baju, boneka, dll.</li>
+            <li>🌲 <strong>Tumbuhan & Tempat:</strong> pohon, rumput, bunga, kelas, rumah, jalan, taman, dll.</li>
+          </ul>
+        </div>
+      )}
+
+      <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)', borderLeftColor: 'var(--blue)' }}>
+        <div className="example-label" style={{ color: 'var(--blue-dark)' }}>▶ Contoh</div>
+        <div className="example-sentence">
+          "Ibu memasak <span className="highlight-o">nasi</span>"
+        </div>
+        <div className="example-analysis">Objek = <strong style={{ color: '#1565c0' }}>nasi</strong> (yang dimasak)</div>
+      </div>
+      <div className="materi-image-row">
+        <img src="/images/image24.png" alt="Memasak" />
+        <img src="/images/image23.png" alt="Objek" />
+      </div>
+    </div>
+  );
+}
 
 // Vocabulary for real-time Sandbox parser
 export const vocabS = [
@@ -60,10 +246,12 @@ export const materiSlides = [
     desc: 'Selamat datang di markas besar detektif kalimat! Ayo kita pecahkan teka-teki kata.',
     content: (
       <div className="materi-body" style={{ textAlign: 'center' }}>
-        <div className="materi-slide1-row">
-          <img src="/images/image11.png" alt="Mengenal" className="img-mengenal" />
-          <img src="/images/image13.png" alt="Detektif Kalimat" className="img-detektif" />
-          <img src="/images/image12.png" alt="Bintang" className="img-bintang" />
+        <div className="materi-slide1-clean" style={{ padding: '20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+          <div style={{ fontSize: '4.5rem', animation: 'floatAnim 3s ease-in-out infinite', display: 'inline-block' }}>🕵️‍♂️🔍</div>
+          <h3 style={{ fontFamily: 'Fredoka', color: 'var(--brown-dark)', fontSize: '1.8rem', margin: '0' }}>Ayo Mulai Petualangan!</h3>
+          <p style={{ fontFamily: 'Nunito', color: '#5c3317', fontSize: '1.1rem', maxWidth: '420px', margin: '0 auto', lineHeight: '1.5' }}>
+            Temukan rahasia di balik kata-kata dan jadilah ahli tata bahasa. Siap menyelidiki kalimat?
+          </p>
         </div>
         <div className="example-box" style={{ marginTop: '10px', background: 'rgba(255,255,255,0.9)', borderLeftColor: 'var(--yellow-deep)' }}>
           <div className="example-sentence" style={{ fontSize: '1.15rem', color: 'var(--brown-dark)' }}>
@@ -75,16 +263,88 @@ export const materiSlides = [
   },
   {
     id: 1,
+    title: 'Petunjuk Penggunaan',
+    emoji: '💡',
+    bgClass: 'bg-slide-guide',
+    desc: 'Ikuti langkah-langkah di bawah ini untuk belajar dan bermain!',
+    content: (
+      <div className="materi-body">
+        <div className="guide-container" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div className="guide-item" style={{
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderLeft: '5px solid var(--yellow-deep)',
+            borderRadius: '8px',
+            padding: '10px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <span style={{ fontSize: '1.8rem' }}>📖</span>
+            <div style={{ textAlign: 'left' }}>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--brown-dark)', fontFamily: 'Fredoka' }}>1. Pelajari Materi</strong>
+              <span style={{ fontSize: '0.85rem', color: '#5c3317', fontFamily: 'Nunito' }}>Baca penjelasan SPO. Klik kotak Subjek, Predikat, & Objek untuk info detail!</span>
+            </div>
+          </div>
+
+          <div className="guide-item" style={{
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderLeft: '5px solid var(--green)',
+            borderRadius: '8px',
+            padding: '10px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <span style={{ fontSize: '1.8rem' }}>🎯</span>
+            <div style={{ textAlign: 'left' }}>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--brown-dark)', fontFamily: 'Fredoka' }}>2. Mulai Latihan</strong>
+              <span style={{ fontSize: '0.85rem', color: '#5c3317', fontFamily: 'Nunito' }}>Klik tombol "Latihan" di akhir slide untuk menguji kemampuanmu.</span>
+            </div>
+          </div>
+
+          <div className="guide-item" style={{
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderLeft: '5px solid var(--blue)',
+            borderRadius: '8px',
+            padding: '10px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <span style={{ fontSize: '1.8rem' }}>🧩</span>
+            <div style={{ textAlign: 'left' }}>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--brown-dark)', fontFamily: 'Fredoka' }}>3. Jawab 3 Tipe Soal</strong>
+              <span style={{ fontSize: '0.85rem', color: '#5c3317', fontFamily: 'Nunito' }}>Pilih kata (SPO), susun kalimat acak, dan kelompokkan kata (Drag & Drop).</span>
+            </div>
+          </div>
+
+          <div className="guide-item" style={{
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderLeft: '5px solid #a855f7',
+            borderRadius: '8px',
+            padding: '10px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <span style={{ fontSize: '1.8rem' }}>⭐</span>
+            <div style={{ textAlign: 'left' }}>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--brown-dark)', fontFamily: 'Fredoka' }}>4. Dapatkan Bintang</strong>
+              <span style={{ fontSize: '0.85rem', color: '#5c3317', fontFamily: 'Nunito' }}>Jawab benar untuk kumpulkan skor tertinggi dan masuk Papan Peringkat!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 2,
     title: 'Apa Itu Kalimat SPO?',
     emoji: '📜',
     bgClass: 'bg-slide-spo',
     desc: 'Kalimat adalah kumpulan kata yang memiliki arti.',
     content: (
       <div className="materi-body">
-        <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)' }}>
-          <div className="example-label">▶ Contoh Kalimat</div>
-          <div className="example-sentence">"Saya makan roti."</div>
-        </div>
         <div className="spo-grid" style={{ marginTop: '16px' }}>
           <div className="spo-box s">
             <div className="spo-label">S</div>
@@ -107,85 +367,31 @@ export const materiSlides = [
     )
   },
   {
-    id: 2,
+    id: 3,
     title: 'Subjek (S)',
     emoji: '🟡',
     bgClass: 'bg-slide-s',
     desc: 'Subjek adalah pelaku – siapa yang melakukan kegiatan.',
-    content: (
-      <div className="materi-body">
-        <div className="spo-box s" style={{ marginBottom: '12px', padding: '12px' }}>
-          <div className="spo-label">S = Subjek</div>
-          <div className="spo-name" style={{ fontSize: '.9rem', marginTop: '4px' }}>Siapa yang melakukan kegiatan?</div>
-        </div>
-        <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)' }}>
-          <div className="example-label">▶ Contoh</div>
-          <div className="example-sentence">
-            "<span className="highlight-s">Budi</span> bermain bola"
-          </div>
-          <div className="example-analysis">Subjek = <strong style={{ color: '#f4a100' }}>Budi</strong> (yang bermain)</div>
-        </div>
-        <div className="materi-image-row">
-          <img src="/images/image17.png" alt="Budi bermain bola" />
-          <img src="/images/image18.png" alt="Subjek" />
-        </div>
-      </div>
-    )
+    content: <SubjekSlide />
   },
   {
-    id: 3,
+    id: 4,
     title: 'Predikat (P)',
     emoji: '🟢',
     bgClass: 'bg-slide-p',
     desc: 'Predikat adalah kegiatan atau tindakan yang dilakukan.',
-    content: (
-      <div className="materi-body">
-        <div className="spo-box p" style={{ marginBottom: '12px', padding: '12px' }}>
-          <div className="spo-label">P = Predikat</div>
-          <div className="spo-name" style={{ fontSize: '.9rem', marginTop: '4px' }}>Apa yang sedang dilakukan?</div>
-        </div>
-        <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)', borderLeftColor: 'var(--green)' }}>
-          <div className="example-label" style={{ color: 'var(--green-dark)' }}>▶ Contoh</div>
-          <div className="example-sentence">
-            "Kakak <span className="highlight-p">membaca</span> buku"
-          </div>
-          <div className="example-analysis">Predikat = <strong style={{ color: '#2e7d32' }}>membaca</strong> (kegiatan membaca)</div>
-        </div>
-        <div className="materi-image-row">
-          <img src="/images/image21.png" alt="Membaca" />
-          <img src="/images/image20.png" alt="Predikat" />
-        </div>
-      </div>
-    )
+    content: <PredikatSlide />
   },
   {
-    id: 4,
+    id: 5,
     title: 'Objek (O)',
     emoji: '🔵',
     bgClass: 'bg-slide-o',
     desc: 'Objek adalah benda yang dikenai kegiatan.',
-    content: (
-      <div className="materi-body">
-        <div className="spo-box o" style={{ marginBottom: '12px', padding: '12px' }}>
-          <div className="spo-label">O = Objek</div>
-          <div className="spo-name" style={{ fontSize: '.9rem', marginTop: '4px' }}>Benda yang dikenai kegiatan</div>
-        </div>
-        <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)', borderLeftColor: 'var(--blue)' }}>
-          <div className="example-label" style={{ color: 'var(--blue-dark)' }}>▶ Contoh</div>
-          <div className="example-sentence">
-            "Ibu memasak <span className="highlight-o">nasi</span>"
-          </div>
-          <div className="example-analysis">Objek = <strong style={{ color: '#1565c0' }}>nasi</strong> (yang dimasak)</div>
-        </div>
-        <div className="materi-image-row">
-          <img src="/images/image24.png" alt="Memasak" />
-          <img src="/images/image23.png" alt="Objek" />
-        </div>
-      </div>
-    )
+    content: <ObjekSlide />
   },
   {
-    id: 5,
+    id: 6,
     title: 'Contoh 1: Ayah mencuci mobil',
     emoji: '🚗',
     bgClass: 'bg-slide-ex1',
@@ -209,7 +415,7 @@ export const materiSlides = [
     )
   },
   {
-    id: 6,
+    id: 7,
     title: 'Contoh 2: Rina minum susu',
     emoji: '🥛',
     bgClass: 'bg-slide-ex2',
@@ -233,7 +439,7 @@ export const materiSlides = [
     )
   },
   {
-    id: 7,
+    id: 8,
     title: 'Contoh 3: Dia menulis surat',
     emoji: '✉️',
     bgClass: 'bg-slide-ex3',

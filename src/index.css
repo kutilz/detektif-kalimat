@@ -2430,3 +2430,34 @@ html, body {
   letter-spacing: 0.04em;
   margin-bottom: 12px;
 }
+
+/* ======= INTERACTIVE MATERI & HIGHLIGHTING ======= */
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.clickable-spo-btn {
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.clickable-spo-btn:hover {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+.clickable-spo-btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.highlight-s-text {
+  color: #e67e22 !important; /* Slightly darker orange/yellow for text readability on white */
+  font-weight: 900;
+}
+.highlight-p-text {
+  color: #27ae60 !important; /* Premium bright green */
+  font-weight: 900;
+}
+.highlight-o-text {
+  color: #2980b9 !important; /* Premium vibrant blue */
+  font-weight: 900;
+}

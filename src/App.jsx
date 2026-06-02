@@ -32,6 +32,28 @@ import UserIdentityForm from './components/Quiz/UserIdentityForm';
 import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
 
+const highlightExplanation = (text) => {
+  if (!text) return '';
+  let highlighted = text;
+  
+  // Highlight subjek (yellowish/orange)
+  highlighted = highlighted.replace(/(subjek|Subjek)/g, '<strong class="highlight-s-text">$1</strong>');
+  highlighted = highlighted.replace(/\(S\)/g, '(<strong class="highlight-s-text">S</strong>)');
+  highlighted = highlighted.replace(/\bS\b:/g, '<strong class="highlight-s-text">S</strong>:');
+  
+  // Highlight predikat (green)
+  highlighted = highlighted.replace(/(predikat|Predikat)/g, '<strong class="highlight-p-text">$1</strong>');
+  highlighted = highlighted.replace(/\(P\)/g, '(<strong class="highlight-p-text">P</strong>)');
+  highlighted = highlighted.replace(/\bP\b:/g, '<strong class="highlight-p-text">P</strong>:');
+  
+  // Highlight objek (blue)
+  highlighted = highlighted.replace(/(objek|Objek)/g, '<strong class="highlight-o-text">$1</strong>');
+  highlighted = highlighted.replace(/\(O\)/g, '(<strong class="highlight-o-text">O</strong>)');
+  highlighted = highlighted.replace(/\bO\b:/g, '<strong class="highlight-o-text">O</strong>:');
+  
+  return highlighted;
+};
+
 export default function App() {
   // Route state
   const [route, setRoute] = useState('app'); // 'app' | 'admin'
@@ -221,7 +243,7 @@ export default function App() {
     setFeedback({
       show: true,
       correct: isCorrect,
-      explain: computedExplain,
+      explain: highlightExplanation(computedExplain),
       answerStr: rightAnswerStr
     });
   };
