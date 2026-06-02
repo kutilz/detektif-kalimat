@@ -2461,3 +2461,18 @@ html, body {
   color: #2980b9 !important; /* Premium vibrant blue */
   font-weight: 900;
 }
+
+/* Contoh 1 Slide Bird Fly & Reveal animations */
+.contoh1-bird.fly-away {
+  transform: translateY(-250px) translateX(-60px) scale(0.2) rotate(-20deg);
+  opacity: 0;
+}
+
+.fade-in-image {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}

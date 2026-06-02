@@ -186,6 +186,94 @@ export function ObjekSlide() {
   );
 }
 
+export function Contoh1Slide() {
+  const [isBirdFlying, setIsBirdFlying] = useState(false);
+  const [showFatherImage, setShowFatherImage] = useState(false);
+
+  React.useEffect(() => {
+    // Start bird flying animation after 1.5 seconds
+    const flyTimeout = setTimeout(() => {
+      setIsBirdFlying(true);
+    }, 1500);
+
+    // After bird flies away (animation takes 1.5s), show the father washing car image
+    const revealTimeout = setTimeout(() => {
+      setShowFatherImage(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(flyTimeout);
+      clearTimeout(revealTimeout);
+    };
+  }, []);
+
+  return (
+    <div className="materi-body">
+      <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)' }}>
+        <div className="example-label">▶ Analisis Kalimat</div>
+        <div className="example-sentence">
+          "<span className="highlight-s">Ayah</span> <span className="highlight-p">mencuci</span> <span className="highlight-o">mobil</span>"
+        </div>
+        <div className="example-analysis">
+          S: <strong>Ayah</strong> | P: <strong>mencuci</strong> | O: <strong>mobil</strong>
+        </div>
+      </div>
+
+      <div className="materi-image-row contoh1-image-container" style={{ 
+        position: 'relative', 
+        minHeight: '180px', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        margin: '15px auto 0',
+        width: '100%'
+      }}>
+        {/* Bird Image (image16.png) */}
+        {!showFatherImage && (
+          <img 
+            src="/images/image16.png" 
+            alt="Burung" 
+            className={`contoh1-bird ${isBirdFlying ? 'fly-away' : ''}`}
+            style={{
+              maxHeight: '120px',
+              transition: 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.2s ease',
+              zIndex: 5
+            }}
+          />
+        )}
+
+        {/* Mobil Image (image25.png) */}
+        {!showFatherImage && !isBirdFlying && (
+          <img 
+            src="/images/image25.png" 
+            alt="Mobil" 
+            style={{
+              maxHeight: '60px',
+              marginLeft: '15px'
+            }}
+          />
+        )}
+
+        {/* Father Washing Car Image (revealed after bird flies away) */}
+        {showFatherImage && (
+          <img 
+            src="/images/father_washing_car.png" 
+            alt="Ayah mencuci mobil" 
+            className="fade-in-image"
+            style={{
+              maxHeight: '180px',
+              borderRadius: '16px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+              border: '4px solid #fff',
+              display: 'block'
+            }}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Vocabulary for real-time Sandbox parser
 export const vocabS = [
   // Kata Ganti & Keluarga
@@ -396,23 +484,7 @@ export const materiSlides = [
     emoji: '🚗',
     bgClass: 'bg-slide-ex1',
     desc: 'Mari lihat struktur kalimat lengkap yang pertama!',
-    content: (
-      <div className="materi-body">
-        <div className="example-box" style={{ background: 'rgba(255,255,255,0.85)' }}>
-          <div className="example-label">▶ Analisis Kalimat</div>
-          <div className="example-sentence">
-            "<span className="highlight-s">Ayah</span> <span className="highlight-p">mencuci</span> <span className="highlight-o">mobil</span>"
-          </div>
-          <div className="example-analysis">
-            S: <strong>Ayah</strong> | P: <strong>mencuci</strong> | O: <strong>mobil</strong>
-          </div>
-        </div>
-        <div className="materi-image-row">
-          <img src="/images/image16.png" alt="Mencuci" />
-          <img src="/images/image25.png" alt="Mobil" />
-        </div>
-      </div>
-    )
+    content: <Contoh1Slide />
   },
   {
     id: 7,

@@ -123,7 +123,7 @@ export default function App() {
       if (hasEnabledFields && !userIdentity) {
         setCurrentScreen('identity');
       } else {
-        initQuiz();
+        setCurrentScreen('quiz-instructions');
       }
     }
   };
@@ -131,12 +131,16 @@ export default function App() {
   // Handle identity submission
   const handleIdentitySubmit = (data) => {
     setUserIdentity(data);
-    setCurrentScreen('quiz');
-    initQuiz();
+    setCurrentScreen('quiz-instructions');
   };
 
   const handleIdentitySkip = () => {
     setUserIdentity({ name: '', class: '', studentId: '' });
+    setCurrentScreen('quiz-instructions');
+  };
+
+  const startActualQuiz = () => {
+    playSound('click', isSoundEnabled);
     setCurrentScreen('quiz');
     initQuiz();
   };
@@ -487,6 +491,73 @@ export default function App() {
               onSubmit={handleIdentitySubmit}
               onSkip={handleIdentitySkip}
             />
+          </motion.div>
+        )}
+
+        {/* ===== QUIZ INSTRUCTIONS SCREEN ===== */}
+        {currentScreen === 'quiz-instructions' && (
+          <motion.div
+            key="quiz-instructions"
+            className="screen active"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+          >
+            <div className="header">
+              <button className="btn-back" onClick={() => navigateTo('menu')}>← Menu</button>
+              <h2 className="page-title">📝 Petunjuk Latihan</h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button
+                  className={`btn-sound-header ${!isSoundEnabled ? 'muted' : ''}`}
+                  onClick={handleToggleSound}
+                  aria-label="Toggle Sound"
+                >
+                  {isSoundEnabled ? '🔊' : '🔇'}
+                </button>
+              </div>
+            </div>
+
+            <div className="quiz-body" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 120px)' }}>
+              <div className="quiz-card bg-slide-quiz-intro" style={{ maxWidth: '500px', margin: '20px auto', width: '90%' }}>
+                <div className="materi-slide-glass-overlay" style={{ padding: '28px' }}>
+                  <div style={{ fontSize: '4rem', marginBottom: '14px', textAlign: 'center', animation: 'floatAnim 3s ease-in-out infinite' }}>🕵️‍♂️🔍</div>
+                  <h3 style={{ fontFamily: 'Fredoka', color: 'var(--brown-dark)', fontSize: '1.6rem', textAlign: 'center', marginBottom: '20px', fontWeight: '800' }}>
+                    Siap Memulai Misi Latihan?
+                  </h3>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left', marginBottom: '28px' }}>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
+                      <span style={{ fontSize: '1.4rem' }}>👆</span>
+                      <p style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
+                        <strong>Pilih Kata:</strong> Klik kata di kalimat yang merupakan Subjek (S), Predikat (P), atau Objek (O).
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
+                      <span style={{ fontSize: '1.4rem' }}>📦</span>
+                      <p style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
+                        <strong>Geser & Kelompokkan:</strong> Tarik kata ke kotak S, P, atau O yang benar.
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
+                      <span style={{ fontSize: '1.4rem' }}>🔀</span>
+                      <p style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
+                        <strong>Susun Kalimat:</strong> Urutkan kata acak agar membentuk susunan SPO yang benar.
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
+                      <span style={{ fontSize: '1.4rem' }}>💡</span>
+                      <p style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
+                        <strong>Petunjuk (Hint):</strong> Klik ikon bohlam jika kamu butuh bantuan detektif!
+                      </p>
+                    </div>
+                  </div>
+
+                  <button className="btn-main" style={{ width: '100%', padding: '16px 20px', fontSize: '1.2rem', fontFamily: 'Fredoka' }} onClick={startActualQuiz}>
+                    🚀 Mulai Misi Latihan!
+                  </button>
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
 
