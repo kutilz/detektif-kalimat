@@ -2467,14 +2467,39 @@ html, body {
 }
 
 /* Contoh 1 Slide Bird Fly & Reveal animations */
+.contoh1-bird {
+  max-height: 110px;
+  z-index: 5;
+  position: absolute;
+}
+
 .contoh1-bird.fly-away {
   transform: translateY(-250px) translateX(-60px) scale(0.2) rotate(-20deg);
   opacity: 0;
+  transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.2s ease;
 }
 
 .contoh1-bird.fly-away-right {
-  transform: translateY(-800px) translateX(800px) scale(0.1) rotate(35deg);
-  opacity: 0;
+  animation: flyCurve 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes flyCurve {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(80px, -150px) scale(0.75) rotate(-15deg);
+    opacity: 1;
+  }
+  65% {
+    transform: translate(360px, -360px) scale(0.45) rotate(12deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(900px, -750px) scale(0.1) rotate(35deg);
+    opacity: 0;
+  }
 }
 
 .fade-in-image {

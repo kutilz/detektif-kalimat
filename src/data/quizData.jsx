@@ -191,15 +191,15 @@ export function Contoh1Slide() {
   const [showFatherImage, setShowFatherImage] = useState(false);
 
   React.useEffect(() => {
-    // Start bird flying animation after 1.5 seconds
+    // Start bird flying animation after 0.4 seconds
     const flyTimeout = setTimeout(() => {
       setIsBirdFlying(true);
-    }, 1500);
+    }, 400);
 
-    // After bird flies away (animation takes 1.5s), show the father washing car image
+    // After bird flies away, show the father washing car image (1.4 seconds)
     const revealTimeout = setTimeout(() => {
       setShowFatherImage(true);
-    }, 3000);
+    }, 1400);
 
     return () => {
       clearTimeout(flyTimeout);
@@ -238,12 +238,6 @@ export function Contoh1Slide() {
               src="/images/image16.png" 
               alt="Burung" 
               className={`contoh1-bird ${isBirdFlying ? 'fly-away-right' : ''}`}
-              style={{
-                maxHeight: '110px',
-                transition: 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.2s ease',
-                zIndex: 5,
-                position: 'absolute'
-              }}
             />
           )}
 
