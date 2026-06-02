@@ -2462,6 +2462,10 @@ html, body {
   font-weight: 900;
 }
 
+.materi-slide.no-overflow-hidden {
+  overflow: visible !important;
+}
+
 /* Contoh 1 Slide Bird Fly & Reveal animations */
 .contoh1-bird.fly-away {
   transform: translateY(-250px) translateX(-60px) scale(0.2) rotate(-20deg);
@@ -2469,7 +2473,7 @@ html, body {
 }
 
 .contoh1-bird.fly-away-right {
-  transform: translateY(-300px) translateX(300px) scale(0.2) rotate(25deg);
+  transform: translateY(-800px) translateX(800px) scale(0.1) rotate(35deg);
   opacity: 0;
 }
 

@@ -228,7 +228,7 @@ export function Contoh1Slide() {
         gap: '30px',
         margin: '15px auto 0',
         width: '100%',
-        overflow: 'hidden'
+        overflow: 'visible'
       }}>
         {/* Left Side Container: Bird flying away, replaced by Father washing car */}
         <div style={{ position: 'relative', width: '200px', height: '160px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -489,7 +489,7 @@ export const materiSlides = [
     id: 6,
     title: 'Contoh 1: Ayah mencuci mobil',
     emoji: '🚗',
-    bgClass: 'bg-slide-ex1',
+    bgClass: 'bg-slide-ex1 no-overflow-hidden',
     desc: 'Mari lihat struktur kalimat lengkap yang pertama!',
     content: <Contoh1Slide />
   },
