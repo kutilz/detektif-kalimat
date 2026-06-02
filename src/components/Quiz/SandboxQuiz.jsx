@@ -92,13 +92,6 @@ export default function SandboxQuiz({ q, onCheck, usedSentences = [] }) {
       }
     }
     
-    // 3. Fallback: If exactly 3 words are typed and we missed any slots
-    if (words.length === 3 && (!s || !p || !o)) {
-      s = words[0];
-      p = words[1];
-      o = words[2];
-    }
-    
     setFoundS(s);
     setFoundP(p);
     setFoundO(o);
