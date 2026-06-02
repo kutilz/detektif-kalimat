@@ -477,6 +477,21 @@ export default function AdminDashboard({ onLogout }) {
                         <span className="admin-toggle-slider" />
                       </label>
                     </div>
+
+                    <div className="admin-toggle-group">
+                      <div className="admin-toggle-info">
+                        <span className="admin-toggle-label">Animasi Burung Terbang</span>
+                        <span className="admin-toggle-desc">Aktifkan animasi burung terbang di materi Contoh 1</span>
+                      </div>
+                      <label className="admin-toggle">
+                        <input
+                          type="checkbox"
+                          checked={settings.enableFlyingBird !== false}
+                          onChange={() => handleUpdateSettings({ enableFlyingBird: !settings.enableFlyingBird })}
+                        />
+                        <span className="admin-toggle-slider" />
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>

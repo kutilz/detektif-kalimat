@@ -55,6 +55,7 @@ const DEFAULT_SETTINGS = {
   shuffleOptions: true,
   timeLimit: 0,                // 0 = no limit, in seconds
   showLeaderboard: true,
+  enableFlyingBird: true,
 };
 
 const DEFAULT_USER_IDENTITY_CONFIG = {

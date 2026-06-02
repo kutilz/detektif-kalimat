@@ -187,10 +187,29 @@ export function ObjekSlide() {
 }
 
 export function Contoh1Slide() {
+  // Read admin settings directly from localStorage to avoid circular dependency
+  const enableFlyingBird = (() => {
+    try {
+      const raw = localStorage.getItem('dk_admin_settings');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.enableFlyingBird !== undefined) {
+          return parsed.enableFlyingBird;
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return true; // default value
+  })();
+
   const [isBirdFlying, setIsBirdFlying] = useState(false);
-  const [showFatherImage, setShowFatherImage] = useState(false);
+  const [showFatherImage, setShowFatherImage] = useState(!enableFlyingBird);
 
   React.useEffect(() => {
+    if (!enableFlyingBird) {
+      return;
+    }
     // Start bird flying animation after 0.4 seconds
     const flyTimeout = setTimeout(() => {
       setIsBirdFlying(true);
@@ -205,7 +224,7 @@ export function Contoh1Slide() {
       clearTimeout(flyTimeout);
       clearTimeout(revealTimeout);
     };
-  }, []);
+  }, [enableFlyingBird]);
 
   return (
     <div className="materi-body">
@@ -233,7 +252,7 @@ export function Contoh1Slide() {
         {/* Left Side Container: Bird flying away, replaced by Father washing car */}
         <div style={{ position: 'relative', width: '200px', height: '160px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           {/* Bird Image (image16.png) */}
-          {!showFatherImage && (
+          {enableFlyingBird && !showFatherImage && (
             <img 
               src="/images/image16.png" 
               alt="Burung" 
@@ -246,12 +265,9 @@ export function Contoh1Slide() {
             <img 
               src="/images/father_washing_car.png" 
               alt="Ayah mencuci mobil" 
-              className="fade-in-image"
+              className={enableFlyingBird ? "fade-in-image" : ""}
               style={{
                 maxHeight: '150px',
-                borderRadius: '16px',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                border: '4px solid #fff',
                 display: 'block',
                 position: 'absolute'
               }}
@@ -548,7 +564,7 @@ export const allQuestions = [
     answer: 'Ani',
     question: 'Tentukan SUBJEK dari kalimat berikut!',
     hint: '💡 Tanya: "Siapa yang membaca?"',
-    explain: '✅ Ani adalah subjek karena dia yang melakukan kegiatan membaca.'
+    explain: '✅ Ani adalah subjek (S) karena dia yang melakukan kegiatan membaca.'
   },
   // 2. Aku menulis surat - S
   {
