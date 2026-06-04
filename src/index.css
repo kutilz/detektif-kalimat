@@ -1702,46 +1702,10 @@ html, body {
   background: rgba(244,161,0,0.08);
 }
 .admin-presentation-btn.active {
-  background: linear-gradient(135deg, rgba(244,161,0,0.18), rgba(251,100,50,0.14));
+  background: var(--admin-surface);
   border-color: var(--admin-accent);
   color: var(--admin-accent);
-  box-shadow: 0 0 16px rgba(244,161,0,0.25);
-  animation: presentation-pulse 2s ease-in-out infinite;
-}
-
-@keyframes presentation-pulse {
-  0%, 100% { box-shadow: 0 0 14px rgba(244,161,0,0.25); }
-  50% { box-shadow: 0 0 26px rgba(244,161,0,0.45); }
-}
-
-.admin-presentation-badge {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  background: linear-gradient(90deg, #f4a100, #fb6432, #f4a100);
-  background-size: 200% 100%;
-  animation: badge-shimmer 3s linear infinite;
-  color: #fff;
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 800;
-  font-size: 0.9rem;
-  letter-spacing: 0.05em;
-  text-align: center;
-  padding: 6px 16px;
-  pointer-events: none;
-  user-select: none;
-}
-
-@keyframes badge-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-.admin-screen.presentation-mode {
-  outline: 3px solid var(--admin-accent);
-  outline-offset: -3px;
+  box-shadow: 0 2px 8px rgba(244,161,0,0.15);
 }
 
 

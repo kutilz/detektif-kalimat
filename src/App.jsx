@@ -75,6 +75,24 @@ export default function App() {
       setIsStoreLoaded(true);
     });
   }, []);
+
+  // Apply global font scale based on admin settings
+  useEffect(() => {
+    const applyGlobalFontScale = () => {
+      const settings = getAdminSettings();
+      const scale = settings.presentationMode ? Math.max(settings.fontScale || 1.0, 1.5) : (settings.fontScale || 1.0);
+      document.documentElement.style.setProperty('--admin-font-scale', scale);
+      document.documentElement.style.fontSize = `${scale * 16}px`;
+    };
+
+    // Apply initially
+    applyGlobalFontScale();
+
+    window.addEventListener('admin-settings-updated', applyGlobalFontScale);
+    return () => {
+      window.removeEventListener('admin-settings-updated', applyGlobalFontScale);
+    };
+  }, []);
   
   // Quiz States
   const [quizQuestions, setQuizQuestions] = useState([]);

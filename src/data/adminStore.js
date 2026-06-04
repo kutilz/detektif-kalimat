@@ -28,6 +28,9 @@ export async function initGlobalStore() {
   } catch (err) {
     console.warn('Failed to load global store from API. Falling back to local.', err);
     globalStoreCache = {};
+  } finally {
+    // Notify application that settings (and store) are loaded
+    window.dispatchEvent(new Event('admin-settings-updated'));
   }
 }
 
@@ -56,6 +59,8 @@ const DEFAULT_SETTINGS = {
   timeLimit: 0,                // 0 = no limit, in seconds
   showLeaderboard: true,
   enableFlyingBird: true,
+  fontScale: 1.0,
+  presentationMode: false,
 };
 
 const DEFAULT_USER_IDENTITY_CONFIG = {
@@ -116,6 +121,7 @@ export function updateAdminSettings(partial) {
   const current = getAdminSettings();
   const updated = { ...current, ...partial };
   saveAdminSettings(updated);
+  window.dispatchEvent(new Event('admin-settings-updated'));
   return updated;
 }
 

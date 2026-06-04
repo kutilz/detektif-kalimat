@@ -41,10 +41,6 @@ export default function AdminDashboard({ onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState(null);
 
-  // Font scale & presentation
-  const [fontScale, setFontScale] = useState(1.0);
-  const [presentationMode, setPresentationMode] = useState(false);
-
   // Data states
   const [settings, setSettings] = useState(getAdminSettings());
   const [customQuestions, setCustomQuestions] = useState(getCustomQuestions());
@@ -69,21 +65,23 @@ export default function AdminDashboard({ onLogout }) {
   // Confirm dialog
   const [confirmDialog, setConfirmDialog] = useState(null);
 
-  // Apply font scale globally
-  useEffect(() => {
-    const scale = presentationMode ? Math.max(fontScale, PRESENTATION_SCALE) : fontScale;
-    document.documentElement.style.setProperty('--admin-font-scale', scale);
-    document.documentElement.style.fontSize = `${scale * 16}px`;
-    return () => {
-      document.documentElement.style.removeProperty('--admin-font-scale');
-      document.documentElement.style.fontSize = '';
-    };
-  }, [fontScale, presentationMode]);
+  const fontScale = settings.fontScale || 1.0;
+  const presentationMode = settings.presentationMode || false;
 
-  const handleFontIncrease = () => setFontScale((s) => Math.min(FONT_SCALE_MAX, parseFloat((s + FONT_SCALE_STEP).toFixed(1))));
-  const handleFontDecrease = () => setFontScale((s) => Math.max(FONT_SCALE_MIN, parseFloat((s - FONT_SCALE_STEP).toFixed(1))));
-  const handleFontReset = () => setFontScale(1.0);
-  const handleTogglePresentation = () => setPresentationMode((v) => !v);
+  const handleFontIncrease = () => {
+    const next = Math.min(FONT_SCALE_MAX, parseFloat((fontScale + FONT_SCALE_STEP).toFixed(1)));
+    handleUpdateSettings({ fontScale: next });
+  };
+  const handleFontDecrease = () => {
+    const next = Math.max(FONT_SCALE_MIN, parseFloat((fontScale - FONT_SCALE_STEP).toFixed(1)));
+    handleUpdateSettings({ fontScale: next });
+  };
+  const handleFontReset = () => {
+    handleUpdateSettings({ fontScale: 1.0 });
+  };
+  const handleTogglePresentation = () => {
+    handleUpdateSettings({ presentationMode: !presentationMode });
+  };
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -258,20 +256,7 @@ export default function AdminDashboard({ onLogout }) {
   };
 
   return (
-    <div className={`admin-screen ${presentationMode ? 'presentation-mode' : ''}`}>
-      {/* Presentation Mode Badge */}
-      <AnimatePresence>
-        {presentationMode && (
-          <motion.div
-            className="admin-presentation-badge"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            🎯 PRESENTATION MODE — Skala Font: x{Math.max(fontScale, PRESENTATION_SCALE).toFixed(1)}
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="admin-screen">
       <div className="admin-layout">
         {/* Sidebar Overlay (mobile) */}
         <div
