@@ -149,7 +149,11 @@ export default function IdentityLoadingScreen({ isInitialLoad = true, isStoreLoa
           <div className="avatar-container">
             <div className="avatar-ring" />
             <div className="avatar-content">
-              <span className="avatar-initials">Ale</span>
+              <img 
+                src="/images/PAS PHOTO BERLIANA INDRA LESTARI.JPG.jpeg" 
+                alt="Berliana Indra Lestari" 
+                className="avatar-image"
+              />
             </div>
           </div>
 
