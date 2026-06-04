@@ -149,7 +149,7 @@ export default function IdentityLoadingScreen({ isInitialLoad = true, isStoreLoa
           <div className="avatar-container">
             <div className="avatar-ring" />
             <div className="avatar-content">
-              <span className="avatar-initials">BIL</span>
+              <span className="avatar-initials">Ale</span>
             </div>
           </div>
 
