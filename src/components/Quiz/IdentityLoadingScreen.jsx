@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, User, Hash, Phone, Instagram, Sparkles, Award, X } from 'lucide-react';
+import { Search, User, Hash, Phone, Instagram, Linkedin, Sparkles, Award, X } from 'lucide-react';
 import ParticlesBackground from '../ReactBits/ParticlesBackground';
 
 export default function IdentityLoadingScreen({ isInitialLoad = true, isStoreLoaded, onComplete, onClose }) {
@@ -154,7 +154,6 @@ export default function IdentityLoadingScreen({ isInitialLoad = true, isStoreLoa
           </div>
 
           <div className="developer-info">
-            <span className="dev-label">PENGEMBANG APLIKASI</span>
             <h2 className="dev-name">Berliana Indra Lestari</h2>
             
             <div className="nim-badge">
@@ -193,6 +192,21 @@ export default function IdentityLoadingScreen({ isInitialLoad = true, isStoreLoa
             <div className="contact-text">
               <span className="contact-label">Instagram</span>
               <span className="contact-value">@berlianaindrale</span>
+            </div>
+          </a>
+
+          <a
+            href="https://id.linkedin.com/in/berliana-indra-lestari"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-item linkedin-btn"
+          >
+            <div className="contact-icon-wrapper">
+              <Linkedin size={18} />
+            </div>
+            <div className="contact-text">
+              <span className="contact-label">LinkedIn</span>
+              <span className="contact-value">Berliana Indra Lestari</span>
             </div>
           </a>
         </div>

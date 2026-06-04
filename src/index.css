@@ -2709,11 +2709,23 @@ html, body {
 }
 
 .contact-links {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   width: 100%;
   margin-bottom: 28px;
+}
+
+.linkedin-btn {
+  background: #e8f4f9;
+  border-color: #bee3f8;
+  color: #0077b5;
+}
+
+.linkedin-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 119, 181, 0.15);
+  background: #d4ecf7;
 }
 
 .contact-item {
