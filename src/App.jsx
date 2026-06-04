@@ -27,6 +27,8 @@ import DragDropScramble from './components/Quiz/DragDropScramble';
 import DragDropSPO from './components/Quiz/DragDropSPO';
 import SandboxQuiz from './components/Quiz/SandboxQuiz';
 import UserIdentityForm from './components/Quiz/UserIdentityForm';
+import IdentityLoadingScreen from './components/Quiz/IdentityLoadingScreen';
+
 
 // Admin Components
 import AdminLogin from './components/Admin/AdminLogin';
@@ -64,11 +66,12 @@ export default function App() {
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [currentMateri, setCurrentMateri] = useState(0);
   const [isGlobalLoading, setIsGlobalLoading] = useState(true);
+  const [isStoreLoaded, setIsStoreLoaded] = useState(false);
 
   // Initialize Global Store
   useEffect(() => {
     initGlobalStore().then(() => {
-      setIsGlobalLoading(false);
+      setIsStoreLoaded(true);
     });
   }, []);
   
@@ -362,11 +365,10 @@ export default function App() {
 
   if (isGlobalLoading) {
     return (
-      <div className="app-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--blue-50)' }}>
-        <h2 style={{ color: 'var(--blue-600)', marginBottom: 20 }}>🔄 Menghubungkan ke Server...</h2>
-        <div className="spinner" style={{ width: 40, height: 40, border: '4px solid rgba(0,0,0,0.1)', borderTopColor: 'var(--blue-500)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
+      <IdentityLoadingScreen
+        isStoreLoaded={isStoreLoaded}
+        onComplete={() => setIsGlobalLoading(false)}
+      />
     );
   }
 

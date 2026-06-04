@@ -2510,3 +2510,322 @@ html, body {
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 }
+
+/* ======= IDENTITY LOADER SCREEN ======= */
+.identity-loader-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  background: url('/images/image1.jpeg') no-repeat center center;
+  background-size: cover;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.loader-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(92, 51, 23, 0.4) 0%, rgba(45, 27, 14, 0.8) 100%);
+  backdrop-filter: blur(8px);
+  z-index: 0;
+}
+
+.loader-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 4px solid var(--brown-dark);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.6);
+  text-align: center;
+  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loader-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--brown-dark);
+  color: var(--yellow);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 10px var(--shadow);
+}
+
+.loader-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--brown-dark);
+  line-height: 1.1;
+  margin-bottom: 6px;
+  text-shadow: 1px 1px 0 var(--white), 2px 2px 0 rgba(92, 51, 23, 0.15);
+}
+
+.loader-subtitle {
+  font-size: 0.95rem;
+  color: var(--brown-mid);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.loader-divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 2px;
+  background: var(--brown-light);
+  opacity: 0.5;
+}
+
+.divider-icon-wrapper {
+  background: var(--yellow);
+  border: 2px solid var(--brown-dark);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+.divider-icon {
+  color: var(--brown-dark);
+  animation: pulseScan 2s infinite ease-in-out;
+}
+
+@keyframes pulseScan {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(15deg); }
+}
+
+.developer-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  background: var(--bg);
+  border: 2px solid var(--brown-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.avatar-container {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.avatar-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px dashed var(--yellow-deep);
+  border-radius: 50%;
+  animation: spinRing 12s linear infinite;
+}
+
+@keyframes spinRing {
+  to { transform: rotate(360deg); }
+}
+
+.avatar-content {
+  position: absolute;
+  inset: 4px;
+  background: linear-gradient(135deg, var(--brown-light), var(--brown-dark));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-initials {
+  color: var(--white);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.developer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.dev-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--brown-mid);
+  letter-spacing: 0.05em;
+}
+
+.dev-name {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--brown-dark);
+  margin: 2px 0 4px;
+}
+
+.nim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(92, 51, 23, 0.08);
+  color: var(--brown-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.nim-icon {
+  opacity: 0.7;
+}
+
+.contact-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: var(--transition);
+  border: 2px solid transparent;
+}
+
+.whatsapp-btn {
+  background: #e8f5e9;
+  border-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.whatsapp-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(46, 125, 50, 0.15);
+  background: #dbf1dd;
+}
+
+.instagram-btn {
+  background: #fce4ec;
+  border-color: #f8bbd0;
+  color: #c2185b;
+}
+
+.instagram-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(194, 24, 91, 0.15);
+  background: #f8d3df;
+}
+
+.contact-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.contact-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.contact-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+}
+
+.contact-value {
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.loading-progress-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.progress-text-wrapper {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--brown-dark);
+  margin-bottom: 6px;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 10px;
+  background: rgba(92, 51, 23, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(92, 51, 23, 0.08);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--yellow), var(--yellow-deep));
+  border-radius: 999px;
+}
+
+.loader-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brown-mid);
+  opacity: 0.85;
+}
+
+.footer-icon {
+  color: var(--brown-light);
+}
+
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
