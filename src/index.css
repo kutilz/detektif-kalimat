@@ -1620,6 +1620,132 @@ html, body {
   padding: 28px 32px 40px;
 }
 
+/* ======= FONT SCALE & PRESENTATION MODE ======= */
+.admin-font-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.admin-font-scale-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--admin-surface-2);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  padding: 4px 8px;
+}
+
+.admin-font-btn {
+  background: transparent;
+  border: none;
+  color: var(--admin-text-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+.admin-font-btn:hover:not(:disabled) {
+  background: var(--admin-border-2);
+  color: var(--admin-accent);
+}
+.admin-font-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.admin-font-btn.reset {
+  color: var(--admin-text-3);
+  width: 24px;
+  height: 24px;
+}
+.admin-font-btn.reset:hover {
+  color: var(--admin-danger);
+  background: rgba(239,68,68,0.12);
+}
+
+.admin-font-label {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--admin-accent);
+  min-width: 32px;
+  text-align: center;
+  user-select: none;
+}
+
+.admin-presentation-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--admin-surface-2);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  color: var(--admin-text-2);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.admin-presentation-btn:hover {
+  border-color: var(--admin-accent);
+  color: var(--admin-accent);
+  background: rgba(244,161,0,0.08);
+}
+.admin-presentation-btn.active {
+  background: linear-gradient(135deg, rgba(244,161,0,0.18), rgba(251,100,50,0.14));
+  border-color: var(--admin-accent);
+  color: var(--admin-accent);
+  box-shadow: 0 0 16px rgba(244,161,0,0.25);
+  animation: presentation-pulse 2s ease-in-out infinite;
+}
+
+@keyframes presentation-pulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(244,161,0,0.25); }
+  50% { box-shadow: 0 0 26px rgba(244,161,0,0.45); }
+}
+
+.admin-presentation-badge {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: linear-gradient(90deg, #f4a100, #fb6432, #f4a100);
+  background-size: 200% 100%;
+  animation: badge-shimmer 3s linear infinite;
+  color: #fff;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+  padding: 6px 16px;
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes badge-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.admin-screen.presentation-mode {
+  outline: 3px solid var(--admin-accent);
+  outline-offset: -3px;
+}
+
+
+
 /* ======= ADMIN STATS ======= */
 .admin-stats-grid {
   display: grid;

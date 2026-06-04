@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Settings, FileQuestion, Trophy, Users, Shield,
   LogOut, Plus, Trash2, Edit3, Search, X, Menu, Copy, RefreshCw,
-  Save, Hash, Clock, Shuffle, Eye, EyeOff
+  Save, Hash, Clock, Shuffle, Eye, EyeOff, ZoomIn, ZoomOut, Presentation, RotateCcw
 } from 'lucide-react';
 import {
   getAdminSettings, updateAdminSettings,
@@ -31,10 +31,19 @@ const QUIZ_MODES = [
   { key: 'mixed', icon: '🔀', label: 'Campuran', desc: 'Gabungan bawaan + custom' },
 ];
 
+const FONT_SCALE_MIN = 1.0;
+const FONT_SCALE_MAX = 2.0;
+const FONT_SCALE_STEP = 0.1;
+const PRESENTATION_SCALE = 1.5;
+
 export default function AdminDashboard({ onLogout }) {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState(null);
+
+  // Font scale & presentation
+  const [fontScale, setFontScale] = useState(1.0);
+  const [presentationMode, setPresentationMode] = useState(false);
 
   // Data states
   const [settings, setSettings] = useState(getAdminSettings());
@@ -59,6 +68,22 @@ export default function AdminDashboard({ onLogout }) {
 
   // Confirm dialog
   const [confirmDialog, setConfirmDialog] = useState(null);
+
+  // Apply font scale globally
+  useEffect(() => {
+    const scale = presentationMode ? Math.max(fontScale, PRESENTATION_SCALE) : fontScale;
+    document.documentElement.style.setProperty('--admin-font-scale', scale);
+    document.documentElement.style.fontSize = `${scale * 16}px`;
+    return () => {
+      document.documentElement.style.removeProperty('--admin-font-scale');
+      document.documentElement.style.fontSize = '';
+    };
+  }, [fontScale, presentationMode]);
+
+  const handleFontIncrease = () => setFontScale((s) => Math.min(FONT_SCALE_MAX, parseFloat((s + FONT_SCALE_STEP).toFixed(1))));
+  const handleFontDecrease = () => setFontScale((s) => Math.max(FONT_SCALE_MIN, parseFloat((s - FONT_SCALE_STEP).toFixed(1))));
+  const handleFontReset = () => setFontScale(1.0);
+  const handleTogglePresentation = () => setPresentationMode((v) => !v);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -233,7 +258,20 @@ export default function AdminDashboard({ onLogout }) {
   };
 
   return (
-    <div className="admin-screen">
+    <div className={`admin-screen ${presentationMode ? 'presentation-mode' : ''}`}>
+      {/* Presentation Mode Badge */}
+      <AnimatePresence>
+        {presentationMode && (
+          <motion.div
+            className="admin-presentation-badge"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+          >
+            🎯 PRESENTATION MODE — Skala Font: x{Math.max(fontScale, PRESENTATION_SCALE).toFixed(1)}
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="admin-layout">
         {/* Sidebar Overlay (mobile) */}
         <div
@@ -292,6 +330,48 @@ export default function AdminDashboard({ onLogout }) {
               <h2 className="admin-content-title">
                 {NAV_ITEMS.find((n) => n.key === activeSection)?.label || 'Dashboard'}
               </h2>
+            </div>
+
+            {/* Font Scale & Presentation Controls */}
+            <div className="admin-font-controls">
+              <div className="admin-font-scale-group">
+                <button
+                  className="admin-font-btn"
+                  onClick={handleFontDecrease}
+                  disabled={fontScale <= FONT_SCALE_MIN}
+                  title="Kecilkan Font"
+                >
+                  <ZoomOut size={15} />
+                </button>
+                <span className="admin-font-label">
+                  {fontScale === 1.0 ? 'x1' : `x${fontScale.toFixed(1)}`}
+                </span>
+                <button
+                  className="admin-font-btn"
+                  onClick={handleFontIncrease}
+                  disabled={fontScale >= FONT_SCALE_MAX}
+                  title="Besarkan Font"
+                >
+                  <ZoomIn size={15} />
+                </button>
+                {fontScale !== 1.0 && (
+                  <button
+                    className="admin-font-btn reset"
+                    onClick={handleFontReset}
+                    title="Reset ke Default"
+                  >
+                    <RotateCcw size={13} />
+                  </button>
+                )}
+              </div>
+              <button
+                className={`admin-presentation-btn ${presentationMode ? 'active' : ''}`}
+                onClick={handleTogglePresentation}
+                title={presentationMode ? 'Matikan Presentation Mode' : 'Aktifkan Presentation Mode'}
+              >
+                <Presentation size={15} />
+                <span>{presentationMode ? 'Presentasi ON' : 'Presentasi'}</span>
+              </button>
             </div>
           </div>
 
