@@ -2829,3 +2829,53 @@ html, body {
   animation: spin 8s linear infinite;
 }
 
+/* ======= FLOATING INFO BUTTON & CLOSE BUTTON ======= */
+.btn-info-floating {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 1000;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid var(--white);
+  background: linear-gradient(135deg, var(--brown-light), var(--brown-dark));
+  color: var(--white);
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  outline: none;
+}
+.btn-info-floating:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+.loader-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(92, 51, 23, 0.08);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brown-dark);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.loader-close-btn:hover {
+  background: var(--red);
+  color: var(--white);
+  transform: rotate(90deg);
+}
+
+

@@ -67,6 +67,7 @@ export default function App() {
   const [currentMateri, setCurrentMateri] = useState(0);
   const [isGlobalLoading, setIsGlobalLoading] = useState(true);
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
+  const [showDeveloperInfo, setShowDeveloperInfo] = useState(false);
 
   // Initialize Global Store
   useEffect(() => {
@@ -363,14 +364,7 @@ export default function App() {
   const currentLeaderboard = getLeaderboard();
   const adminSettings = getAdminSettings();
 
-  if (isGlobalLoading) {
-    return (
-      <IdentityLoadingScreen
-        isStoreLoaded={isStoreLoaded}
-        onComplete={() => setIsGlobalLoading(false)}
-      />
-    );
-  }
+
 
   return (
     <div className="app-container">
@@ -890,6 +884,36 @@ export default function App() {
               <p className="feedback-tap-hint">Ketuk di mana saja untuk lanjut 👇</p>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Info Button (only visible on Cover screen) */}
+      {!isGlobalLoading && currentScreen === 'cover' && (
+        <button
+          className="btn-info-floating"
+          onClick={() => {
+            playSound('click', isSoundEnabled);
+            setShowDeveloperInfo(true);
+          }}
+          aria-label="Informasi Pengembang"
+        >
+          i
+        </button>
+      )}
+
+      {/* Developer Info & Initial Loading Overlay */}
+      <AnimatePresence>
+        {(isGlobalLoading || showDeveloperInfo) && (
+          <IdentityLoadingScreen
+            key="identity-loader"
+            isInitialLoad={isGlobalLoading}
+            isStoreLoaded={isStoreLoaded}
+            onComplete={() => {
+              setIsGlobalLoading(false);
+              setShowDeveloperInfo(false);
+            }}
+            onClose={() => setShowDeveloperInfo(false)}
+          />
         )}
       </AnimatePresence>
     </div>
