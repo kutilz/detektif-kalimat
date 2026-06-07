@@ -77,7 +77,16 @@ export default function AdminDashboard({ onLogout }) {
     handleUpdateSettings({ fontScale: next });
   };
   const handleFontReset = () => {
-    handleUpdateSettings({ fontScale: 1.0 });
+    handleUpdateSettings({
+      fontScale: 1.0,
+      groupScales: {
+        title: 1.0,
+        sentence: 1.0,
+        desc: 1.0,
+        button: 1.0,
+        small: 1.0
+      }
+    });
   };
   const handleTogglePresentation = () => {
     handleUpdateSettings({ presentationMode: !presentationMode });
@@ -339,7 +348,7 @@ export default function AdminDashboard({ onLogout }) {
                 >
                   <ZoomIn size={15} />
                 </button>
-                {fontScale !== 1.0 && (
+                {(fontScale !== 1.0 || Object.values(settings.groupScales || {}).some(v => v !== 1.0)) && (
                   <button
                     className="admin-font-btn reset"
                     onClick={handleFontReset}
