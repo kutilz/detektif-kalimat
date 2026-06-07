@@ -61,6 +61,14 @@ const DEFAULT_SETTINGS = {
   enableFlyingBird: true,
   fontScale: 1.0,
   presentationMode: false,
+  enableManualFontEdit: false,
+  groupScales: {
+    title: 1.0,
+    sentence: 1.0,
+    desc: 1.0,
+    button: 1.0,
+    small: 1.0
+  }
 };
 
 const DEFAULT_USER_IDENTITY_CONFIG = {

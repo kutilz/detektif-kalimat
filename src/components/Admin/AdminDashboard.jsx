@@ -557,6 +557,21 @@ export default function AdminDashboard({ onLogout }) {
                         <span className="admin-toggle-slider" />
                       </label>
                     </div>
+
+                    <div className="admin-toggle-group">
+                      <div className="admin-toggle-info">
+                        <span className="admin-toggle-label">Edit Font Manual (Per Kelompok)</span>
+                        <span className="admin-toggle-desc">Tampilkan tombol + - di teks web untuk mengubah ukuran per kelompok tulisan</span>
+                      </div>
+                      <label className="admin-toggle">
+                        <input
+                          type="checkbox"
+                          checked={settings.enableManualFontEdit || false}
+                          onChange={() => handleUpdateSettings({ enableManualFontEdit: !settings.enableManualFontEdit })}
+                        />
+                        <span className="admin-toggle-slider" />
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>

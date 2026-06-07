@@ -28,8 +28,7 @@ import DragDropSPO from './components/Quiz/DragDropSPO';
 import SandboxQuiz from './components/Quiz/SandboxQuiz';
 import UserIdentityForm from './components/Quiz/UserIdentityForm';
 import IdentityLoadingScreen from './components/Quiz/IdentityLoadingScreen';
-
-
+import ScalableText from './components/Quiz/ScalableText';
 // Admin Components
 import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
@@ -83,6 +82,12 @@ export default function App() {
       const scale = settings.presentationMode ? Math.max(settings.fontScale || 1.0, 1.5) : (settings.fontScale || 1.0);
       document.documentElement.style.setProperty('--admin-font-scale', scale);
       document.documentElement.style.fontSize = `${scale * 16}px`;
+
+      // Apply individual group scales
+      const groupScales = settings.groupScales || { title: 1.0, sentence: 1.0, desc: 1.0, button: 1.0, small: 1.0 };
+      Object.entries(groupScales).forEach(([group, val]) => {
+        document.documentElement.style.setProperty(`--group-scale-${group}`, val);
+      });
     };
 
     // Apply initially
@@ -416,22 +421,22 @@ export default function App() {
             <ParticlesBackground />
             <div className="cover-content">
               <div className="cover-title-wrap">
-                <div className="cover-badge">✨ Bahasa Indonesia</div>
-                <h1 className="cover-title">
+                <ScalableText group="small" as="div" className="cover-badge">✨ Bahasa Indonesia</ScalableText>
+                <ScalableText group="title" as="h1" className="cover-title">
                   <SplitText text="Detektif Kalimat" delay={0.1} stagger={0.06} />
-                </h1>
-                <p className="cover-subtitle">
+                </ScalableText>
+                <ScalableText group="desc" as="p" className="cover-subtitle">
                   <BlurText text="Belajar Kalimat SPO dengan Seru!" delay={0.6} />
-                </p>
+                </ScalableText>
               </div>
               <div className="cover-characters">
                 <img src="/images/image2.png" alt="Detektif perempuan" className="char char-left bounce-anim" />
                 <img src="/images/image3.png" alt="Detektif laki-laki" className="char char-right bounce-anim delay-1" />
               </div>
               <div className="cover-buttons">
-                <button className="btn-main" onClick={() => navigateTo('menu')}>
+                <ScalableText group="button" as="button" className="btn-main" onClick={() => navigateTo('menu')}>
                   📚 <ShinyText text="Mulai Belajar!" speed="3s" />
-                </button>
+                </ScalableText>
               </div>
             </div>
           </motion.div>
@@ -453,8 +458,8 @@ export default function App() {
             <ParticlesBackground count={30} color="#5c3317" />
             <div className="menu-content">
               <div className="header" style={{ width: '100%', background: 'rgba(255,255,255,0.9)', borderRadius: '16px' }}>
-                <button className="btn-back" onClick={() => navigateTo('cover')}>← Kembali</button>
-                <h2 className="page-title">📋 Menu Utama</h2>
+                <ScalableText group="button" as="button" className="btn-back" onClick={() => navigateTo('cover')}>← Kembali</ScalableText>
+                <ScalableText group="title" as="h2" className="page-title">📋 Menu Utama</ScalableText>
                 <button
                   className={`btn-sound-header ${!isSoundEnabled ? 'muted' : ''}`}
                   onClick={handleToggleSound}
@@ -471,8 +476,8 @@ export default function App() {
                   <TiltedCard className="menu-card-tilt" onClick={() => navigateTo('materi')}>
                     <div className="menu-card card-materi">
                       <div className="menu-card-icon">📖</div>
-                      <h3>Materi</h3>
-                      <p>Pelajari Kalimat SPO</p>
+                      <ScalableText group="title" as="h3">Materi</ScalableText>
+                      <ScalableText group="desc" as="p">Pelajari Kalimat SPO</ScalableText>
                       <span className="menu-card-arrow">→</span>
                     </div>
                   </TiltedCard>
@@ -480,8 +485,8 @@ export default function App() {
                   <TiltedCard className="menu-card-tilt" onClick={() => navigateTo('quiz')}>
                     <div className="menu-card card-latihan">
                       <div className="menu-card-icon">🎯</div>
-                      <h3>Latihan</h3>
-                      <p>Uji Kemampuanmu!</p>
+                      <ScalableText group="title" as="h3">Latihan</ScalableText>
+                      <ScalableText group="desc" as="p">Uji Kemampuanmu!</ScalableText>
                       <span className="menu-card-arrow">→</span>
                     </div>
                   </TiltedCard>
@@ -518,8 +523,8 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.95 }}
           >
             <div className="header">
-              <button className="btn-back" onClick={() => navigateTo('menu')}>← Menu</button>
-              <h2 className="page-title">📝 Petunjuk Latihan</h2>
+              <ScalableText group="button" as="button" className="btn-back" onClick={() => navigateTo('menu')}>← Menu</ScalableText>
+              <ScalableText group="title" as="h2" className="page-title">📝 Petunjuk Latihan</ScalableText>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <button
                   className={`btn-sound-header ${!isSoundEnabled ? 'muted' : ''}`}
@@ -531,44 +536,44 @@ export default function App() {
               </div>
             </div>
 
-            <div className="quiz-body" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 120px)' }}>
-              <div className="quiz-card bg-slide-quiz-intro" style={{ maxWidth: '500px', margin: '20px auto', width: '90%' }}>
+            <div className="quiz-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+              <div className="quiz-card bg-slide-quiz-intro" style={{ maxWidth: '500px', margin: 'auto', width: '90%' }}>
                 <div className="materi-slide-glass-overlay" style={{ padding: '28px' }}>
                   <div style={{ fontSize: '4rem', marginBottom: '14px', textAlign: 'center', animation: 'floatAnim 3s ease-in-out infinite' }}>🕵️‍♂️🔍</div>
-                  <h3 style={{ fontFamily: 'Fredoka', color: 'var(--brown-dark)', fontSize: '1.6rem', textAlign: 'center', marginBottom: '20px', fontWeight: '800' }}>
+                  <ScalableText group="title" as="h3" style={{ color: 'var(--brown-dark)', fontSize: '1.6rem', textAlign: 'center', marginBottom: '20px', fontWeight: '800' }}>
                     Siap Memulai Misi Latihan?
-                  </h3>
+                  </ScalableText>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left', marginBottom: '28px' }}>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
                       <span style={{ fontSize: '1.4rem' }}>👆</span>
-                      <p style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
+                      <ScalableText group="desc" as="p" style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
                         <strong>Pilih Kata:</strong> Klik kata di kalimat yang merupakan Subjek (S), Predikat (P), atau Objek (O).
-                      </p>
+                      </ScalableText>
                     </div>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
                       <span style={{ fontSize: '1.4rem' }}>📦</span>
-                      <p style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
+                      <ScalableText group="desc" as="p" style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
                         <strong>Geser & Kelompokkan:</strong> Tarik kata ke kotak S, P, atau O yang benar.
-                      </p>
+                      </ScalableText>
                     </div>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
                       <span style={{ fontSize: '1.4rem' }}>🔀</span>
-                      <p style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
+                      <ScalableText group="desc" as="p" style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
                         <strong>Susun Kalimat:</strong> Urutkan kata acak agar membentuk susunan SPO yang benar.
-                      </p>
+                      </ScalableText>
                     </div>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
                       <span style={{ fontSize: '1.4rem' }}>💡</span>
-                      <p style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
+                      <ScalableText group="desc" as="p" style={{ margin: 0, fontSize: '0.95rem', color: '#5c3317', fontFamily: 'Nunito', lineHeight: '1.4' }}>
                         <strong>Petunjuk (Hint):</strong> Klik ikon bohlam jika kamu butuh bantuan detektif!
-                      </p>
+                      </ScalableText>
                     </div>
                   </div>
 
-                  <button className="btn-main" style={{ width: '100%', padding: '16px 20px', fontSize: '1.2rem', fontFamily: 'Fredoka' }} onClick={startActualQuiz}>
+                  <ScalableText group="button" as="button" className="btn-main" style={{ width: '100%', padding: '16px 20px', fontSize: '1.2rem', fontFamily: 'Fredoka' }} onClick={startActualQuiz}>
                     🚀 Mulai Misi Latihan!
-                  </button>
+                  </ScalableText>
                 </div>
               </div>
             </div>
@@ -586,10 +591,10 @@ export default function App() {
             transition={{ type: 'tween', ease: 'easeInOut', duration: 0.35 }}
           >
             <div className="header">
-              <button className="btn-back" onClick={() => navigateTo('menu')}>← Menu</button>
-              <h2 className="page-title">📖 Materi</h2>
+              <ScalableText group="button" as="button" className="btn-back" onClick={() => navigateTo('menu')}>← Menu</ScalableText>
+              <ScalableText group="title" as="h2" className="page-title">📖 Materi</ScalableText>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div className="slide-counter">{currentMateri + 1} / {materiSlides.length}</div>
+                <ScalableText group="small" as="div" className="slide-counter">{currentMateri + 1} / {materiSlides.length}</ScalableText>
                 <button
                   className={`btn-sound-header ${!isSoundEnabled ? 'muted' : ''}`}
                   onClick={handleToggleSound}
@@ -611,8 +616,8 @@ export default function App() {
                 <div className="materi-slide-glass-overlay">
                   <div className="materi-slide-header">
                     <span className="slide-emoji">{materiSlides[currentMateri].emoji}</span>
-                    <h2>{materiSlides[currentMateri].title}</h2>
-                    <p>{materiSlides[currentMateri].desc}</p>
+                    <ScalableText group="title" as="h2">{materiSlides[currentMateri].title}</ScalableText>
+                    <ScalableText group="desc" as="p">{materiSlides[currentMateri].desc}</ScalableText>
                   </div>
                   {materiSlides[currentMateri].content}
                 </div>
@@ -620,13 +625,15 @@ export default function App() {
             </div>
 
             <div className="materi-nav">
-              <button
+              <ScalableText
+                group="button"
+                as="button"
                 className="btn-nav"
                 onClick={handlePrevMateri}
                 disabled={currentMateri === 0}
               >
                 ◀ Sebelumnya
-              </button>
+              </ScalableText>
               
               <div className="materi-dots">
                 {materiSlides.map((_, i) => (
@@ -641,12 +648,14 @@ export default function App() {
                 ))}
               </div>
 
-              <button
+              <ScalableText
+                group="button"
+                as="button"
                 className="btn-nav btn-nav-next"
                 onClick={handleNextMateri}
               >
                 {currentMateri === materiSlides.length - 1 ? '🎯 Latihan!' : 'Selanjutnya ▶'}
-              </button>
+              </ScalableText>
             </div>
           </motion.div>
         )}
@@ -661,13 +670,13 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.95 }}
           >
             <div className="header">
-              <button className="btn-back" onClick={() => setShowConfirmModal(true)}>← Menu</button>
-              <h2 className="page-title">🎯 Latihan</h2>
+              <ScalableText group="button" as="button" className="btn-back" onClick={() => setShowConfirmModal(true)}>← Menu</ScalableText>
+              <ScalableText group="title" as="h2" className="page-title">🎯 Latihan</ScalableText>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div className="quiz-progress-wrap">
-                  <span className="quiz-progress-text">
+                  <ScalableText group="small" as="span" className="quiz-progress-text">
                     {currentQuestionIndex + 1}/{quizQuestions.length}
-                  </span>
+                  </ScalableText>
                   <div className="quiz-progress-bar">
                     <div
                       className="quiz-progress-fill"
@@ -688,8 +697,8 @@ export default function App() {
             <div className="quiz-body">
               <div className={`quiz-card ${quizQuestions[currentQuestionIndex].type === 'sandbox' ? 'bg-slide-intro' : 'bg-slide-quiz-intro'}`}>
                 <div className="materi-slide-glass-overlay">
-                  <div className="quiz-num">Soal {currentQuestionIndex + 1} dari {quizQuestions.length}</div>
-                  <h3 className="quiz-question">{quizQuestions[currentQuestionIndex].question}</h3>
+                  <ScalableText group="small" as="div" className="quiz-num">Soal {currentQuestionIndex + 1} dari {quizQuestions.length}</ScalableText>
+                  <ScalableText group="sentence" as="h3" className="quiz-question">{quizQuestions[currentQuestionIndex].question}</ScalableText>
 
                   {/* Show sentence box ONLY for question types that need the full sentence displayed */}
                   {quizQuestions[currentQuestionIndex].sentence &&
@@ -697,7 +706,7 @@ export default function App() {
                    quizQuestions[currentQuestionIndex].type !== 'scramble' &&
                    quizQuestions[currentQuestionIndex].type !== 'drag' && (
                     <div className="quiz-sentence-box">
-                      <div className="quiz-sentence">"{quizQuestions[currentQuestionIndex].sentence}"</div>
+                      <ScalableText group="sentence" as="div" className="quiz-sentence">"{quizQuestions[currentQuestionIndex].sentence}"</ScalableText>
                     </div>
                   )}
 
@@ -754,25 +763,25 @@ export default function App() {
               <img src="/images/image3.png" alt="Detektif" className="hasil-char" />
               
               <div className="hasil-card">
-                <h2 className="hasil-title">
+                <ScalableText group="title" as="h2" className="hasil-title">
                   {score === quizQuestions.length
                     ? '🏆 Sempurna!'
                     : score >= quizQuestions.length * 0.7
                     ? '🎉 Bagus Sekali!'
                     : '💪 Ayo Coba Lagi!'}
-                </h2>
-                <p className="hasil-subtitle">
+                </ScalableText>
+                <ScalableText group="desc" as="p" className="hasil-subtitle">
                   {score === quizQuestions.length
                     ? 'Kamu Detektif Kalimat Sejati!'
                     : score >= quizQuestions.length * 0.7
                     ? 'Kamu hampir jadi detektif handal!'
                     : 'Belajar lagi, kamu pasti bisa!'}
-                </p>
+                </ScalableText>
 
                 {userIdentity?.name && (
-                  <p style={{ fontSize: '0.9rem', color: '#8b5e3c', fontWeight: 700, marginTop: 4 }}>
+                  <ScalableText group="small" as="p" style={{ fontSize: '0.9rem', color: '#8b5e3c', fontWeight: 700, marginTop: 4 }}>
                     🕵️ {userIdentity.name}{userIdentity.class ? ` • ${userIdentity.class}` : ''}
-                  </p>
+                  </ScalableText>
                 )}
 
                 <div className="score-display">
@@ -810,7 +819,7 @@ export default function App() {
                 {/* Leaderboard in Results */}
                 {adminSettings.showLeaderboard && currentLeaderboard.length > 0 && (
                   <div className="hasil-leaderboard">
-                    <h3 className="hasil-leaderboard-title">🏆 Papan Peringkat</h3>
+                    <ScalableText group="title" as="h3" className="hasil-leaderboard-title">🏆 Papan Peringkat</ScalableText>
                     <table className="hasil-leaderboard-table">
                       <thead>
                         <tr>
@@ -844,18 +853,18 @@ export default function App() {
                 )}
 
                 <div className="hasil-buttons">
-                  <button className="btn-main btn-ulang" onClick={() => {
+                  <ScalableText group="button" as="button" className="btn-main btn-ulang" onClick={() => {
                     setUserIdentity(null);
                     navigateTo('quiz');
                   }}>
                     🔄 Coba Lagi
-                  </button>
-                  <button className="btn-main btn-menu-back" onClick={() => {
+                  </ScalableText>
+                  <ScalableText group="button" as="button" className="btn-main btn-menu-back" onClick={() => {
                     setUserIdentity(null);
                     navigateTo('menu');
                   }}>
                     🏠 Menu
-                  </button>
+                  </ScalableText>
                 </div>
               </div>
             </div>
