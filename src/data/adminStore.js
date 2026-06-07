@@ -19,7 +19,7 @@ let isInitialized = false;
 
 export async function initGlobalStore() {
   try {
-    const res = await fetch('/api/store', { cache: 'no-store' });
+    const res = await fetch('/api/store?t=' + Date.now(), { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       const oldStr = JSON.stringify(globalStoreCache);
@@ -141,13 +141,15 @@ function setJSON(key, value) {
   }
   
   // Update Global Store and debounce sync
-  if (globalStoreCache) {
-    globalStoreCache[key] = value;
-    clearTimeout(syncTimeout);
-    syncTimeout = setTimeout(() => {
-      syncToGlobalStore();
-    }, 1000); // 1-second debounce
+  if (!globalStoreCache) {
+    globalStoreCache = {};
   }
+  
+  globalStoreCache[key] = value;
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(() => {
+    syncToGlobalStore();
+  }, 1000); // 1-second debounce
 }
 
 // ---- Admin Settings ----

@@ -6,6 +6,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -19,7 +20,12 @@ export default async function handler(req, res) {
       const { blobs } = await list({ prefix: STORE_FILENAME, token: process.env.BLOB_READ_WRITE_TOKEN });
       if (blobs.length > 0) {
         // Fetch the actual JSON content from the blob URL
-        const response = await fetch(blobs[0].url, { cache: 'no-store' });
+        const response = await fetch(blobs[0].url, {
+          cache: 'no-store',
+          headers: {
+            Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}`
+          }
+        });
         const data = await response.json();
         return res.status(200).json(data);
       } else {
@@ -31,7 +37,7 @@ export default async function handler(req, res) {
     else if (req.method === 'POST') {
       const data = req.body;
       const blob = await put(STORE_FILENAME, JSON.stringify(data), {
-        access: 'public',
+        access: 'private', // Use private access since the store is configured as private
         addRandomSuffix: false, // Override the same file
         token: process.env.BLOB_READ_WRITE_TOKEN,
         contentType: 'application/json'
