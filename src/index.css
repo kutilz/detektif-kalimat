@@ -26,6 +26,7 @@
 
 html, body {
   height: 100%;
+  height: -webkit-fill-available;
   font-family: 'Fredoka', 'Nunito', sans-serif;
   background: var(--bg);
   color: var(--text-dark);
@@ -34,11 +35,13 @@ html, body {
 
 #root {
   height: 100%;
+  height: -webkit-fill-available;
   width: 100%;
 }
 
 .app-container {
   height: 100%;
+  height: -webkit-fill-available;
   width: 100%;
   position: relative;
 }
@@ -48,6 +51,7 @@ html, body {
   position: fixed;
   inset: 0;
   height: 100%;
+  height: -webkit-fill-available;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -70,10 +74,11 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-height: 0;
-  flex: 1;
+  height: 0;
+  flex: 1 1 0%;
   width: 100%;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 32px 24px 40px;
   background: rgba(0, 0, 0, 0.1);
 }
@@ -262,11 +267,12 @@ html, body {
   align-items: center;
   padding: 24px 20px 40px;
   gap: 30px;
-  flex: 1;
+  flex: 1 1 0%;
+  height: 0;
   background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(4px);
   overflow-y: auto;
-  min-height: 0;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
 }
 
@@ -335,14 +341,15 @@ html, body {
   color: var(--brown-dark);
 }
 .materi-content {
-  flex: 1;
+  flex: 1 1 0%;
+  height: 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  min-height: 0;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .materi-slide {
   width: 100%;
@@ -543,14 +550,15 @@ html, body {
 }
 
 .quiz-body {
-  flex: 1;
+  flex: 1 1 0%;
+  height: 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   overflow-y: auto;
-  min-height: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .quiz-card {
@@ -850,7 +858,8 @@ html, body {
 
 /* ======= HASIL SCREEN ======= */
 .hasil-content {
-  flex: 1;
+  flex: 1 1 0%;
+  height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -858,8 +867,8 @@ html, body {
   padding: 32px 20px 40px;
   gap: 12px;
   background: linear-gradient(160deg, #fff9f0 0%, #fdf3d0 100%);
-  min-height: 100vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .hasil-char {
   height: 150px;
