@@ -16,8 +16,14 @@ const KEYS = {
 let globalStoreCache = null;
 let syncTimeout = null;
 let isInitialized = false;
+let lastWriteTime = 0;
 
 export async function initGlobalStore() {
+  // Prevent race condition: if we recently performed a local write, skip polling
+  if (Date.now() - lastWriteTime < 3000) {
+    return;
+  }
+  
   try {
     const res = await fetch('/api/store?t=' + Date.now(), { cache: 'no-store' });
     if (res.ok) {
@@ -146,10 +152,12 @@ function setJSON(key, value) {
   }
   
   globalStoreCache[key] = value;
+  lastWriteTime = Date.now(); // Record write time to prevent immediate polling overwrite
+  
   clearTimeout(syncTimeout);
   syncTimeout = setTimeout(() => {
     syncToGlobalStore();
-  }, 1000); // 1-second debounce
+  }, 300); // Faster 300ms debounce
 }
 
 // ---- Admin Settings ----
