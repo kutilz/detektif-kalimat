@@ -47,6 +47,8 @@ html, body {
 .screen {
   position: fixed;
   inset: 0;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1497,6 +1499,7 @@ html, body {
 /* ======= ADMIN DASHBOARD LAYOUT ======= */
 .admin-screen {
   position: fixed; inset: 0;
+  height: 100%; width: 100%;
   background: var(--admin-bg);
   z-index: 50; display: flex;
   overflow: hidden;
@@ -2187,6 +2190,7 @@ html, body {
 /* ======= USER IDENTITY FORM (light, user-facing) ======= */
 .identity-screen {
   position: fixed; inset: 0;
+  height: 100%; width: 100%;
   display: flex; 
   align-items: flex-start; 
   justify-content: center;
@@ -2618,6 +2622,8 @@ html, body {
 .identity-loader-screen {
   position: fixed;
   inset: 0;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
