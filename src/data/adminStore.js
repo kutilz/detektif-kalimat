@@ -15,22 +15,58 @@ const KEYS = {
 // ---- Global State Cache ----
 let globalStoreCache = null;
 let syncTimeout = null;
+let isInitialized = false;
 
 export async function initGlobalStore() {
   try {
     const res = await fetch('/api/store', { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
-      globalStoreCache = data;
+      const oldStr = JSON.stringify(globalStoreCache);
+      const newStr = JSON.stringify(data);
+      
+      if (oldStr !== newStr || !isInitialized) {
+        globalStoreCache = data;
+        isInitialized = true;
+        
+        // Sync to localStorage
+        Object.keys(KEYS).forEach((k) => {
+          const keyVal = KEYS[k];
+          if (data[keyVal] !== undefined) {
+            try {
+              localStorage.setItem(keyVal, JSON.stringify(data[keyVal]));
+            } catch (e) {
+              console.warn('Failed to sync to localStorage', e);
+            }
+          }
+        });
+        
+        window.dispatchEvent(new Event('admin-settings-updated'));
+      }
     } else {
-      globalStoreCache = {};
+      if (!globalStoreCache || !isInitialized) {
+        globalStoreCache = {};
+        isInitialized = true;
+        window.dispatchEvent(new Event('admin-settings-updated'));
+      }
     }
   } catch (err) {
     console.warn('Failed to load global store from API. Falling back to local.', err);
-    globalStoreCache = {};
-  } finally {
-    // Notify application that settings (and store) are loaded
-    window.dispatchEvent(new Event('admin-settings-updated'));
+    if (!globalStoreCache || !isInitialized) {
+      globalStoreCache = {};
+      isInitialized = true;
+      // Fill cache from localStorage fallback
+      Object.keys(KEYS).forEach((k) => {
+        const keyVal = KEYS[k];
+        try {
+          const raw = localStorage.getItem(keyVal);
+          if (raw) {
+            globalStoreCache[keyVal] = JSON.parse(raw);
+          }
+        } catch {}
+      });
+      window.dispatchEvent(new Event('admin-settings-updated'));
+    }
   }
 }
 

@@ -68,11 +68,33 @@ export default function App() {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
   const [showDeveloperInfo, setShowDeveloperInfo] = useState(false);
 
-  // Initialize Global Store
+  // Track admin settings as state so the component updates reactively
+  const [adminSettings, setAdminSettings] = useState(getAdminSettings());
+
+  // Initialize and poll Global Store
   useEffect(() => {
     initGlobalStore().then(() => {
       setIsStoreLoaded(true);
     });
+
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        initGlobalStore();
+      }
+    }, 3000); // Poll every 3 seconds when tab is active
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Listen to global settings updates to update React state
+  useEffect(() => {
+    const handleUpdate = () => {
+      setAdminSettings(getAdminSettings());
+    };
+    window.addEventListener('admin-settings-updated', handleUpdate);
+    return () => {
+      window.removeEventListener('admin-settings-updated', handleUpdate);
+    };
   }, []);
 
   // Apply global font scale based on admin settings
@@ -385,7 +407,6 @@ export default function App() {
 
   // Get leaderboard for results
   const currentLeaderboard = getLeaderboard();
-  const adminSettings = getAdminSettings();
 
 
 

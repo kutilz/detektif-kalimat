@@ -48,6 +48,21 @@ export default function AdminDashboard({ onLogout }) {
   const [leaderboard, setLeaderboard] = useState(getLeaderboard());
   const [identityConfig, setIdentityConfig] = useState(getUserIdentityConfig());
 
+  // Listen to global store updates (from polling or other changes)
+  useEffect(() => {
+    const handleUpdate = () => {
+      setSettings(getAdminSettings());
+      setCustomQuestions(getCustomQuestions());
+      setQuestionOverrides(getQuestionOverrides());
+      setLeaderboard(getLeaderboard());
+      setIdentityConfig(getUserIdentityConfig());
+    };
+    window.addEventListener('admin-settings-updated', handleUpdate);
+    return () => {
+      window.removeEventListener('admin-settings-updated', handleUpdate);
+    };
+  }, []);
+
   // Question editor
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState(null);
