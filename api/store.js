@@ -39,6 +39,7 @@ export default async function handler(req, res) {
       const blob = await put(STORE_FILENAME, JSON.stringify(data), {
         access: 'private', // Use private access since the store is configured as private
         addRandomSuffix: false, // Override the same file
+        allowOverwrite: true, // Allow overwriting the existing file
         token: process.env.BLOB_READ_WRITE_TOKEN,
         contentType: 'application/json'
       });
