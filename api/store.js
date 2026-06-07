@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       const { blobs } = await list({ prefix: STORE_FILENAME, token: process.env.BLOB_READ_WRITE_TOKEN });
       if (blobs.length > 0) {
         // Fetch the actual JSON content from the blob URL
-        const response = await fetch(blobs[0].url, {
+        const response = await fetch(`${blobs[0].url}?t=${Date.now()}`, {
           cache: 'no-store',
           headers: {
             Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}`
