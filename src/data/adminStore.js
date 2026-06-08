@@ -25,25 +25,25 @@ export async function initGlobalStore() {
   if (isSyncing || Date.now() - lastWriteTime < 10000) {
     return;
   }
-  
+
   try {
     const res = await fetch('/api/store?t=' + Date.now(), { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       const oldStr = JSON.stringify(globalStoreCache);
       const newStr = JSON.stringify(data);
-      
+
       if (oldStr !== newStr || !isInitialized) {
         // Only apply server data if it's NEWER than our local state.
         // This prevents stale server responses from overwriting recent local writes
         // during Vercel Blob's propagation delay.
         const serverTime = data._updatedAt || 0;
-        const localTime = globalStoreCache?._updatedAt || 0;
-        
+        const localTime = globalStoreCache ? (globalStoreCache._updatedAt || 0) : 0;
+
         if (!isInitialized || serverTime > localTime) {
           globalStoreCache = data;
           isInitialized = true;
-          
+
           // Sync to localStorage
           Object.keys(KEYS).forEach((k) => {
             const keyVal = KEYS[k];
@@ -55,11 +55,12 @@ export async function initGlobalStore() {
               }
             }
           });
-          
+
           window.dispatchEvent(new Event('admin-settings-updated'));
         } else if (!isInitialized) {
           isInitialized = true;
         }
+      }
     } else {
       if (!globalStoreCache || !isInitialized) {
         globalStoreCache = {};
