@@ -81,7 +81,7 @@ export default function App() {
       if (document.visibilityState === 'visible') {
         initGlobalStore();
       }
-    }, 3000); // Poll every 3 seconds when tab is active
+    }, 10000); // Poll every 10s — matches the 10s write-guard in adminStore.js to prevent bounce
 
     return () => clearInterval(interval);
   }, []);

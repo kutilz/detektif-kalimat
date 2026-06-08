@@ -17,10 +17,12 @@ let globalStoreCache = null;
 let syncTimeout = null;
 let isInitialized = false;
 let lastWriteTime = 0;
+let isSyncing = false; // True while a write is in-flight to Vercel Blob
 
 export async function initGlobalStore() {
-  // Prevent race condition: if we recently performed a local write, skip polling
-  if (Date.now() - lastWriteTime < 3000) {
+  // Prevent race condition: skip polling if a write happened recently OR a sync is in-flight
+  // 10s guard gives Vercel Blob enough time to fully propagate before we poll again
+  if (isSyncing || Date.now() - lastWriteTime < 10000) {
     return;
   }
   
@@ -32,23 +34,32 @@ export async function initGlobalStore() {
       const newStr = JSON.stringify(data);
       
       if (oldStr !== newStr || !isInitialized) {
-        globalStoreCache = data;
-        isInitialized = true;
+        // Only apply server data if it's NEWER than our local state.
+        // This prevents stale server responses from overwriting recent local writes
+        // during Vercel Blob's propagation delay.
+        const serverTime = data._updatedAt || 0;
+        const localTime = globalStoreCache?._updatedAt || 0;
         
-        // Sync to localStorage
-        Object.keys(KEYS).forEach((k) => {
-          const keyVal = KEYS[k];
-          if (data[keyVal] !== undefined) {
-            try {
-              localStorage.setItem(keyVal, JSON.stringify(data[keyVal]));
-            } catch (e) {
-              console.warn('Failed to sync to localStorage', e);
+        if (!isInitialized || serverTime > localTime) {
+          globalStoreCache = data;
+          isInitialized = true;
+          
+          // Sync to localStorage
+          Object.keys(KEYS).forEach((k) => {
+            const keyVal = KEYS[k];
+            if (data[keyVal] !== undefined) {
+              try {
+                localStorage.setItem(keyVal, JSON.stringify(data[keyVal]));
+              } catch (e) {
+                console.warn('Failed to sync to localStorage', e);
+              }
             }
-          }
-        });
-        
-        window.dispatchEvent(new Event('admin-settings-updated'));
-      }
+          });
+          
+          window.dispatchEvent(new Event('admin-settings-updated'));
+        } else if (!isInitialized) {
+          isInitialized = true;
+        }
     } else {
       if (!globalStoreCache || !isInitialized) {
         globalStoreCache = {};
@@ -78,14 +89,20 @@ export async function initGlobalStore() {
 
 async function syncToGlobalStore() {
   if (!globalStoreCache) return;
+  isSyncing = true;
   try {
     await fetch('/api/store', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(globalStoreCache)
     });
+    // Refresh lastWriteTime after the blob write completes so the 10s guard
+    // starts from when the server actually received the data
+    lastWriteTime = Date.now();
   } catch (err) {
     console.error('Failed to sync to global store:', err);
+  } finally {
+    isSyncing = false;
   }
 }
 
@@ -152,12 +169,13 @@ function setJSON(key, value) {
   }
   
   globalStoreCache[key] = value;
+  globalStoreCache._updatedAt = Date.now(); // Timestamp for optimistic-update versioning
   lastWriteTime = Date.now(); // Record write time to prevent immediate polling overwrite
   
   clearTimeout(syncTimeout);
   syncTimeout = setTimeout(() => {
     syncToGlobalStore();
-  }, 300); // Faster 300ms debounce
+  }, 500); // 500ms debounce — batches rapid toggles without feeling sluggish
 }
 
 // ---- Admin Settings ----
