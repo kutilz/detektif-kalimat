@@ -2365,6 +2365,18 @@ html, body {
 
 .admin-toast.success { border-left: 3px solid var(--admin-success); }
 .admin-toast.error { border-left: 3px solid var(--admin-danger); }
+.admin-toast.loading { border-left: 3px solid var(--admin-accent); }
+.admin-toast.loading::before {
+  content: '';
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid var(--admin-accent);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: toastSpin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes toastSpin { to { transform: rotate(360deg); } }
 
 /* ======= ADMIN SEARCH ======= */
 .admin-search-box {

@@ -99,8 +99,10 @@ async function syncToGlobalStore() {
     // Refresh lastWriteTime after the blob write completes so the 10s guard
     // starts from when the server actually received the data
     lastWriteTime = Date.now();
+    window.dispatchEvent(new CustomEvent('admin-settings-save-result', { detail: { success: true } }));
   } catch (err) {
     console.error('Failed to sync to global store:', err);
+    window.dispatchEvent(new CustomEvent('admin-settings-save-result', { detail: { success: false } }));
   } finally {
     isSyncing = false;
   }

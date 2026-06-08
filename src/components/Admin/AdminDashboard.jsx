@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Settings, FileQuestion, Trophy, Users, Shield,
@@ -107,16 +107,36 @@ export default function AdminDashboard({ onLogout }) {
     handleUpdateSettings({ presentationMode: !presentationMode });
   };
 
+  const toastTimerRef = useRef(null);
+
   const showToast = (message, type = 'success') => {
+    // Clear any existing auto-dismiss timer
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     setToast({ message, type });
-    setTimeout(() => setToast(null), 2500);
+    // Loading toasts stay until replaced; others auto-dismiss
+    if (type !== 'loading') {
+      toastTimerRef.current = setTimeout(() => setToast(null), 2500);
+    }
   };
+
+  // Listen for save result from adminStore to confirm actual server write
+  useEffect(() => {
+    const handleSaveResult = (e) => {
+      if (e.detail?.success) {
+        showToast('Tersimpan! ✅');
+      } else {
+        showToast('Gagal menyimpan ❌', 'error');
+      }
+    };
+    window.addEventListener('admin-settings-save-result', handleSaveResult);
+    return () => window.removeEventListener('admin-settings-save-result', handleSaveResult);
+  }, []);
 
   // ---- Settings handlers ----
   const handleUpdateSettings = (partial) => {
     const updated = updateAdminSettings(partial);
     setSettings(updated);
-    showToast('Pengaturan disimpan! ✅');
+    showToast('Menyimpan...', 'loading');
   };
 
   // ---- Question handlers ----
