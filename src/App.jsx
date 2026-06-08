@@ -557,9 +557,9 @@ export default function App() {
               </div>
             </div>
 
-            <div className="quiz-body">
-              <div className="quiz-card bg-slide-quiz-intro" style={{ maxWidth: '500px', margin: '20px 0', width: '90%' }}>
-                <div className="materi-slide-glass-overlay" style={{ padding: '28px' }}>
+            <div className="quiz-body" style={{ justifyContent: 'flex-start', overflowY: 'auto' }}>
+              <div className="quiz-card bg-slide-quiz-intro" style={{ maxWidth: '500px', margin: '20px auto', width: '90%', flexShrink: 0, overflow: 'visible' }}>
+                <div className="materi-slide-glass-overlay" style={{ padding: '28px', minHeight: 'auto' }}>
                   <div style={{ fontSize: '4rem', marginBottom: '14px', textAlign: 'center', animation: 'floatAnim 3s ease-in-out infinite' }}>🕵️‍♂️🔍</div>
                   <ScalableText group="title" as="h3" style={{ color: 'var(--brown-dark)', fontSize: '1.6rem', textAlign: 'center', marginBottom: '20px', fontWeight: '800' }}>
                     Siap Memulai Misi Latihan?
