@@ -126,7 +126,7 @@ html, body {
   backdrop-filter: blur(4px);
 }
 
-.cover-title-wrap { text-align: center; }
+.cover-title-wrap { text-align: center; flex-shrink: 0; }
 
 .cover-characters {
   display: flex;
@@ -135,6 +135,7 @@ html, body {
   align-items: flex-end;
   flex: 1;
   padding: 16px 0;
+  flex-shrink: 0;
 }
 
 .char { 
@@ -144,7 +145,7 @@ html, body {
 }
 .char-left { transform: scaleX(-1); }
 
-.cover-buttons { width: 100%; max-width: 340px; }
+.cover-buttons { width: 100%; max-width: 340px; flex-shrink: 0; }
 
 /* ======= BUTTON MAIN ======= */
 .btn-main {
@@ -283,6 +284,7 @@ html, body {
   gap: 20px;
   width: 100%;
   max-width: 500px;
+  flex-shrink: 0;
 }
 
 .menu-char { height: 160px; object-fit: contain; }
@@ -357,12 +359,13 @@ html, body {
   background: var(--white);
   border-radius: var(--radius-lg);
   box-shadow: 0 8px 32px var(--shadow);
-  overflow: hidden;
+  overflow: visible; /* Prevent internal cutoff */
   border: 3px solid var(--brown-light);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin: 20px 0;
+  margin: 20px auto;
+  flex-shrink: 0;
 }
 .materi-slide-header {
   padding: 16px 16px 8px;
@@ -567,12 +570,13 @@ html, body {
   background: var(--white);
   border-radius: var(--radius-lg);
   box-shadow: 0 8px 32px var(--shadow);
-  overflow: hidden;
+  overflow: visible; /* Prevent internal cutoff */
   border: 3px solid var(--brown-light);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin: 20px 0;
+  margin: 20px auto;
+  flex-shrink: 0;
 }
 
 .quiz-num {
@@ -875,6 +879,7 @@ html, body {
   object-fit: contain;
   filter: drop-shadow(0 8px 20px rgba(0,0,0,.2));
   animation: floatAnim 3s ease-in-out infinite;
+  flex-shrink: 0;
 }
 .hasil-card {
   width: 100%;
@@ -885,6 +890,8 @@ html, body {
   padding: 28px 24px;
   text-align: center;
   border: 3px solid var(--brown-light);
+  margin: 20px auto;
+  flex-shrink: 0;
 }
 .hasil-title {
   font-family: 'Fredoka', sans-serif;
@@ -2217,7 +2224,8 @@ html, body {
   width: 100%; max-width: 440px;
   text-align: center;
   border: 3px solid var(--brown-light);
-  margin: auto; /* Centering helper inside scrollable flex container */
+  margin: 20px auto; /* Changed from auto to prevent vertical cutoff */
+  flex-shrink: 0;
 }
 
 .identity-char {
