@@ -202,23 +202,24 @@ export default function App() {
 
     // Build question pool based on mode
     let pool = [];
-    const standardPool = mergedQuestions.filter(q => q.type !== 'sandbox');
+    const activeCustomQs = customQs.filter(q => q.enabled !== false);
+    const standardPool = mergedQuestions.filter(q => q.type !== 'sandbox' && q.enabled !== false);
 
     switch (settings.quizMode) {
       case 'sequential':
-        pool = [...standardPool, ...customQs];
+        pool = [...standardPool, ...activeCustomQs];
         break;
       case 'custom_only':
-        pool = [...customQs];
+        pool = [...activeCustomQs];
         break;
       case 'mixed':
-        pool = [...standardPool, ...customQs];
+        pool = [...standardPool, ...activeCustomQs];
         // Shuffle for mixed mode
         pool.sort(() => Math.random() - 0.5);
         break;
       case 'random':
       default:
-        pool = [...standardPool, ...customQs].sort(() => Math.random() - 0.5);
+        pool = [...standardPool, ...activeCustomQs].sort(() => Math.random() - 0.5);
         break;
     }
 
@@ -228,7 +229,7 @@ export default function App() {
 
     // Optionally append sandbox questions
     if (settings.includeSandbox) {
-      const sandboxQs = mergedQuestions.filter(q => q.type === 'sandbox');
+      const sandboxQs = mergedQuestions.filter(q => q.type === 'sandbox' && q.enabled !== false);
       if (sandboxQs.length > 0) {
         selected = [...selected, ...sandboxQs];
       }
@@ -237,7 +238,7 @@ export default function App() {
     // Fallback: if no questions available, use defaults
     if (selected.length === 0) {
       const defaultPool = [...standardPool].sort(() => Math.random() - 0.5).slice(0, 9);
-      const sandboxQs = mergedQuestions.filter(q => q.type === 'sandbox');
+      const sandboxQs = mergedQuestions.filter(q => q.type === 'sandbox' && q.enabled !== false);
       selected = sandboxQs.length > 0 ? [...defaultPool, ...sandboxQs] : defaultPool;
     }
 

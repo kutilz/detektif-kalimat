@@ -194,6 +194,26 @@ export default function AdminDashboard({ onLogout }) {
     });
   };
 
+  const handleToggleQuestionStatus = (q) => {
+    const updatedStatus = q.enabled === false ? true : false;
+    
+    if (q.isCustom) {
+      const updated = updateCustomQuestion(q.id, { ...q, enabled: updatedStatus });
+      setCustomQuestions(updated);
+      showToast(`Soal ${updatedStatus ? 'diaktifkan' : 'dinonaktifkan'}!`);
+    } else {
+      const currentOverrides = getQuestionOverrides();
+      currentOverrides[q.id] = {
+        ...q,
+        isOverride: true,
+        enabled: updatedStatus
+      };
+      saveQuestionOverrides(currentOverrides);
+      setQuestionOverrides(currentOverrides);
+      showToast(`Soal bawaan ${updatedStatus ? 'diaktifkan' : 'dinonaktifkan'}!`);
+    }
+  };
+
   // ---- Leaderboard handlers ----
   const handleDeleteEntry = (id) => {
     const updated = deleteLeaderboardEntry(id);
@@ -648,7 +668,7 @@ export default function AdminDashboard({ onLogout }) {
 
                 <div className="admin-question-list">
                   {filteredQuestions.map((q) => (
-                    <div key={q.id} className="admin-question-item">
+                    <div key={q.id} className="admin-question-item" style={{ opacity: q.enabled === false ? 0.6 : 1 }}>
                       <span className={`admin-question-type-badge ${q.type}`}>
                         {q.type}
                       </span>
@@ -666,6 +686,14 @@ export default function AdminDashboard({ onLogout }) {
                             Bawaan{q.isOverride ? ' (Diedit)' : ''}
                           </span>
                         )}
+                        <label className="admin-toggle" style={{ marginLeft: 8, width: 36, height: 20 }} title={q.enabled !== false ? 'Nonaktifkan Soal' : 'Aktifkan Soal'}>
+                          <input
+                            type="checkbox"
+                            checked={q.enabled !== false}
+                            onChange={() => handleToggleQuestionStatus(q)}
+                          />
+                          <span className="admin-toggle-slider" />
+                        </label>
                       </div>
                       <div className="admin-question-actions">
                         <button
