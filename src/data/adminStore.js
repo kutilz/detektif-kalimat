@@ -18,6 +18,7 @@ let syncTimeout = null;
 let isInitialized = false;
 let lastWriteTime = 0;
 let isSyncing = false; // True while a write is in-flight to Vercel Blob
+let pendingSync = false; // True when local changes haven't reached the server yet (e.g. offline)
 
 export async function initGlobalStore() {
   // Prevent race condition: skip polling if a write happened recently OR a sync is in-flight
@@ -90,23 +91,44 @@ export async function initGlobalStore() {
 
 async function syncToGlobalStore() {
   if (!globalStoreCache) return;
+
+  // Offline: don't even try — flag it so we flush automatically once back online.
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    pendingSync = true;
+    window.dispatchEvent(new CustomEvent('admin-settings-save-result', { detail: { success: false, offline: true } }));
+    return;
+  }
+
   isSyncing = true;
   try {
-    await fetch('/api/store', {
+    const res = await fetch('/api/store', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(globalStoreCache)
     });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     // Refresh lastWriteTime after the blob write completes so the 10s guard
     // starts from when the server actually received the data
     lastWriteTime = Date.now();
+    pendingSync = false;
     window.dispatchEvent(new CustomEvent('admin-settings-save-result', { detail: { success: true } }));
   } catch (err) {
     console.error('Failed to sync to global store:', err);
+    // Keep the data flagged so the next reconnect (or write) retries the push.
+    pendingSync = true;
     window.dispatchEvent(new CustomEvent('admin-settings-save-result', { detail: { success: false } }));
   } finally {
     isSyncing = false;
   }
+}
+
+// When connectivity returns, flush any local changes that never reached the server.
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    if (pendingSync && globalStoreCache) {
+      syncToGlobalStore();
+    }
+  });
 }
 
 // ---- Default Values ----

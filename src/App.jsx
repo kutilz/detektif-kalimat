@@ -32,6 +32,9 @@ import ScalableText from './components/Quiz/ScalableText';
 // Admin Components
 import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
+// PWA
+import InstallGate from './components/InstallGate';
+import { isStandalone, isInstallSkipped, setInstallSkipped } from './utils/pwa';
 
 const highlightExplanation = (text) => {
   if (!text) return '';
@@ -70,6 +73,18 @@ export default function App() {
 
   // Track admin settings as state so the component updates reactively
   const [adminSettings, setAdminSettings] = useState(getAdminSettings());
+
+  // PWA install gate — shown to browser users who haven't installed/skipped yet.
+  const [showInstallGate, setShowInstallGate] = useState(
+    () => !isStandalone() && !isInstallSkipped()
+  );
+
+  // Once installed, drop the gate immediately (no need to nag further).
+  useEffect(() => {
+    const onInstalled = () => setShowInstallGate(false);
+    window.addEventListener('appinstalled', onInstalled);
+    return () => window.removeEventListener('appinstalled', onInstalled);
+  }, []);
 
   // Initialize and poll Global Store
   useEffect(() => {
@@ -399,6 +414,18 @@ export default function App() {
         onLogout={() => {
           setAdminLoggedIn(false);
           window.location.hash = '';
+        }}
+      />
+    );
+  }
+
+  // ===== INSTALL GATE (browser users only) =====
+  if (showInstallGate) {
+    return (
+      <InstallGate
+        onSkip={() => {
+          setInstallSkipped(true);
+          setShowInstallGate(false);
         }}
       />
     );
