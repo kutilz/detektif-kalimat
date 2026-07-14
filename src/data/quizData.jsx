@@ -338,7 +338,7 @@ export const vocabO = [
   'mainan', 'boneka', 'bantal', 'guling', 'selimut', 'sabun', 'sampo', 'sikat gigi',
   // Kendaraan & Bangunan
   'motor', 'pesawat', 'kereta', 'sekolah', 'kamar', 'taman', 'halaman', 'jalan', 'bunga',
-  'pasien'
+  'pasien', 'padi', 'koran', 'huruf'
 ];
 
 // Materials Content
@@ -419,7 +419,7 @@ export const materiSlides = [
             <span style={{ fontSize: '1.8rem' }}>🧩</span>
             <div style={{ textAlign: 'left' }}>
               <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--brown-dark)', fontFamily: 'Fredoka' }}>3. Jawab 3 Tipe Soal</strong>
-              <span style={{ fontSize: '0.85rem', color: '#5c3317', fontFamily: 'Nunito' }}>Pilih kata (SPO), susun kalimat acak, dan kelompokkan kata (Drag & Drop).</span>
+              <span style={{ fontSize: '0.85rem', color: '#5c3317', fontFamily: 'Nunito' }}>Tentukan SPO, susun kalimat (Drag & Drop), dan buat kalimat kreatif dari gambar!</span>
             </div>
           </div>
 
@@ -555,7 +555,8 @@ export const materiSlides = [
 
 // Quiz Questions Pool
 export const allQuestions = [
-  // 1. Ani membaca buku - S
+  // ===== BAGIAN 1: Tentukan SPO (3 soal: 1 Subjek, 1 Predikat, 1 Objek) =====
+  // 1. Ani membaca buku - Tentukan Subjek
   {
     id: 'q_docx1',
     type: 'token',
@@ -566,97 +567,9 @@ export const allQuestions = [
     hint: '💡 Tanya: "Siapa yang membaca?"',
     explain: '✅ Ani adalah subjek (S) karena dia yang melakukan kegiatan membaca.'
   },
-  // 2. Aku menulis surat - S
-  {
-    id: 'q_docx2',
-    type: 'token',
-    sentence: 'Aku menulis surat',
-    tokens: ['Aku', 'menulis', 'surat'],
-    answer: 'Aku',
-    question: 'Tentukan SUBJEK dari kalimat berikut!',
-    hint: '💡 Siapa yang menulis surat?',
-    explain: '✅ Aku adalah subjek (S) karena Aku yang melakukan tindakan menulis.'
-  },
-  // 3. Monyet memanjat pohon - S
-  {
-    id: 'q_docx3',
-    type: 'token',
-    sentence: 'Monyet memanjat pohon',
-    tokens: ['Monyet', 'memanjat', 'pohon'],
-    answer: 'Monyet',
-    question: 'Tentukan SUBJEK dari kalimat berikut!',
-    hint: '💡 Siapa yang memanjat pohon?',
-    explain: '✅ Monyet adalah subjek (S) karena Monyet yang melakukan tindakan memanjat.'
-  },
-  // 4. Ani membaca buku dongeng - S
-  {
-    id: 'q_docx4',
-    type: 'token',
-    sentence: 'Ani membaca buku dongeng',
-    tokens: ['Ani', 'membaca', 'buku dongeng'],
-    answer: 'Ani',
-    question: 'Tentukan SUBJEK dari kalimat berikut!',
-    hint: '💡 Siapa yang membaca buku dongeng?',
-    explain: '✅ Ani adalah subjek (S) karena Ani yang melakukan tindakan membaca.'
-  },
-  // 5. Kakak membaca buku dongeng - S
-  {
-    id: 'q_docx5',
-    type: 'token',
-    sentence: 'Kakak membaca buku dongeng',
-    tokens: ['Kakak', 'membaca', 'buku dongeng'],
-    answer: 'Kakak',
-    question: 'Tentukan SUBJEK dari kalimat berikut!',
-    hint: '💡 Siapa yang membaca buku dongeng?',
-    explain: '✅ Kakak adalah subjek (S) karena Kakak pelaku tindakan membaca.'
-  },
-  // 6. Anak memanjat pohon - P
+  // 2. Ibu memasak sayur - Tentukan Predikat
   {
     id: 'q_docx6',
-    type: 'token',
-    sentence: 'Anak memanjat pohon',
-    tokens: ['Anak', 'memanjat', 'pohon'],
-    answer: 'memanjat',
-    question: 'Tentukan PREDIKAT dari kalimat berikut!',
-    hint: '💡 Apa kegiatan yang sedang dilakukan Anak?',
-    explain: '✅ memanjat adalah predikat (P) karena menunjukkan tindakan/kegiatan yang dilakukan Anak.'
-  },
-  // 7. Kalian menggambar rumah - P
-  {
-    id: 'q_docx7',
-    type: 'token',
-    sentence: 'Kalian menggambar rumah',
-    tokens: ['Kalian', 'menggambar', 'rumah'],
-    answer: 'menggambar',
-    question: 'Tentukan PREDIKAT dari kalimat berikut!',
-    hint: '💡 Tindakan apa yang dilakukan Kalian?',
-    explain: '✅ menggambar adalah predikat (P) – kata kerja yang menggambarkan aktivitas.'
-  },
-  // 8. Adik memanjat pohon - P
-  {
-    id: 'q_docx8',
-    type: 'token',
-    sentence: 'Adik memanjat pohon',
-    tokens: ['Adik', 'memanjat', 'pohon'],
-    answer: 'memanjat',
-    question: 'Tentukan PREDIKAT dari kalimat berikut!',
-    hint: '💡 Apa kegiatan yang sedang dilakukan Adik?',
-    explain: '✅ memanjat adalah predikat (P) karena menunjukkan tindakan/kegiatan yang dilakukan Adik.'
-  },
-  // 9. Kamu membeli sayur - P
-  {
-    id: 'q_docx9',
-    type: 'token',
-    sentence: 'Kamu membeli sayur',
-    tokens: ['Kamu', 'membeli', 'sayur'],
-    answer: 'membeli',
-    question: 'Tentukan PREDIKAT dari kalimat berikut!',
-    hint: '💡 Temukan kata kerja/tindakan dalam kalimat ini.',
-    explain: '✅ membeli adalah predikat (P) – tindakan yang dilakukan oleh subjek (Kamu).'
-  },
-  // 10. Ibu memasak sayur - P
-  {
-    id: 'q_docx10',
     type: 'token',
     sentence: 'Ibu memasak sayur',
     tokens: ['Ibu', 'memasak', 'sayur'],
@@ -665,51 +578,7 @@ export const allQuestions = [
     hint: '💡 Apa kegiatan yang sedang dilakukan Ibu?',
     explain: '✅ memasak adalah predikat (P) karena menunjukkan tindakan yang dilakukan Ibu.'
   },
-  // 11. Tante memasak nasi - O
-  {
-    id: 'q_docx11',
-    type: 'token',
-    sentence: 'Tante memasak nasi',
-    tokens: ['Tante', 'memasak', 'nasi'],
-    answer: 'nasi',
-    question: 'Tentukan OBJEK dari kalimat berikut!',
-    hint: '💡 Benda apa yang dimasak oleh Tante?',
-    explain: '✅ nasi adalah objek (O) karena merupakan sasaran benda yang dimasak Tante.'
-  },
-  // 12. Mereka mencuci mobil - O
-  {
-    id: 'q_docx12',
-    type: 'token',
-    sentence: 'Mereka mencuci mobil',
-    tokens: ['Mereka', 'mencuci', 'mobil'],
-    answer: 'mobil',
-    question: 'Tentukan OBJEK dari kalimat berikut!',
-    hint: '💡 Apa sasaran benda yang sedang dicuci?',
-    explain: '✅ mobil adalah objek (O) – sasaran yang dikenai tindakan mencuci.'
-  },
-  // 13. Kakak memakan roti - O
-  {
-    id: 'q_docx13',
-    type: 'token',
-    sentence: 'Kakak memakan roti',
-    tokens: ['Kakak', 'memakan', 'roti'],
-    answer: 'roti',
-    question: 'Tentukan OBJEK dari kalimat berikut!',
-    hint: '💡 Benda apa yang dimakan oleh Kakak?',
-    explain: '✅ roti adalah objek (O) karena merupakan sasaran benda yang dimakan Kakak.'
-  },
-  // 14. Kerbau meminum air - O
-  {
-    id: 'q_docx14',
-    type: 'token',
-    sentence: 'Kerbau meminum air',
-    tokens: ['Kerbau', 'meminum', 'air'],
-    answer: 'air',
-    question: 'Tentukan OBJEK dari kalimat berikut!',
-    hint: '💡 Benda apa yang diminum oleh Kerbau?',
-    explain: '✅ air adalah objek (O) – sasaran air yang diminum Kerbau.'
-  },
-  // 15. Kakak melempar bola - O
+  // 3. Kakak melempar bola - Tentukan Objek
   {
     id: 'q_docx15',
     type: 'token',
@@ -721,7 +590,8 @@ export const allQuestions = [
     explain: '✅ bola adalah objek (O) karena merupakan sasaran benda yang dilempar Kakak.'
   },
 
-  // 16. New Drag and Drop (SPO Identification) Questions
+  // ===== BAGIAN 2: Menyusun Kalimat SPO (8 soal drag-and-drop) =====
+  // 4. Budi bermain bola
   {
     id: 'q_drag1',
     type: 'drag',
@@ -732,6 +602,7 @@ export const allQuestions = [
     hint: '💡 Tarik kata ke kotak Subjek, Predikat, atau Objek!',
     explain: '✅ Budi (Subjek) + bermain (Predikat) + bola (Objek).'
   },
+  // 5. Ibu memasak nasi
   {
     id: 'q_drag2',
     type: 'drag',
@@ -742,6 +613,7 @@ export const allQuestions = [
     hint: '💡 Ibu adalah pelaku, memasak adalah kegiatan, nasi adalah objek.',
     explain: '✅ Ibu (Subjek) + memasak (Predikat) + nasi (Objek).'
   },
+  // 6. Anak-anak menulis huruf
   {
     id: 'q_drag3',
     type: 'drag',
@@ -752,46 +624,106 @@ export const allQuestions = [
     hint: '💡 Anak-anak adalah pelaku, menulis adalah kegiatan, huruf adalah objek.',
     explain: '✅ Anak-anak (Subjek) + menulis (Predikat) + huruf (Objek).'
   },
+  // 7. Ayah mencuci mobil
+  {
+    id: 'q_drag4',
+    type: 'drag',
+    sentence: 'Ayah mencuci mobil',
+    words: ['mobil', 'mencuci', 'Ayah'],
+    answer: { S: 'Ayah', P: 'mencuci', O: 'mobil' },
+    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
+    hint: '💡 Ayah adalah pelaku, mencuci adalah kegiatan, mobil adalah benda.',
+    explain: '✅ Ayah (Subjek) + mencuci (Predikat) + mobil (Objek).'
+  },
+  // 8. Kakak membaca buku
+  {
+    id: 'q_drag5',
+    type: 'drag',
+    sentence: 'Kakak membaca buku',
+    words: ['membaca', 'buku', 'Kakak'],
+    answer: { S: 'Kakak', P: 'membaca', O: 'buku' },
+    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
+    hint: '💡 Kakak adalah pelaku, membaca adalah kegiatan, buku adalah benda.',
+    explain: '✅ Kakak (Subjek) + membaca (Predikat) + buku (Objek).'
+  },
+  // 9. Adik minum susu
+  {
+    id: 'q_drag6',
+    type: 'drag',
+    sentence: 'Adik minum susu',
+    words: ['susu', 'Adik', 'minum'],
+    answer: { S: 'Adik', P: 'minum', O: 'susu' },
+    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
+    hint: '💡 Adik adalah pelaku, minum adalah kegiatan, susu adalah benda.',
+    explain: '✅ Adik (Subjek) + minum (Predikat) + susu (Objek).'
+  },
+  // 10. Petani menanam padi
+  {
+    id: 'q_drag7',
+    type: 'drag',
+    sentence: 'Petani menanam padi',
+    words: ['menanam', 'Petani', 'padi'],
+    answer: { S: 'Petani', P: 'menanam', O: 'padi' },
+    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
+    hint: '💡 Petani adalah pelaku, menanam adalah kegiatan, padi adalah benda.',
+    explain: '✅ Petani (Subjek) + menanam (Predikat) + padi (Objek).'
+  },
+  // 11. Dokter memeriksa pasien
+  {
+    id: 'q_drag8',
+    type: 'drag',
+    sentence: 'Dokter memeriksa pasien',
+    words: ['pasien', 'memeriksa', 'Dokter'],
+    answer: { S: 'Dokter', P: 'memeriksa', O: 'pasien' },
+    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
+    hint: '💡 Dokter adalah pelaku, memeriksa adalah kegiatan, pasien adalah sasaran.',
+    explain: '✅ Dokter (Subjek) + memeriksa (Predikat) + pasien (Objek).'
+  },
 
-  // 17. Scramble Questions
+  // ===== BAGIAN 3: Tantangan Detektif Kreatif (9 soal sandbox) =====
+  // --- 4 soal pertama: dengan bantuan gambar ---
+  // 12. Sandbox dengan gambar: Ibu memetik bunga
   {
-    id: 'q_docx16',
-    type: 'scramble',
-    words: ['membersihkan', 'Kami', 'kelas'],
-    answer: ['Kami', 'membersihkan', 'kelas'],
-    question: 'Susun kata menjadi kalimat SPO yang benar!',
-    hint: '💡 Susun berurutan: Pelaku (S) + Kegiatan (P) + Benda (O).',
-    explain: '✅ Susunan benar: Kami (S) + membersihkan (P) + kelas (O).'
+    id: 'q_sandbox_img1',
+    type: 'sandbox',
+    question: 'Tantangan Detektif Kreatif!',
+    image: '/images/sandbox_ibu_memetik_bunga.jpg',
+    imageAlt: 'Ibu memetik bunga',
+    hint: '💡 Buatlah kalimat SPO dengan benar sesuai dengan gambar ini! Perhatikan siapa yang melakukan kegiatan dan apa yang dilakukan.',
+    explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   },
+  // 13. Sandbox dengan gambar: Adik naik sepeda
   {
-    id: 'q_docx17',
-    type: 'scramble',
-    words: ['rumput', 'Sapi', 'memakan'],
-    answer: ['Sapi', 'memakan', 'rumput'],
-    question: 'Susun kata menjadi kalimat SPO yang benar!',
-    hint: '💡 Mulai dari hewan yang memakan.',
-    explain: '✅ Susunan benar: Sapi (S) + memakan (P) + rumput (O).'
+    id: 'q_sandbox_img2',
+    type: 'sandbox',
+    question: 'Tantangan Detektif Kreatif!',
+    image: '/images/sandbox_adik_naik_sepeda.jpg',
+    imageAlt: 'Adik naik sepeda',
+    hint: '💡 Buatlah kalimat SPO dengan benar sesuai dengan gambar ini! Siapa yang melakukan apa?',
+    explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   },
+  // 14. Sandbox dengan gambar: Ayah membaca koran
   {
-    id: 'q_scramble3',
-    type: 'scramble',
-    words: ['surat', 'Dia', 'menulis'],
-    answer: ['Dia', 'menulis', 'surat'],
-    question: 'Susun kata menjadi kalimat SPO yang benar!',
-    hint: '💡 Pelakunya adalah kata ganti orang.',
-    explain: '✅ Susunan benar: Dia (S) + menulis (P) + surat (O).'
+    id: 'q_sandbox_img3',
+    type: 'sandbox',
+    question: 'Tantangan Detektif Kreatif!',
+    image: '/images/sandbox_ayah_membaca_koran.jpg',
+    imageAlt: 'Ayah membaca koran',
+    hint: '💡 Buatlah kalimat SPO dengan benar sesuai dengan gambar ini! Perhatikan kegiatannya.',
+    explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   },
+  // 15. Sandbox dengan gambar: Kakak menendang bola
   {
-    id: 'q_scramble4',
-    type: 'scramble',
-    words: ['bola', 'Budi', 'bermain'],
-    answer: ['Budi', 'bermain', 'bola'],
-    question: 'Susun kata menjadi kalimat SPO yang benar!',
-    hint: '💡 Mulai dari orang yang bermain.',
-    explain: '✅ Susunan benar: Budi (S) + bermain (P) + bola (O).'
+    id: 'q_sandbox_img4',
+    type: 'sandbox',
+    question: 'Tantangan Detektif Kreatif!',
+    image: '/images/sandbox_kakak_menendang_bola.jpg',
+    imageAlt: 'Kakak menendang bola',
+    hint: '💡 Buatlah kalimat SPO dengan benar sesuai dengan gambar ini! Perhatikan aktivitas di gambar.',
+    explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   },
-
-  // 19–23. Tantangan Detektif Kreatif (5 soal sandbox)
+  // --- 5 soal selanjutnya: tanpa bantuan gambar ---
+  // 16. Sandbox tanpa gambar
   {
     id: 'q_sandbox1',
     type: 'sandbox',
@@ -799,6 +731,7 @@ export const allQuestions = [
     hint: '💡 Ketik kalimat sederhana buatanmu sendiri yang memiliki susunan Subjek (S), Predikat (P), dan Objek (O) yang benar!',
     explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   },
+  // 17. Sandbox tanpa gambar
   {
     id: 'q_sandbox2',
     type: 'sandbox',
@@ -806,6 +739,7 @@ export const allQuestions = [
     hint: '💡 Coba buat kalimat tentang kegiatan di sekolah! Pastikan ada Subjek, Predikat, dan Objek.',
     explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   },
+  // 18. Sandbox tanpa gambar
   {
     id: 'q_sandbox3',
     type: 'sandbox',
@@ -813,6 +747,7 @@ export const allQuestions = [
     hint: '💡 Buat kalimat tentang hewan! Siapa (S) melakukan apa (P) terhadap apa (O)?',
     explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   },
+  // 19. Sandbox tanpa gambar
   {
     id: 'q_sandbox4',
     type: 'sandbox',
@@ -820,6 +755,7 @@ export const allQuestions = [
     hint: '💡 Ceritakan kegiatan di rumah! Tuliskan kalimat dengan susunan SPO yang benar.',
     explain: '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!'
   },
+  // 20. Sandbox tanpa gambar
   {
     id: 'q_sandbox5',
     type: 'sandbox',

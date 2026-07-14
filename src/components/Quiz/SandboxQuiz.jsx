@@ -221,7 +221,31 @@ export default function SandboxQuiz({ q, onCheck, usedSentences = [] }) {
 
   return (
     <div className="sandbox-container">
-      <p className="sandbox-instruction">Buatlah kalimat SPO dengan benar!</p>
+      {q.image ? (
+        <>
+          <p className="sandbox-instruction">Buatlah kalimat SPO dengan benar sesuai dengan gambar ini!</p>
+          <div className="sandbox-image-container" style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '16px',
+          }}>
+            <img 
+              src={q.image} 
+              alt={q.imageAlt || 'Gambar soal'} 
+              style={{
+                maxWidth: '280px',
+                maxHeight: '200px',
+                borderRadius: '16px',
+                border: '3px solid var(--yellow-deep)',
+                boxShadow: '0 4px 16px rgba(139, 69, 19, 0.15)',
+                objectFit: 'cover',
+              }}
+            />
+          </div>
+        </>
+      ) : (
+        <p className="sandbox-instruction">Buatlah kalimat SPO dengan benar!</p>
+      )}
       
       <div className="sandbox-input-group">
         <input

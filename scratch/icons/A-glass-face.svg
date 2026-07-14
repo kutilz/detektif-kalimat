@@ -1,0 +1,34 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd76b"/>
+      <stop offset="1" stop-color="#f4a100"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a06a3f"/>
+      <stop offset="1" stop-color="#5c3317"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- whole magnifying glass, nudged to visually centre the composition -->
+  <g transform="translate(20,24)">
+    <!-- handle (points down-right) -->
+    <g transform="rotate(-45 210 205)">
+      <rect x="193" y="333" width="34" height="128" rx="17" fill="url(#rim)"/>
+    </g>
+
+    <!-- lens -->
+    <circle cx="210" cy="205" r="140" fill="url(#rim)"/>
+    <circle cx="210" cy="205" r="118" fill="#fffdf6"/>
+
+    <!-- face -->
+    <circle cx="178" cy="197" r="17" fill="#3d2410"/>
+    <circle cx="242" cy="197" r="17" fill="#3d2410"/>
+    <circle cx="172" cy="190" r="6" fill="#fff"/>
+    <circle cx="236" cy="190" r="6" fill="#fff"/>
+    <circle cx="152" cy="226" r="15" fill="#ff9d9d" opacity="0.75"/>
+    <circle cx="268" cy="226" r="15" fill="#ff9d9d" opacity="0.75"/>
+    <path d="M186 232 Q210 260 234 232" fill="none" stroke="#3d2410" stroke-width="9" stroke-linecap="round"/>
+  </g>
+</svg>

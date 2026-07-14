@@ -1,0 +1,41 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9be7c4"/>
+      <stop offset="1" stop-color="#3bb273"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a06a3f"/>
+      <stop offset="1" stop-color="#5c3317"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <g transform="translate(18,30)">
+    <!-- handle (points down-right) -->
+    <g transform="rotate(-45 210 212)">
+      <rect x="193" y="340" width="34" height="124" rx="17" fill="url(#rim)"/>
+    </g>
+
+    <!-- lens -->
+    <circle cx="210" cy="212" r="134" fill="url(#rim)"/>
+    <circle cx="210" cy="212" r="112" fill="#fffdf6"/>
+
+    <!-- detective deerstalker hat -->
+    <g>
+      <ellipse cx="210" cy="108" rx="138" ry="34" fill="#7a4a24"/>
+      <path d="M118 110 Q210 14 302 110 Z" fill="#8b5e3c"/>
+      <ellipse cx="210" cy="108" rx="90" ry="22" fill="#6b3f1f"/>
+      <circle cx="210" cy="58" r="14" fill="#5c3317"/>
+    </g>
+
+    <!-- face -->
+    <circle cx="180" cy="206" r="16" fill="#3d2410"/>
+    <circle cx="240" cy="206" r="16" fill="#3d2410"/>
+    <circle cx="174" cy="200" r="6" fill="#fff"/>
+    <circle cx="234" cy="200" r="6" fill="#fff"/>
+    <circle cx="156" cy="234" r="14" fill="#ff9d9d" opacity="0.72"/>
+    <circle cx="264" cy="234" r="14" fill="#ff9d9d" opacity="0.72"/>
+    <path d="M188 240 Q210 266 232 240" fill="none" stroke="#3d2410" stroke-width="9" stroke-linecap="round"/>
+  </g>
+</svg>
