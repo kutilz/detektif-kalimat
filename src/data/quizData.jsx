@@ -555,7 +555,7 @@ export const materiSlides = [
 
 // Quiz Questions Pool
 export const allQuestions = [
-  // ===== BAGIAN 1: Tentukan SPO (3 soal: 1 Subjek, 1 Predikat, 1 Objek) =====
+  // ===== BAGIAN 1: Tentukan SPO & Susun Kalimat (3 soal: 1 Subjek, 1 Predikat, 1 Scramble) =====
   // 1. Ani membaca buku - Tentukan Subjek
   {
     id: 'q_docx1',
@@ -578,16 +578,15 @@ export const allQuestions = [
     hint: '💡 Apa kegiatan yang sedang dilakukan Ibu?',
     explain: '✅ memasak adalah predikat (P) karena menunjukkan tindakan yang dilakukan Ibu.'
   },
-  // 3. Kakak melempar bola - Tentukan Objek
+  // 3. Susun kalimat acak - Scramble
   {
-    id: 'q_docx15',
-    type: 'token',
-    sentence: 'Kakak melempar bola',
-    tokens: ['Kakak', 'melempar', 'bola'],
-    answer: 'bola',
-    question: 'Tentukan OBJEK dari kalimat berikut!',
-    hint: '💡 Benda apa yang dilempar oleh Kakak?',
-    explain: '✅ bola adalah objek (O) karena merupakan sasaran benda yang dilempar Kakak.'
+    id: 'q_scramble1',
+    type: 'scramble',
+    words: ['membersihkan', 'Kami', 'kelas'],
+    answer: ['Kami', 'membersihkan', 'kelas'],
+    question: 'Susun kata menjadi kalimat SPO yang benar!',
+    hint: '💡 Susun berurutan: Pelaku (S) + Kegiatan (P) + Benda (O).',
+    explain: '✅ Susunan benar: Kami (S) + membersihkan (P) + kelas (O).'
   },
 
   // ===== BAGIAN 2: Menyusun Kalimat SPO (8 soal drag-and-drop) =====
