@@ -33,6 +33,7 @@ import ScalableText from './components/Quiz/ScalableText';
 import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
 // PWA
+import { Download } from 'lucide-react';
 import InstallGate from './components/InstallGate';
 import { isStandalone, isInstallSkipped, setInstallSkipped } from './utils/pwa';
 
@@ -78,10 +79,16 @@ export default function App() {
   const [showInstallGate, setShowInstallGate] = useState(
     () => !isStandalone() && !isInstallSkipped()
   );
+  // Re-openable install panel — brought back via the floating download button
+  // after the user has skipped/dismissed the initial gate.
+  const [showInstallPanel, setShowInstallPanel] = useState(false);
 
   // Once installed, drop the gate immediately (no need to nag further).
   useEffect(() => {
-    const onInstalled = () => setShowInstallGate(false);
+    const onInstalled = () => {
+      setShowInstallGate(false);
+      setShowInstallPanel(false);
+    };
     window.addEventListener('appinstalled', onInstalled);
     return () => window.removeEventListener('appinstalled', onInstalled);
   }, []);
@@ -456,6 +463,27 @@ export default function App() {
         >
           {isSoundEnabled ? '🔊' : '🔇'}
         </button>
+      )}
+
+      {/* Floating Download/Install Button (only on Cover screen, only if not already installed) */}
+      {!isGlobalLoading && currentScreen === 'cover' && !isStandalone() && (
+        <button
+          className="btn-download-floating"
+          onClick={() => {
+            playSound('click', isSoundEnabled);
+            setShowInstallPanel(true);
+          }}
+          aria-label="Pasang Aplikasi"
+        >
+          <Download size={22} />
+        </button>
+      )}
+
+      {/* Re-openable Install Panel */}
+      {showInstallPanel && (
+        <InstallGate
+          onSkip={() => setShowInstallPanel(false)}
+        />
       )}
 
       {/* Screens Router */}
