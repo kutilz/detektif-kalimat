@@ -7,7 +7,11 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // 'prompt' (not 'autoUpdate'): a new deploy installs its service worker but
+      // WAITS — the app shows a "Versi baru tersedia" banner and only reloads when
+      // the user taps Perbarui. This keeps kids from being reloaded mid-quiz.
+      // Offline is unaffected: the precache below still serves the whole app offline.
+      registerType: 'prompt',
       includeAssets: [
         'favicon-32x32.png',
         'apple-touch-icon-180x180.png',
