@@ -46,10 +46,29 @@ export default defineConfig({
             // users always get the latest, but offline falls back to last response.
             urlPattern: ({ url }) => url.pathname.startsWith('/api/store'),
             handler: 'NetworkFirst',
+            method: 'GET',
             options: {
               cacheName: 'dk-api-store',
-              networkTimeoutSeconds: 4,
-              expiration: { maxEntries: 8, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              // Was 4s — too aggressive on school Wi-Fi / mobile data, so the
+              // installed app kept timing out and falling back to stale settings.
+              // This is a tiny JSON payload; give the network room to actually win.
+              networkTimeoutSeconds: 10,
+              plugins: [
+                {
+                  // The client appends ?t=<timestamp> to bust the HTTP/CDN cache.
+                  // Without normalizing, every request is a unique cache key, so the
+                  // cache never keeps a usable "latest settings" entry: the offline
+                  // fallback silently never hit and a timed-out read could resolve to
+                  // a stale copy. Collapse to the bare pathname so there is exactly
+                  // ONE entry that always reflects the newest settings.
+                  cacheKeyWillBeUsed: async ({ request }) => {
+                    const u = new URL(request.url);
+                    u.search = '';
+                    return u.href;
+                  },
+                },
+              ],
+              expiration: { maxEntries: 4, maxAgeSeconds: 60 * 60 * 24 * 30 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
