@@ -291,7 +291,7 @@ export default function AdminDashboard({ onLogout }) {
   // All questions combined
   const mergedBuiltins = getMergedQuestions();
   const allQuestionsPool = [
-    ...mergedBuiltins.filter((q) => q.type !== 'sandbox'),
+    ...mergedBuiltins,
     ...customQuestions.map((q) => ({ ...q, isCustom: true })),
   ];
 
@@ -431,7 +431,7 @@ export default function AdminDashboard({ onLogout }) {
                 <div className="admin-stats-grid">
                   <div className="admin-stat-card">
                     <span className="admin-stat-icon">📝</span>
-                    <div className="admin-stat-value">{mergedBuiltins.filter((q) => q.type !== 'sandbox').length}</div>
+                    <div className="admin-stat-value">{mergedBuiltins.length}</div>
                     <div className="admin-stat-label">Soal Bawaan</div>
                   </div>
                   <div className="admin-stat-card">
@@ -463,7 +463,7 @@ export default function AdminDashboard({ onLogout }) {
                         <span className="admin-toggle-label">Jumlah Soal per Quiz</span>
                       </div>
                       <span style={{ color: 'var(--admin-accent)', fontWeight: 800, fontSize: '1.1rem' }}>
-                        {settings.useAllQuestions ? 'Semua Soal' : settings.questionCount}{settings.includeSandbox ? ` + ${mergedBuiltins.filter(q => q.type === 'sandbox').length} Sandbox` : ''}
+                        {settings.useAllQuestions ? 'Semua Soal' : settings.questionCount}{settings.includeSandbox ? ` + ${mergedBuiltins.filter(q => q.type === 'sandbox').length + customQuestions.filter(q => q.type === 'sandbox' && q.enabled !== false).length} Sandbox` : ''}
                       </span>
                     </div>
                     <div className="admin-toggle-group">
@@ -672,10 +672,20 @@ export default function AdminDashboard({ onLogout }) {
                       <span className={`admin-question-type-badge ${q.type}`}>
                         {q.type}
                       </span>
+                      {q.image && (
+                        <img
+                          src={q.image}
+                          alt={q.imageAlt || ''}
+                          style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }}
+                        />
+                      )}
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div className="admin-question-text">{q.question}</div>
                         {q.sentence && (
                           <div className="admin-question-sentence">"{q.sentence}"</div>
+                        )}
+                        {q.type === 'sandbox' && !q.sentence && (
+                          <div className="admin-question-sentence">{q.hint}</div>
                         )}
                       </div>
                       <div className="admin-question-meta">

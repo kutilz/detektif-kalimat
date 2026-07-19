@@ -2386,6 +2386,8 @@ html, body {
 }
 @keyframes toastSpin { to { transform: rotate(360deg); } }
 
+.admin-spin { animation: toastSpin 0.8s linear infinite; }
+
 /* ======= ADMIN SEARCH ======= */
 .admin-search-box {
   position: relative; margin-bottom: 16px;

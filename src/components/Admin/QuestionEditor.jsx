@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save } from 'lucide-react';
+import { X, Save, Upload, Loader2 } from 'lucide-react';
+import { uploadQuestionImage } from '../../utils/image';
 
 // Helper to shuffle array and ensure it is not identical to correctOrder
 function shuffleArray(arr, correctOrder = null) {
@@ -37,6 +38,8 @@ function deriveState(q) {
       dragS: '',
       dragP: '',
       dragO: '',
+      sandboxImage: '',
+      sandboxImageAlt: '',
     };
   }
 
@@ -52,6 +55,8 @@ function deriveState(q) {
     dragS: '',
     dragP: '',
     dragO: '',
+    sandboxImage: '',
+    sandboxImageAlt: '',
   };
 
   if (q.type === 'token') {
@@ -77,6 +82,9 @@ function deriveState(q) {
     } else {
       base.dragWordsDisplay = savedWords;
     }
+  } else if (q.type === 'sandbox') {
+    base.sandboxImage = q.image || '';
+    base.sandboxImageAlt = q.imageAlt || '';
   }
 
   return base;
@@ -101,6 +109,11 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
   const [dragP, setDragP] = useState('');
   const [dragO, setDragO] = useState('');
   const [dragWordsDisplay, setDragWordsDisplay] = useState([]);
+  const [sandboxImage, setSandboxImage] = useState('');
+  const [sandboxImageAlt, setSandboxImageAlt] = useState('');
+  const [sandboxUploading, setSandboxUploading] = useState(false);
+  const [sandboxUploadError, setSandboxUploadError] = useState('');
+  const fileInputRef = useRef(null);
 
   // Sync ALL state whenever the modal opens or editingQuestion changes
   useEffect(() => {
@@ -120,6 +133,10 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     setDragP(s.dragP);
     setDragO(s.dragO);
     setDragWordsDisplay(s.dragWordsDisplay || []);
+    setSandboxImage(s.sandboxImage || '');
+    setSandboxImageAlt(s.sandboxImageAlt || '');
+    setSandboxUploading(false);
+    setSandboxUploadError('');
   }, [isOpen, editingQuestion]);
 
   // Keep dragWordsDisplay in sync with dragS, dragP, and dragO input values
@@ -158,7 +175,35 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     setDragP('');
     setDragO('');
     setDragWordsDisplay([]);
+    setSandboxImage('');
+    setSandboxImageAlt('');
+    setSandboxUploadError('');
+    if (t === 'sandbox' && !questionText.trim()) {
+      setQuestionText('Tantangan Detektif Kreatif!');
+    }
     setStep(2);
+  };
+
+  // ---- Sandbox helpers ----
+  const handleSandboxFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setSandboxUploadError('');
+    setSandboxUploading(true);
+    try {
+      const url = await uploadQuestionImage(file);
+      setSandboxImage(url);
+    } catch (err) {
+      setSandboxUploadError(err.message || 'Gagal mengunggah gambar');
+    } finally {
+      setSandboxUploading(false);
+    }
+  };
+  const handleRemoveSandboxImage = () => {
+    setSandboxImage('');
+    setSandboxImageAlt('');
+    setSandboxUploadError('');
   };
 
   // ---- Scramble helpers ----
@@ -191,6 +236,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     if (type === 'token') return sentence.trim() && tokenAnswer.trim() && computeTokens().includes(tokenAnswer.trim());
     if (type === 'scramble') return scrambleWords.length >= 2;
     if (type === 'drag') return dragS.trim() && dragP.trim() && dragO.trim();
+    if (type === 'sandbox') return hint.trim() && !sandboxUploading;
     return false;
   };
 
@@ -221,6 +267,12 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
         words: [...dragWordsDisplay],
         answer: { S: dragS.trim(), P: dragP.trim(), O: dragO.trim() },
       };
+    } else if (type === 'sandbox') {
+      question = {
+        ...question,
+        explain: explain.trim() || '✅ Kalimat kreatifmu berhasil dianalisis dengan susunan SPO yang lengkap!',
+        ...(sandboxImage ? { image: sandboxImage, imageAlt: sandboxImageAlt.trim() || questionText.trim() } : {}),
+      };
     }
 
     if (isEditing) question.id = editingQuestion.id;
@@ -233,6 +285,7 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
     token: { icon: '🎯', label: 'Token', desc: 'Pilih kata yang tepat dari kalimat' },
     scramble: { icon: '🔀', label: 'Scramble', desc: 'Susun kata-kata acak menjadi kalimat' },
     drag: { icon: '📦', label: 'Drag SPO', desc: 'Tempatkan kata ke kotak S/P/O' },
+    sandbox: { icon: '🕵️', label: 'Sandbox Kreatif', desc: 'Siswa buat kalimat SPO sendiri, bisa dibantu gambar' },
   };
 
   return (
@@ -503,9 +556,83 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                   </>
                 )}
 
+                {/* ── Sandbox fields ── */}
+                {type === 'sandbox' && (
+                  <div className="admin-form-group">
+                    <div style={{ fontSize: '0.82rem', color: 'var(--admin-text-3)', marginBottom: 12, padding: '8px 12px', background: 'var(--admin-surface-2)', borderRadius: 8 }}>
+                      💡 Siswa akan mengetik kalimat SPO buatannya sendiri. Gambar bersifat opsional — kalau diisi, gambar akan tampil sebagai bantuan di atas kotak jawaban.
+                    </div>
+
+                    <label className="admin-label">Gambar Bantuan (opsional)</label>
+                    {sandboxImage ? (
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginTop: 8 }}>
+                        <img
+                          src={sandboxImage}
+                          alt="Preview"
+                          style={{ width: 120, height: 90, objectFit: 'cover', borderRadius: 10, border: '2px solid var(--admin-accent)' }}
+                        />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                          <button
+                            type="button"
+                            className="admin-btn admin-btn-secondary admin-btn-sm"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={sandboxUploading}
+                          >
+                            🔄 Ganti Gambar
+                          </button>
+                          <button
+                            type="button"
+                            className="admin-btn admin-btn-secondary admin-btn-sm"
+                            onClick={handleRemoveSandboxImage}
+                          >
+                            <X size={14} /> Hapus Gambar
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="admin-btn admin-btn-secondary admin-btn-sm"
+                        style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 6 }}
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={sandboxUploading}
+                      >
+                        {sandboxUploading ? <Loader2 size={14} className="admin-spin" /> : <Upload size={14} />}
+                        {sandboxUploading ? 'Mengunggah...' : 'Unggah Gambar'}
+                      </button>
+                    )}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={handleSandboxFileChange}
+                    />
+                    {sandboxUploadError && (
+                      <div style={{ color: 'var(--admin-danger, #ef4444)', fontSize: '0.8rem', marginTop: 6 }}>
+                        ⚠ {sandboxUploadError}
+                      </div>
+                    )}
+
+                    {sandboxImage && (
+                      <div className="admin-form-group" style={{ marginTop: 12 }}>
+                        <label className="admin-label">Deskripsi Gambar (alt text)</label>
+                        <input
+                          className="admin-input"
+                          placeholder="Contoh: Ibu memetik bunga"
+                          value={sandboxImageAlt}
+                          onChange={(e) => setSandboxImageAlt(e.target.value)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Hint & Explain */}
                 <div className="admin-form-group" style={{ marginTop: 8 }}>
-                  <label className="admin-label">Hint (opsional)</label>
+                  <label className="admin-label">
+                    Hint {type === 'sandbox' ? <span className="required">*</span> : '(opsional)'}
+                  </label>
                   <input
                     className="admin-input"
                     placeholder="💡 Contoh hint untuk siswa"
@@ -531,6 +658,8 @@ export default function QuestionEditor({ isOpen, onClose, onSave, editingQuestio
                     {type === 'token' && sentence.trim() && !tokenAnswer && '⚠ Pilih jawaban benar dari token di atas'}
                     {type === 'scramble' && scrambleWords.length < 2 && '⚠ Tambahkan minimal 2 kata'}
                     {type === 'drag' && (!dragS || !dragP || !dragO) && '⚠ Isi semua field S, P, dan O'}
+                    {type === 'sandbox' && sandboxUploading && '⚠ Tunggu sampai gambar selesai diunggah'}
+                    {type === 'sandbox' && !sandboxUploading && !hint.trim() && '⚠ Isi hint untuk siswa'}
                   </div>
                 )}
               </div>

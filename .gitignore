@@ -47,3 +47,4 @@ ppt_slides_extracted.txt
 
 # Local env files
 .env
+.gstack/

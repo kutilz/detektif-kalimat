@@ -217,7 +217,7 @@ export default function App() {
 
     // Build question pool based on mode
     let pool = [];
-    const activeCustomQs = customQs.filter(q => q.enabled !== false);
+    const activeCustomQs = customQs.filter(q => q.enabled !== false && q.type !== 'sandbox');
     const standardPool = mergedQuestions.filter(q => q.type !== 'sandbox' && q.enabled !== false);
 
     switch (settings.quizMode) {
@@ -244,7 +244,10 @@ export default function App() {
 
     // Optionally append sandbox questions
     if (settings.includeSandbox) {
-      const sandboxQs = mergedQuestions.filter(q => q.type === 'sandbox' && q.enabled !== false);
+      const sandboxQs = [
+        ...mergedQuestions.filter(q => q.type === 'sandbox' && q.enabled !== false),
+        ...customQs.filter(q => q.type === 'sandbox' && q.enabled !== false),
+      ];
       if (sandboxQs.length > 0) {
         selected = [...selected, ...sandboxQs];
       }
@@ -253,7 +256,10 @@ export default function App() {
     // Fallback: if no questions available, use defaults
     if (selected.length === 0) {
       const defaultPool = [...standardPool].sort(() => Math.random() - 0.5).slice(0, 9);
-      const sandboxQs = mergedQuestions.filter(q => q.type === 'sandbox' && q.enabled !== false);
+      const sandboxQs = [
+        ...mergedQuestions.filter(q => q.type === 'sandbox' && q.enabled !== false),
+        ...customQs.filter(q => q.type === 'sandbox' && q.enabled !== false),
+      ];
       selected = sandboxQs.length > 0 ? [...defaultPool, ...sandboxQs] : defaultPool;
     }
 
