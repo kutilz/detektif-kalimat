@@ -580,7 +580,7 @@ export const allQuestions = [
   },
   // 3. Kakak melempar bola - Tentukan Objek
   {
-    id: 'q_docx3',
+    id: 'q_objek_bola',
     type: 'token',
     sentence: 'Kakak melempar bola',
     tokens: ['Kakak', 'melempar', 'bola'],
@@ -593,7 +593,7 @@ export const allQuestions = [
   // ===== BAGIAN 2: Susun Kalimat Acak (3 soal scramble) =====
   // 4. Adik minum susu
   {
-    id: 'q_scramble1',
+    id: 'q_scramble_susu',
     type: 'scramble',
     words: ['susu', 'Adik', 'minum'],
     answer: ['Adik', 'minum', 'susu'],
@@ -603,7 +603,7 @@ export const allQuestions = [
   },
   // 5. Petani menanam padi
   {
-    id: 'q_scramble2',
+    id: 'q_scramble_padi',
     type: 'scramble',
     words: ['menanam', 'Petani', 'padi'],
     answer: ['Petani', 'menanam', 'padi'],
@@ -613,7 +613,7 @@ export const allQuestions = [
   },
   // 6. Dokter memeriksa pasien
   {
-    id: 'q_scramble3',
+    id: 'q_scramble_pasien',
     type: 'scramble',
     words: ['pasien', 'memeriksa', 'Dokter'],
     answer: ['Dokter', 'memeriksa', 'pasien'],
