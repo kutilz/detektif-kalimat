@@ -555,7 +555,7 @@ export const materiSlides = [
 
 // Quiz Questions Pool
 export const allQuestions = [
-  // ===== BAGIAN 1: Tentukan SPO & Susun Kalimat (3 soal: 1 Subjek, 1 Predikat, 1 Scramble) =====
+  // ===== BAGIAN 1: Tentukan SPO & Susun Kalimat (3 soal: 1 Subjek, 1 Predikat, 1 Objek) =====
   // 1. Ani membaca buku - Tentukan Subjek
   {
     id: 'q_docx1',
@@ -578,19 +578,52 @@ export const allQuestions = [
     hint: '💡 Apa kegiatan yang sedang dilakukan Ibu?',
     explain: '✅ memasak adalah predikat (P) karena menunjukkan tindakan yang dilakukan Ibu.'
   },
-  // 3. Susun kalimat acak - Scramble
+  // 3. Kakak melempar bola - Tentukan Objek
+  {
+    id: 'q_docx3',
+    type: 'token',
+    sentence: 'Kakak melempar bola',
+    tokens: ['Kakak', 'melempar', 'bola'],
+    answer: 'bola',
+    question: 'Tentukan OBJEK dari kalimat berikut!',
+    hint: '💡 Tanya: "Apa yang dilempar Kakak?"',
+    explain: '✅ bola adalah objek (O) karena benda yang dikenai kegiatan melempar.'
+  },
+
+  // ===== BAGIAN 2: Susun Kalimat Acak (3 soal scramble) =====
+  // 4. Adik minum susu
   {
     id: 'q_scramble1',
     type: 'scramble',
-    words: ['membersihkan', 'Kami', 'kelas'],
-    answer: ['Kami', 'membersihkan', 'kelas'],
+    words: ['susu', 'Adik', 'minum'],
+    answer: ['Adik', 'minum', 'susu'],
     question: 'Susun kata menjadi kalimat SPO yang benar!',
     hint: '💡 Susun berurutan: Pelaku (S) + Kegiatan (P) + Benda (O).',
-    explain: '✅ Susunan benar: Kami (S) + membersihkan (P) + kelas (O).'
+    explain: '✅ Susunan benar: Adik (S) + minum (P) + susu (O).'
+  },
+  // 5. Petani menanam padi
+  {
+    id: 'q_scramble2',
+    type: 'scramble',
+    words: ['menanam', 'Petani', 'padi'],
+    answer: ['Petani', 'menanam', 'padi'],
+    question: 'Susun kata menjadi kalimat SPO yang benar!',
+    hint: '💡 Susun berurutan: Pelaku (S) + Kegiatan (P) + Benda (O).',
+    explain: '✅ Susunan benar: Petani (S) + menanam (P) + padi (O).'
+  },
+  // 6. Dokter memeriksa pasien
+  {
+    id: 'q_scramble3',
+    type: 'scramble',
+    words: ['pasien', 'memeriksa', 'Dokter'],
+    answer: ['Dokter', 'memeriksa', 'pasien'],
+    question: 'Susun kata menjadi kalimat SPO yang benar!',
+    hint: '💡 Susun berurutan: Pelaku (S) + Kegiatan (P) + Benda (O).',
+    explain: '✅ Susunan benar: Dokter (S) + memeriksa (P) + pasien (O).'
   },
 
-  // ===== BAGIAN 2: Menyusun Kalimat SPO (8 soal drag-and-drop) =====
-  // 4. Budi bermain bola
+  // ===== BAGIAN 3: Menyusun Kalimat SPO (5 soal drag-and-drop) =====
+  // 7. Budi bermain bola
   {
     id: 'q_drag1',
     type: 'drag',
@@ -601,7 +634,7 @@ export const allQuestions = [
     hint: '💡 Tarik kata ke kotak Subjek, Predikat, atau Objek!',
     explain: '✅ Budi (Subjek) + bermain (Predikat) + bola (Objek).'
   },
-  // 5. Ibu memasak nasi
+  // 8. Ibu memasak nasi
   {
     id: 'q_drag2',
     type: 'drag',
@@ -612,7 +645,7 @@ export const allQuestions = [
     hint: '💡 Ibu adalah pelaku, memasak adalah kegiatan, nasi adalah objek.',
     explain: '✅ Ibu (Subjek) + memasak (Predikat) + nasi (Objek).'
   },
-  // 6. Anak-anak menulis huruf
+  // 9. Anak-anak menulis huruf
   {
     id: 'q_drag3',
     type: 'drag',
@@ -623,7 +656,7 @@ export const allQuestions = [
     hint: '💡 Anak-anak adalah pelaku, menulis adalah kegiatan, huruf adalah objek.',
     explain: '✅ Anak-anak (Subjek) + menulis (Predikat) + huruf (Objek).'
   },
-  // 7. Ayah mencuci mobil
+  // 10. Ayah mencuci mobil
   {
     id: 'q_drag4',
     type: 'drag',
@@ -634,7 +667,7 @@ export const allQuestions = [
     hint: '💡 Ayah adalah pelaku, mencuci adalah kegiatan, mobil adalah benda.',
     explain: '✅ Ayah (Subjek) + mencuci (Predikat) + mobil (Objek).'
   },
-  // 8. Kakak membaca buku
+  // 11. Kakak membaca buku
   {
     id: 'q_drag5',
     type: 'drag',
@@ -645,41 +678,8 @@ export const allQuestions = [
     hint: '💡 Kakak adalah pelaku, membaca adalah kegiatan, buku adalah benda.',
     explain: '✅ Kakak (Subjek) + membaca (Predikat) + buku (Objek).'
   },
-  // 9. Adik minum susu
-  {
-    id: 'q_drag6',
-    type: 'drag',
-    sentence: 'Adik minum susu',
-    words: ['susu', 'Adik', 'minum'],
-    answer: { S: 'Adik', P: 'minum', O: 'susu' },
-    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
-    hint: '💡 Adik adalah pelaku, minum adalah kegiatan, susu adalah benda.',
-    explain: '✅ Adik (Subjek) + minum (Predikat) + susu (Objek).'
-  },
-  // 10. Petani menanam padi
-  {
-    id: 'q_drag7',
-    type: 'drag',
-    sentence: 'Petani menanam padi',
-    words: ['menanam', 'Petani', 'padi'],
-    answer: { S: 'Petani', P: 'menanam', O: 'padi' },
-    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
-    hint: '💡 Petani adalah pelaku, menanam adalah kegiatan, padi adalah benda.',
-    explain: '✅ Petani (Subjek) + menanam (Predikat) + padi (Objek).'
-  },
-  // 11. Dokter memeriksa pasien
-  {
-    id: 'q_drag8',
-    type: 'drag',
-    sentence: 'Dokter memeriksa pasien',
-    words: ['pasien', 'memeriksa', 'Dokter'],
-    answer: { S: 'Dokter', P: 'memeriksa', O: 'pasien' },
-    question: 'Tempatkan kata ke unsur SPO yang sesuai!',
-    hint: '💡 Dokter adalah pelaku, memeriksa adalah kegiatan, pasien adalah sasaran.',
-    explain: '✅ Dokter (Subjek) + memeriksa (Predikat) + pasien (Objek).'
-  },
 
-  // ===== BAGIAN 3: Tantangan Detektif Kreatif (9 soal sandbox) =====
+  // ===== BAGIAN 4: Tantangan Detektif Kreatif (9 soal sandbox) =====
   // --- 4 soal pertama: dengan bantuan gambar ---
   // 12. Sandbox dengan gambar: Ibu memetik bunga
   {
